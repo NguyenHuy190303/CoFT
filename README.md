@@ -2,7 +2,7 @@
 ## Requirements
 
 ### Python Environment
-- Python 3.x
+- Python 3.8
 - Install dependencies via `requirements.txt`:
   ```bash
   pip install -r requirements.txt
