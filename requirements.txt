@@ -1,7 +1,0 @@
-numpy
-scikit-learn
-pandas
-openpyxl
-mne==0.20.7
-mat4py
-einops
