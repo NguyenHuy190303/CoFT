@@ -1,0 +1,9 @@
+# Ignore data directories
+data/epilepsy/
+data/HAR/
+data/sleep/
+data/SleepEDF/
+
+# Python cache
+__pycache__/
+*.pyc 
