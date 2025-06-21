@@ -1,0 +1,11 @@
+=============================================
+Dataset: HAR
+Mode:    train_linear_SupCon_1p
+=============================================
+Data loaded ...
+Training started ....
+AMP (Automatic Mixed Precision) enabled
+
+Epoch : 1
+Train Loss     : 1.5012	 | 	Train Accuracy     : 0.6406
+Valid Loss     : 1.5174	 | 	Valid Accuracy     : 0.6071

@@ -1,0 +1,171 @@
+=============================================
+Dataset: HAR
+Mode:    ft_1p
+=============================================
+Data loaded ...
+Training started ....
+
+Epoch : 1
+Train Loss     : 1.9039	 | 	Train Accuracy     : 0.1250
+Valid Loss     : 1.6831	 | 	Valid Accuracy     : 0.3821
+
+Epoch : 2
+Train Loss     : 1.5928	 | 	Train Accuracy     : 0.4219
+Valid Loss     : 1.5656	 | 	Valid Accuracy     : 0.5497
+
+Epoch : 3
+Train Loss     : 1.3301	 | 	Train Accuracy     : 0.7344
+Valid Loss     : 1.4566	 | 	Valid Accuracy     : 0.5909
+
+Epoch : 4
+Train Loss     : 1.1075	 | 	Train Accuracy     : 0.7969
+Valid Loss     : 1.3547	 | 	Valid Accuracy     : 0.6151
+
+Epoch : 5
+Train Loss     : 0.9548	 | 	Train Accuracy     : 0.8438
+Valid Loss     : 1.2625	 | 	Valid Accuracy     : 0.6229
+
+Epoch : 6
+Train Loss     : 0.8069	 | 	Train Accuracy     : 0.8906
+Valid Loss     : 1.1808	 | 	Valid Accuracy     : 0.6214
+
+Epoch : 7
+Train Loss     : 0.6845	 | 	Train Accuracy     : 0.8906
+Valid Loss     : 1.1090	 | 	Valid Accuracy     : 0.6193
+
+Epoch : 8
+Train Loss     : 0.6146	 | 	Train Accuracy     : 0.8906
+Valid Loss     : 1.0423	 | 	Valid Accuracy     : 0.6271
+
+Epoch : 9
+Train Loss     : 0.5437	 | 	Train Accuracy     : 0.9062
+Valid Loss     : 0.9792	 | 	Valid Accuracy     : 0.6428
+
+Epoch : 10
+Train Loss     : 0.4849	 | 	Train Accuracy     : 0.8906
+Valid Loss     : 0.9193	 | 	Valid Accuracy     : 0.6683
+
+Epoch : 11
+Train Loss     : 0.4050	 | 	Train Accuracy     : 0.9531
+Valid Loss     : 0.8650	 | 	Valid Accuracy     : 0.6776
+
+Epoch : 12
+Train Loss     : 0.3872	 | 	Train Accuracy     : 0.9531
+Valid Loss     : 0.8141	 | 	Valid Accuracy     : 0.6932
+
+Epoch : 13
+Train Loss     : 0.3387	 | 	Train Accuracy     : 0.9531
+Valid Loss     : 0.7672	 | 	Valid Accuracy     : 0.7116
+
+Epoch : 14
+Train Loss     : 0.2783	 | 	Train Accuracy     : 0.9531
+Valid Loss     : 0.7265	 | 	Valid Accuracy     : 0.7308
+
+Epoch : 15
+Train Loss     : 0.2773	 | 	Train Accuracy     : 0.9688
+Valid Loss     : 0.6903	 | 	Valid Accuracy     : 0.7457
+
+Epoch : 16
+Train Loss     : 0.2539	 | 	Train Accuracy     : 0.9688
+Valid Loss     : 0.6589	 | 	Valid Accuracy     : 0.7642
+
+Epoch : 17
+Train Loss     : 0.2266	 | 	Train Accuracy     : 0.9688
+Valid Loss     : 0.6335	 | 	Valid Accuracy     : 0.7763
+
+Epoch : 18
+Train Loss     : 0.2301	 | 	Train Accuracy     : 0.9844
+Valid Loss     : 0.6115	 | 	Valid Accuracy     : 0.7834
+
+Epoch : 19
+Train Loss     : 0.1680	 | 	Train Accuracy     : 0.9844
+Valid Loss     : 0.5922	 | 	Valid Accuracy     : 0.7933
+
+Epoch : 20
+Train Loss     : 0.1551	 | 	Train Accuracy     : 0.9844
+Valid Loss     : 0.5778	 | 	Valid Accuracy     : 0.7955
+
+Epoch : 21
+Train Loss     : 0.1610	 | 	Train Accuracy     : 0.9688
+Valid Loss     : 0.5665	 | 	Valid Accuracy     : 0.7990
+
+Epoch : 22
+Train Loss     : 0.1641	 | 	Train Accuracy     : 0.9688
+Valid Loss     : 0.5589	 | 	Valid Accuracy     : 0.7997
+
+Epoch : 23
+Train Loss     : 0.1532	 | 	Train Accuracy     : 0.9688
+Valid Loss     : 0.5513	 | 	Valid Accuracy     : 0.8040
+
+Epoch : 24
+Train Loss     : 0.1376	 | 	Train Accuracy     : 0.9688
+Valid Loss     : 0.5469	 | 	Valid Accuracy     : 0.8054
+
+Epoch : 25
+Train Loss     : 0.1371	 | 	Train Accuracy     : 0.9688
+Valid Loss     : 0.5415	 | 	Valid Accuracy     : 0.8061
+
+Epoch : 26
+Train Loss     : 0.1117	 | 	Train Accuracy     : 0.9844
+Valid Loss     : 0.5353	 | 	Valid Accuracy     : 0.8104
+
+Epoch : 27
+Train Loss     : 0.0972	 | 	Train Accuracy     : 0.9844
+Valid Loss     : 0.5283	 | 	Valid Accuracy     : 0.8118
+
+Epoch : 28
+Train Loss     : 0.0821	 | 	Train Accuracy     : 0.9844
+Valid Loss     : 0.5221	 | 	Valid Accuracy     : 0.8146
+
+Epoch : 29
+Train Loss     : 0.1169	 | 	Train Accuracy     : 0.9688
+Valid Loss     : 0.5152	 | 	Valid Accuracy     : 0.8196
+
+Epoch : 30
+Train Loss     : 0.1030	 | 	Train Accuracy     : 0.9688
+Valid Loss     : 0.5109	 | 	Valid Accuracy     : 0.8210
+
+Epoch : 31
+Train Loss     : 0.0681	 | 	Train Accuracy     : 0.9844
+Valid Loss     : 0.5067	 | 	Valid Accuracy     : 0.8246
+
+Epoch : 32
+Train Loss     : 0.0987	 | 	Train Accuracy     : 0.9688
+Valid Loss     : 0.5016	 | 	Valid Accuracy     : 0.8260
+
+Epoch : 33
+Train Loss     : 0.0975	 | 	Train Accuracy     : 0.9688
+Valid Loss     : 0.4981	 | 	Valid Accuracy     : 0.8274
+
+Epoch : 34
+Train Loss     : 0.0922	 | 	Train Accuracy     : 0.9688
+Valid Loss     : 0.4964	 | 	Valid Accuracy     : 0.8281
+
+Epoch : 35
+Train Loss     : 0.0866	 | 	Train Accuracy     : 0.9688
+Valid Loss     : 0.4935	 | 	Valid Accuracy     : 0.8274
+
+Epoch : 36
+Train Loss     : 0.0658	 | 	Train Accuracy     : 0.9844
+Valid Loss     : 0.4931	 | 	Valid Accuracy     : 0.8281
+
+Epoch : 37
+Train Loss     : 0.0841	 | 	Train Accuracy     : 0.9688
+Valid Loss     : 0.4939	 | 	Valid Accuracy     : 0.8274
+
+Epoch : 38
+Train Loss     : 0.0694	 | 	Train Accuracy     : 0.9844
+Valid Loss     : 0.4929	 | 	Valid Accuracy     : 0.8260
+
+Epoch : 39
+Train Loss     : 0.0874	 | 	Train Accuracy     : 0.9688
+Valid Loss     : 0.4910	 | 	Valid Accuracy     : 0.8260
+
+Epoch : 40
+Train Loss     : 0.0513	 | 	Train Accuracy     : 0.9844
+Valid Loss     : 0.4878	 | 	Valid Accuracy     : 0.8274
+
+Evaluate on the Test set:
+Test loss      :0.6757	 | Test Accuracy      : 0.7470
+
+################## Training is Done! #########################

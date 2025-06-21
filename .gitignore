@@ -1,23 +1,9 @@
-# Add directories or file patterns to ignore during indexing (e.g. foo/ or *.csv)
-__pycache__
-data_preprocessing
-data
-sleepEDF20_fpzcz_subjects
-.pt
-.pyc
-.pyo
-.pyd
-.pyw
-.pyz
-.pywz
-.pyzw
-.log
-.log.gz
-.log.bz2
-.log.xz
-.log.lzma
-.log.lz4
-.log.zstd
-.log.zstd.gz
-.log.zstd.bz2
-.log.zstd.xz
+# Ignore data directories
+data/epilepsy/
+data/HAR/
+data/sleep/
+data/SleepEDF/
+
+# Python cache
+__pycache__/
+*.pyc 

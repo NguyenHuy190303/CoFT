@@ -1,0 +1,7 @@
+Dataset: HAR, Mode: self_supervised
+Data loaded ...
+Training started ....
+
+Epoch : 1
+Train Loss     : 12.2584	 | 	Train Accuracy     : 0.0000
+Valid Loss     : 0.0000	 | 	Valid Accuracy     : 0.0000

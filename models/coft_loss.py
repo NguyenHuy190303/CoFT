@@ -23,7 +23,7 @@ class CoFTHybridLoss(nn.Module):
         self.lambda_frequency = 1.0     # Frequency contrastive weight  
         self.lambda_temporal_ntxent = 0.7   # Temporal NT-Xent weight
         self.lambda_freq_ntxent = 0.7       # Frequency NT-Xent weight
-        self.lambda_cotraining = 0.5        # Co-training weight
+        self.lambda_cotraining = 0.1        # Co-training weight (reduced for debugging)
         self.lambda_consistency = 0.3       # Cross-domain consistency weight
         
         # Initialize loss functions
@@ -188,12 +188,12 @@ class CoFTHybridLoss(nn.Module):
         Dynamically adjust loss weights during training.
         Gradually increase co-training weight as training progresses.
         """
-        # Warm up co-training loss
+        # Warm up co-training loss (reduced weights for debugging)
         warmup_epochs = total_epochs // 4
         if epoch < warmup_epochs:
-            self.lambda_cotraining = 0.1 * (epoch / warmup_epochs)
+            self.lambda_cotraining = 0.05 * (epoch / warmup_epochs)
         else:
-            self.lambda_cotraining = 0.5
+            self.lambda_cotraining = 0.1
             
         # Adjust consistency weight based on training progress
         progress = epoch / total_epochs

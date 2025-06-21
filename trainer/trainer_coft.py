@@ -47,7 +47,7 @@ def CoFTTrainer(model, temporal_contr_model, frequency_model, frequency_contr_mo
             model, temporal_contr_model, frequency_model, frequency_contr_model,
             model_optimizer, temp_cont_optimizer, freq_optimizer, freq_cont_optimizer,
             criterion, train_dl, config, device, training_mode, enable_coft,
-            hybrid_loss, cotraining_module, freq_augmentation
+            hybrid_loss, cotraining_module, freq_augmentation, ensemble_module
         )
         
         valid_loss, valid_acc, _, _ = coft_model_evaluate(
@@ -93,7 +93,7 @@ def CoFTTrainer(model, temporal_contr_model, frequency_model, frequency_contr_mo
 def coft_model_train(model, temporal_contr_model, frequency_model, frequency_contr_model,
                      model_optimizer, temp_cont_optimizer, freq_optimizer, freq_cont_optimizer,
                      criterion, train_loader, config, device, training_mode, enable_coft,
-                     hybrid_loss, cotraining_module, freq_augmentation):
+                     hybrid_loss, cotraining_module, freq_augmentation, ensemble_module):
     """Training loop for CoFT model."""
     total_loss = []
     total_acc = []
@@ -181,6 +181,17 @@ def coft_model_train(model, temporal_contr_model, frequency_model, frequency_con
             loss, loss_dict = hybrid_loss(
                 temporal_outputs, frequency_outputs, labels, cotraining_module
             )
+            
+            # FIXED: Add accuracy calculation for CoFT supervised modes
+            if training_mode not in ["self_supervised", "SupCon"] and 'logits' in temporal_outputs:
+                # DEBUGGING: Use only temporal predictions for now to isolate issue
+                total_acc.append(labels.eq(temporal_outputs['logits'].detach().argmax(dim=1)).float().mean())
+                
+                # DEBUG: Log prediction comparison if needed
+                # if 'logits' in frequency_outputs:
+                #     temp_acc = labels.eq(temporal_outputs['logits'].detach().argmax(dim=1)).float().mean()
+                #     freq_acc = labels.eq(frequency_outputs['logits'].detach().argmax(dim=1)).float().mean()
+                #     print(f"DEBUG - Temporal Acc: {temp_acc:.4f}, Freq Acc: {freq_acc:.4f}")
         else:
             # Fall back to original loss computation
             if training_mode == "self_supervised":
@@ -257,9 +268,11 @@ def coft_model_evaluate(model, temporal_contr_model, frequency_model, frequency_
                 # Get frequency predictions and ensemble if CoFT enabled
                 if enable_coft:
                     freq_predictions, freq_features = frequency_model(data)
-                    # Use ensemble for final prediction
-                    ensemble_predictions = ensemble_module(predictions, freq_predictions)
-                    final_predictions = ensemble_predictions
+                    # DEBUGGING: Use only temporal predictions for now
+                    final_predictions = predictions
+                    # TODO: Re-enable ensemble after debugging
+                    # ensemble_predictions = ensemble_module(predictions, freq_predictions)
+                    # final_predictions = ensemble_predictions
                 else:
                     final_predictions = predictions
 

@@ -1,0 +1,8 @@
+=============================================
+Dataset: HAR
+Mode:    self_supervised
+CoFT:    Enabled
+=============================================
+Data loaded ...
+CoFT: Frequency branch and optimizers initialized
+CoFT Training started ....

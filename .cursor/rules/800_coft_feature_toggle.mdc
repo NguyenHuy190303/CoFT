@@ -1,0 +1,73 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Feature Toggle Architecture Pattern
+
+## Rule: Toggleable Feature Implementation
+**Category**: 8xx - Workflows  
+**Pattern**: ToggleableFeature  
+**Context**: Adding new architectural blocks with clean A/B testing capability
+
+## Implementation Pattern
+
+### CLI Argument Setup
+```python
+parser.add_argument('--enable_feature_name', default=False, type=bool,
+                   help='Enable feature description. When True, activates new components.')
+```
+
+### Conditional Component Initialization
+```python
+# Initialize conditional components
+new_component = None
+new_component_optimizer = None
+
+if args.enable_feature_name:
+    from models.new_component import NewComponent
+    new_component = NewComponent(configs).to(device)
+    new_component_optimizer = torch.optim.Adam(new_component.parameters(), ...)
+    logger.debug("Feature: New component initialized")
+```
+
+### Conditional Trainer Selection
+```python
+# Choose trainer based on feature flag
+if args.enable_feature_name:
+    from trainer.trainer_enhanced import EnhancedTrainer
+    EnhancedTrainer(model, new_component, optimizers, ...)
+else:
+    OriginalTrainer(model, optimizers, ...)
+```
+
+### Hybrid Loss Implementation
+```python
+class HybridLoss(nn.Module):
+    def forward(self, original_outputs, new_outputs=None, enable_feature=False):
+        if enable_feature and new_outputs is not None:
+            return original_loss + new_feature_loss
+        else:
+            return original_loss
+```
+
+## Benefits
+- **Zero Overhead**: No performance impact when disabled
+- **Clean A/B Testing**: Easy comparison between versions
+- **Backwards Compatibility**: Original behavior preserved
+- **Modular Design**: Components can be developed independently
+
+## Applied To
+- CoFT (Co-training with Frequency and Temporal domains)
+- Frequency branch integration with CA-TCC
+- Cross-domain contrastive learning
+
+## Usage Example
+```bash
+# Original behavior
+python main.py --enable_coft False
+
+# Enhanced behavior
+python main.py --enable_coft True
+```
+

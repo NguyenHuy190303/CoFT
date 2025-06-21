@@ -1,0 +1,8 @@
+=============================================
+Dataset: HAR
+Mode:    gen_pseudo_labels
+CoFT:    Enabled
+=============================================
+Data loaded ...
+CoFT: Frequency branch and optimizers initialized
+✅ gen_pseudo_labels completed successfully!
