@@ -8,3 +8,42 @@ experiments_logs
 __pycache__/
 *.pyc 
 .cursor
+
+# Large files and experiment data
+*.pt
+*.pth  
+*.pkl
+*.npy
+*.torch
+*.xlsx
+experiments_logs/*/
+optimization_results_*/
+diagnostic_test_*/
+colab_*/
+quick_*/
+
+# Large data files
+data/
+*.csv
+*.tsv
+*.h5
+*.hdf5
+
+# Temporary files
+*.tmp
+*.backup
+*.bak
+*.log
+
+# Model checkpoints
+saved_models/
+checkpoints/
+
+# Ignore all files in the data directory
+data/
+
+# Ignore all files in the experiments_logs directory
+experiments_logs/
+
+# Ignore all files in the optimization_results_ directory
+optimization_results_/
