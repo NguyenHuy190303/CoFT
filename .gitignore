@@ -3,7 +3,8 @@ data/epilepsy/
 data/HAR/
 data/sleep/
 data/SleepEDF/
-
+experiments_logs
 # Python cache
 __pycache__/
 *.pyc 
+.cursor

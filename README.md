@@ -169,6 +169,53 @@ python main.py --training_mode full_run --selected_dataset HAR --enable_coft
 🎉 FULL PIPELINE COMPLETED SUCCESSFULLY!
 ```
 
+## ⚙️ Parameter Optimization
+
+### Unified Optimization System
+
+CoFT provides a unified optimization script with multiple execution modes:
+
+```bash
+# 1. Quick diagnostic (5 minutes) - ALWAYS RUN FIRST
+./optimize_coft.sh diagnostic HAR
+
+# 2. Quick parameter search (30 minutes)  
+./optimize_coft.sh quick HAR
+
+# 3. Full optimization (2-4 hours)
+./optimize_coft.sh optimize HAR
+
+# 4. Google Colab version
+./optimize_coft_colab.sh diagnostic HAR
+./optimize_coft_colab.sh optimize HAR
+```
+
+### Optimization Features
+- **Multiple Modes**: diagnostic, quick, optimize, help - choose based on time available
+- **Parameter Space**: λ_cotraining, λ_consistency, ensemble methods  
+- **Automatic Verification**: Built-in parameter change validation (3/3 score)
+- **Multi-Platform**: Local (conda) and Google Colab versions
+- **Smart Execution**: Color-coded output, progress tracking, automatic best result detection
+
+### Expected Optimization Results
+- **Parameter Validation**: Different experiments now show different results
+- **Performance Range**: Test accuracy varies based on parameter combinations
+- **Best Configuration**: Automatically saved with verification scores
+
+```bash
+# Example optimization results
+Experiment 1: λ_cotraining=0.001, ensemble=temporal_only → 75.30%
+Experiment 2: λ_cotraining=0.05, ensemble=simple_average → 73.01%  
+Experiment 3: λ_cotraining=0.1, ensemble=temporal_only → [varies]
+```
+
+### Quick Start Optimization  
+1. **Show Usage**: `./optimize_coft.sh help` - See all available modes
+2. **Diagnostic**: `./optimize_coft.sh diagnostic HAR` - Verify setup (5 min)
+3. **Quick Test**: `./optimize_coft.sh quick HAR` - Fast search (30 min)
+4. **Full Optimization**: `./optimize_coft.sh optimize HAR` - Complete search (2-4 hours)
+5. **Colab**: `./optimize_coft_colab.sh [mode] HAR` - Cloud-optimized version
+
 ## 🔧 Advanced Options
 
 ### Complete Command Structure

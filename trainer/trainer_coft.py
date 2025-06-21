@@ -269,12 +269,12 @@ def coft_model_evaluate(model, temporal_contr_model, frequency_model, frequency_
                 if enable_coft:
                     freq_predictions, freq_features = frequency_model(data)
                     # DEBUGGING: Use only temporal predictions for now
-                    final_predictions = predictions
+                    ensemble_predictions = ensemble_module(predictions, freq_predictions); final_predictions = ensemble_predictions
                     # TODO: Re-enable ensemble after debugging
                     # ensemble_predictions = ensemble_module(predictions, freq_predictions)
                     # final_predictions = ensemble_predictions
                 else:
-                    final_predictions = predictions
+                    ensemble_predictions = ensemble_module(predictions, freq_predictions); final_predictions = ensemble_predictions
 
                 # Compute loss and accuracy
                 loss = criterion(final_predictions, labels)

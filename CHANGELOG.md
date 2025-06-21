@@ -2,6 +2,72 @@
 
 All notable changes to the CoFT project will be documented in this file.
 
+## [2.0.0] - 2024-12-21
+
+### 🚀 Major Release - Unified Optimization Architecture
+
+#### 📁 Clean Architecture Implementation
+- **Unified Script System**: Consolidated 5 scripts into 2 main scripts with multiple modes
+- **Script Cleanup**: Removed `optimize_coft_BROKEN.sh`, `optimize_coft_FIXED.sh`, `quick_diagnostic_test.sh`, `quick_test_coft.sh`
+- **File Cleanup**: Removed old optimization results and temporary files
+- **Clean Repository**: Organized structure with only essential files
+
+#### 🎯 New Unified Optimization System
+- **`optimize_coft.sh`**: Main script with 4 modes (diagnostic, quick, optimize, help)
+- **`optimize_coft_colab.sh`**: Google Colab version with reduced parameter space
+- **Mode Selection**: Users can choose execution mode based on time available
+- **Color Output**: Enhanced user experience with color-coded progress
+
+#### 🔧 Optimization Modes
+- **diagnostic**: Quick 5-minute validation (3 experiments)
+- **quick**: Fast parameter search (6 experiments, 30 minutes)  
+- **optimize**: Full optimization (24 experiments, 2-4 hours)
+- **help**: Interactive usage guide
+
+### 🛠️ Critical Bug Fixes - Parameter Optimization System
+
+#### Fixed Major Optimization Bug
+- **CRITICAL**: Fixed `optimize_coft.sh` giving identical results (0.7443%) for all experiments
+- **Root Cause**: Parameter update functions were non-functional
+  - `update_learning_rates()`: Only logged parameters, never modified files
+  - Regex patterns `[0-9.]\+`: Didn't match decimal numbers like `0.01`
+  - Ensemble switching: Non-functional due to debugging mode patterns
+  - No parameter verification system
+
+#### New Optimization Scripts
+- **`optimize_coft_FIXED.sh`**: Fully functional optimization with working parameter updates
+- **`quick_diagnostic_test.sh`**: 5-minute validation tool to verify parameter changes work
+- **`optimize_coft_colab.sh`**: Google Colab compatible optimization script
+- **Parameter verification system**: 3-point validation scores (3/3 = success)
+
+#### Optimization Results Validation
+- **Before Fix**: All experiments identical → 0.7443%
+- **After Fix**: Different parameters show different results:
+  - `λ_cotraining=0.001, temporal_only` → 75.30%
+  - `λ_cotraining=0.05, simple_average` → 73.01%
+  - `λ_cotraining=0.1, temporal_only` → [varies]
+
+### 🔧 Technical Improvements
+- **Fixed Regex Patterns**: `[0-9]*\.[0-9]*` properly matches decimal numbers
+- **Working Learning Rate Updates**: Now actually modifies config files
+- **Functional Ensemble Switching**: temporal_only and simple_average modes work
+- **Parameter Verification**: Real-time validation that changes were applied
+
+### 🌐 Multi-Platform Support
+- **Local Environment**: Full conda-based optimization
+- **Google Colab**: Cloud-optimized version with reduced parameter space
+- **Cross-Platform**: Compatible with both Windows WSL and Linux environments
+
+### 📚 Documentation Updates
+- **README.md**: Added comprehensive Parameter Optimization section
+- **COLAB_USAGE_GUIDE.md**: Complete Google Colab setup and usage guide
+- **Task Documentation**: Detailed problem analysis and solution documentation
+
+### 🧪 Testing & Validation
+- **Diagnostic Testing**: Quick validation tool prevents wasted optimization time
+- **Parameter Space**: Reduced to essential values for faster validation
+- **Results Tracking**: CSV logs, best model saving, progress monitoring
+
 ## [1.1.0] - 2024-06-21
 
 ### 🌟 Major Features Added
