@@ -85,8 +85,11 @@ def model_train(model, temporal_contr_model, model_optimizer, temp_cont_optimize
 
 
         elif training_mode == "SupCon":
+            # Paper specs for CA-TCC:
+            # λ3 (Temporal Contrasting Loss): 0.01
+            # λ4 (Supervised Contextual Contrasting Loss): 0.7
             lambda1 = 0.01
-            lambda2 = 0.1
+            lambda2 = 0.7  # Paper: 0.7 instead of 0.1 - CRITICAL FIX!
             Sup_contrastive_criterion = SupConLoss(device)
 
             supCon_features = torch.cat([temp_cont_feat1.unsqueeze(1), temp_cont_feat2.unsqueeze(1)], dim=1)

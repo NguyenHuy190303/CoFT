@@ -1,5 +1,7 @@
 import os
 import sys
+import time
+from datetime import datetime, timedelta
 
 sys.path.append("..")
 import numpy as np
@@ -7,14 +9,31 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from sklearn.metrics import f1_score
 
 from models.loss import NTXentLoss, SupConLoss
 
 
 def Trainer(model, temporal_contr_model, model_optimizer, temp_cont_optimizer, train_dl, valid_dl, test_dl, device,
-            logger, config, experiment_log_dir, training_mode):
-    # Start training
+            logger, config, experiment_log_dir, training_mode,
+            # Memory optimization arguments (for consistency)
+            memory_efficient=False, gradient_accumulation=1, mixed_precision=False,
+            gradient_checkpointing=False, clear_cache_freq=10):
+
+    # Start timing
+    training_start_time = time.time()
     logger.debug("Training started ....")
+    print(f"🕐 Training started at: {datetime.now().strftime('%H:%M:%S')}")
+
+    # Memory optimization setup (basic support)
+    if mixed_precision:
+        scaler = torch.cuda.amp.GradScaler()
+        logger.debug("🚀 Mixed precision training enabled (baseline)")
+    else:
+        scaler = None
+
+    if memory_efficient:
+        logger.debug(f"🎯 Memory optimizations active - Batch: {config.batch_size}, GradAccum: {gradient_accumulation}")
 
     criterion = nn.CrossEntropyLoss()
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(model_optimizer, 'min')
@@ -22,7 +41,9 @@ def Trainer(model, temporal_contr_model, model_optimizer, temp_cont_optimizer, t
     for epoch in range(1, config.num_epoch + 1):
         # Train and validate
         train_loss, train_acc = model_train(model, temporal_contr_model, model_optimizer, temp_cont_optimizer,
-                                            criterion, train_dl, config, device, training_mode)
+                                            criterion, train_dl, config, device, training_mode,
+                                            scaler=scaler, gradient_accumulation=gradient_accumulation,
+                                            mixed_precision=mixed_precision, clear_cache_freq=clear_cache_freq)
         valid_loss, valid_acc, _, _ = model_evaluate(model, temporal_contr_model, valid_dl, device, training_mode)
         if (training_mode != "self_supervised") and (training_mode != "SupCon"):
             scheduler.step(valid_loss)
@@ -30,7 +51,13 @@ def Trainer(model, temporal_contr_model, model_optimizer, temp_cont_optimizer, t
         logger.debug(f'\nEpoch : {epoch}\n'
                      f'Train Loss     : {train_loss:2.4f}\t | \tTrain Accuracy     : {train_acc:2.4f}\n'
                      f'Valid Loss     : {valid_loss:2.4f}\t | \tValid Accuracy     : {valid_acc:2.4f}')
-
+        
+        # Memory management
+        if memory_efficient and torch.cuda.is_available():
+            torch.cuda.empty_cache()
+            if epoch % 5 == 0:  # Log every 5 epochs
+                current_memory = torch.cuda.memory_allocated() / 1e6  # MB
+                logger.debug(f"💾 GPU Memory: {current_memory:.1f} MB")
 
     # save the model after training ...
     os.makedirs(os.path.join(experiment_log_dir, "saved_models"), exist_ok=True)
@@ -41,70 +68,149 @@ def Trainer(model, temporal_contr_model, model_optimizer, temp_cont_optimizer, t
     if (training_mode != "self_supervised") and (training_mode != "SupCon"):
         # evaluate on the test set
         logger.debug('\nEvaluate on the Test set:')
-        test_loss, test_acc, _, _ = model_evaluate(model, temporal_contr_model, test_dl, device, training_mode)
-        logger.debug(f'Test loss      :{test_loss:2.4f}\t | Test Accuracy      : {test_acc:2.4f}')
+        test_loss, test_acc, pred_labels, true_labels = model_evaluate(model, temporal_contr_model, test_dl, device, training_mode)
+        
+        # Calculate F1 score if we have predictions
+        if len(pred_labels) > 0 and len(true_labels) > 0:
+            f1_macro = f1_score(true_labels, pred_labels, average='macro')
+            f1_weighted = f1_score(true_labels, pred_labels, average='weighted')
+            
+            logger.debug(f'Test loss      :{test_loss:2.4f}\t | Test Accuracy      : {test_acc:2.4f}')
+            logger.debug(f'F1 Score (Macro): {f1_macro:2.4f}\t | F1 Score (Weighted): {f1_weighted:2.4f}')
+            
+            print(f"\n📊 TRAINING COMPLETED - TEST METRICS:")
+            print(f"   🎯 Test Accuracy: {test_acc*100:.2f}%")
+            print(f"   📈 F1 Score (Macro): {f1_macro*100:.2f}%")
+            print(f"   📊 F1 Score (Weighted): {f1_weighted*100:.2f}%")
+        else:
+            logger.debug(f'Test loss      :{test_loss:2.4f}\t | Test Accuracy      : {test_acc:2.4f}')
 
-    logger.debug("\n################## Training is Done! #########################")
+    # Calculate and display total training time
+    training_end_time = time.time()
+    total_training_time = training_end_time - training_start_time
+    training_duration = str(timedelta(seconds=int(total_training_time)))
+    
+    logger.debug(f"\n################## Training is Done! #########################")
+    logger.debug(f"Training time is : {training_duration}")
+    
+    print(f"\n⏰ TRAINING COMPLETED:")
+    print(f"   🕐 Total Training Time: {training_duration}")
+    print(f"   ⏱️  Average per Epoch: {total_training_time/config.num_epoch:.2f} seconds")
+    print(f"   🏁 Finished at: {datetime.now().strftime('%H:%M:%S')}")
 
 
 def model_train(model, temporal_contr_model, model_optimizer, temp_cont_optimizer, criterion, train_loader, config,
-                device, training_mode):
+                device, training_mode,
+                scaler=None, gradient_accumulation=1, mixed_precision=False, clear_cache_freq=10):
     total_loss = []
     total_acc = []
     model.train()
     temporal_contr_model.train()
+
+    # Initialize accumulated loss tracking
+    accumulated_loss = 0.0
+    step_count = 0
 
     for batch_idx, (data, labels, aug1, aug2) in enumerate(train_loader):
         # send to device
         data, labels = data.float().to(device), labels.long().to(device)
         aug1, aug2 = aug1.float().to(device), aug2.float().to(device)
 
-        # optimizer
-        model_optimizer.zero_grad()
-        temp_cont_optimizer.zero_grad()
+        # Forward pass with mixed precision if enabled
+        with torch.cuda.amp.autocast(enabled=mixed_precision):
+            if training_mode == "self_supervised":
+                predictions1, features1 = model(aug1)
+                predictions2, features2 = model(aug2)
 
-        if training_mode == "self_supervised" or training_mode == "SupCon":
-            predictions1, features1 = model(aug1)
-            predictions2, features2 = model(aug2)
+                # normalize projection feature vectors
+                features1 = F.normalize(features1, dim=1)
+                features2 = F.normalize(features2, dim=1)
 
-            # normalize projection feature vectors
-            features1 = F.normalize(features1, dim=1)
-            features2 = F.normalize(features2, dim=1)
+                temp_cont_loss1, temp_cont_feat1 = temporal_contr_model(features1, features2)
+                temp_cont_loss2, temp_cont_feat2 = temporal_contr_model(features2, features1)
 
-            temp_cont_loss1, temp_cont_feat1 = temporal_contr_model(features1, features2)
-            temp_cont_loss2, temp_cont_feat2 = temporal_contr_model(features2, features1)
+                # Paper specs for TS-TCC (unsupervised):
+                # λ1 (Temporal Contrasting Loss): 1
+                # λ2 (Contextual Contrasting Loss): 0.7
+                lambda1 = 1
+                lambda2 = 0.7
+                nt_xent_criterion = NTXentLoss(device, config.batch_size, config.Context_Cont.temperature,
+                                               config.Context_Cont.use_cosine_similarity)
+                loss = (temp_cont_loss1 + temp_cont_loss2) * lambda1 + \
+                       nt_xent_criterion(temp_cont_feat1, temp_cont_feat2) * lambda2
 
+            elif training_mode == "SupCon":
+                predictions1, features1 = model(aug1)
+                predictions2, features2 = model(aug2)
 
-        if training_mode == "self_supervised":
-            lambda1 = 1
-            lambda2 = 0.7
-            nt_xent_criterion = NTXentLoss(device, config.batch_size, config.Context_Cont.temperature,
-                                           config.Context_Cont.use_cosine_similarity)
-            loss = (temp_cont_loss1 + temp_cont_loss2) * lambda1 + \
-                   nt_xent_criterion(temp_cont_feat1, temp_cont_feat2) * lambda2
+                # normalize projection feature vectors
+                features1 = F.normalize(features1, dim=1)
+                features2 = F.normalize(features2, dim=1)
 
+                temp_cont_loss1, temp_cont_feat1 = temporal_contr_model(features1, features2)
+                temp_cont_loss2, temp_cont_feat2 = temporal_contr_model(features2, features1)
 
-        elif training_mode == "SupCon":
-            lambda1 = 0.01
-            lambda2 = 0.1
-            Sup_contrastive_criterion = SupConLoss(device)
+                lambda1 = 0.01
+                lambda2 = 0.7
+                Sup_contrastive_criterion = SupConLoss(device)
+                supCon_features = torch.cat([temp_cont_feat1.unsqueeze(1), temp_cont_feat2.unsqueeze(1)], dim=1)
+                loss = (temp_cont_loss1 + temp_cont_loss2) * lambda1 + Sup_contrastive_criterion(supCon_features, labels) * lambda2
 
-            supCon_features = torch.cat([temp_cont_feat1.unsqueeze(1), temp_cont_feat2.unsqueeze(1)], dim=1)
-            loss = (temp_cont_loss1 + temp_cont_loss2) * lambda1 + Sup_contrastive_criterion(supCon_features,
-                                                                                             labels) * lambda2
+            else:
+                predictions, features = model(data)
+                loss = criterion(predictions, labels)
+                total_acc.append(labels.eq(predictions.detach().argmax(dim=1)).float().mean())
 
+            # Scale loss for gradient accumulation
+            loss = loss / gradient_accumulation
+            accumulated_loss += loss.item()
+
+        # Backward pass with mixed precision support
+        if scaler is not None:
+            scaler.scale(loss).backward()
         else:
-            output = model(data)
-            predictions, features = output
-            loss = criterion(predictions, labels)
-            total_acc.append(labels.eq(predictions.detach().argmax(dim=1)).float().mean())
+            loss.backward()
 
-        total_loss.append(loss.item())
+        step_count += 1
 
-        loss.backward()
-        model_optimizer.step()
-        if training_mode == "self_supervised" or training_mode == "SupCon":
-            temp_cont_optimizer.step()
+        # Update parameters when we've accumulated enough gradients
+        if step_count % gradient_accumulation == 0:
+            if scaler is not None:
+                # Mixed precision gradient clipping and update
+                scaler.unscale_(model_optimizer)
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+                
+                if training_mode == "self_supervised" or training_mode == "SupCon":
+                    scaler.unscale_(temp_cont_optimizer)
+                    torch.nn.utils.clip_grad_norm_(temporal_contr_model.parameters(), max_norm=1.0)
+
+                scaler.step(model_optimizer)
+                if training_mode == "self_supervised" or training_mode == "SupCon":
+                    scaler.step(temp_cont_optimizer)
+                scaler.update()
+            else:
+                # Standard gradient clipping and update
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+                model_optimizer.step()
+                if training_mode == "self_supervised" or training_mode == "SupCon":
+                    torch.nn.utils.clip_grad_norm_(temporal_contr_model.parameters(), max_norm=1.0)
+                    temp_cont_optimizer.step()
+
+            # Zero gradients after update
+            model_optimizer.zero_grad()
+            temp_cont_optimizer.zero_grad()
+
+            # Store the accumulated loss
+            total_loss.append(accumulated_loss)
+            accumulated_loss = 0.0
+
+        # Memory management - clear cache periodically
+        if clear_cache_freq > 0 and batch_idx % clear_cache_freq == 0 and torch.cuda.is_available():
+            torch.cuda.empty_cache()
+
+    # Handle any remaining accumulated loss
+    if step_count % gradient_accumulation != 0:
+        total_loss.append(accumulated_loss)
 
     total_loss = torch.tensor(total_loss).mean()
 

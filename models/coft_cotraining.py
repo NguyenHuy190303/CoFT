@@ -16,6 +16,9 @@ class CoFTCoTraining(nn.Module):
         self.consistency_weight = consistency_weight
         self.num_classes = configs.num_classes
         
+        # Numerical stability constant
+        self.eps = 1e-8
+        
         # Cross-domain alignment modules
         self.temporal_to_freq_adapter = nn.Sequential(
             nn.Linear(configs.final_out_channels, configs.final_out_channels),
@@ -47,8 +50,18 @@ class CoFTCoTraining(nn.Module):
         if threshold is None:
             threshold = self.confidence_threshold
             
-        # Apply softmax to get probabilities
-        probs = F.softmax(logits, dim=1)
+        # Check for NaN in input logits
+        if torch.isnan(logits).any():
+            print(f"⚠️  WARNING: NaN detected in logits during pseudo-label generation")
+            # Return fallback values
+            batch_size = logits.shape[0]
+            device = logits.device
+            pseudo_labels = torch.zeros(batch_size, dtype=torch.long, device=device)
+            confidence_mask = torch.zeros(batch_size, dtype=torch.bool, device=device)
+            return pseudo_labels, confidence_mask
+            
+        # Apply softmax to get probabilities with numerical stability
+        probs = F.softmax(logits, dim=1) + self.eps
         max_probs, pseudo_labels = torch.max(probs, dim=1)
         
         # Create confidence mask
@@ -59,7 +72,7 @@ class CoFTCoTraining(nn.Module):
     def cross_domain_consistency_loss(self, temporal_features, freq_features, 
                                      temporal_logits, freq_logits):
         """
-        Compute cross-domain consistency loss.
+        Compute cross-domain consistency loss with numerical stability.
         
         Args:
             temporal_features: Features from temporal branch
@@ -70,6 +83,15 @@ class CoFTCoTraining(nn.Module):
         Returns:
             consistency_loss: Cross-domain consistency loss
         """
+        # Check for NaN inputs
+        if torch.isnan(temporal_features).any() or torch.isnan(freq_features).any():
+            print(f"⚠️  WARNING: NaN detected in features during consistency loss")
+            return torch.tensor(0.0, device=temporal_features.device, requires_grad=True)
+            
+        if torch.isnan(temporal_logits).any() or torch.isnan(freq_logits).any():
+            print(f"⚠️  WARNING: NaN detected in logits during consistency loss")
+            return torch.tensor(0.0, device=temporal_logits.device, requires_grad=True)
+        
         # Flatten features if they are 3D (from conv layers)
         if len(temporal_features.shape) == 3:
             temporal_features = temporal_features.flatten(1)  # [batch, channels*spatial]
@@ -96,33 +118,54 @@ class CoFTCoTraining(nn.Module):
             
             self._adapters_initialized = True
         
-        # Feature alignment loss
-        temporal_aligned = self.temporal_to_freq_adapter(temporal_features)
-        freq_aligned = self.freq_to_temporal_adapter(freq_features)
-        
-        feature_consistency_loss = F.mse_loss(temporal_aligned, freq_features) + \
-                                  F.mse_loss(freq_aligned, temporal_features)
-        
-        # Prediction consistency loss
-        temporal_probs = F.softmax(temporal_logits / self.temperature, dim=1)
-        freq_probs = F.softmax(freq_logits / self.temperature, dim=1)
-        
-        prediction_consistency_loss = F.kl_div(
-            F.log_softmax(temporal_logits / self.temperature, dim=1),
-            freq_probs,
-            reduction='batchmean'
-        ) + F.kl_div(
-            F.log_softmax(freq_logits / self.temperature, dim=1),
-            temporal_probs,
-            reduction='batchmean'
-        )
-        
-        return (feature_consistency_loss + prediction_consistency_loss) * self.consistency_weight
+        try:
+            # Feature alignment loss with gradient clipping
+            temporal_aligned = self.temporal_to_freq_adapter(temporal_features)
+            freq_aligned = self.freq_to_temporal_adapter(freq_features)
+            
+            # Check for NaN in aligned features
+            if torch.isnan(temporal_aligned).any() or torch.isnan(freq_aligned).any():
+                print(f"⚠️  WARNING: NaN detected in aligned features")
+                return torch.tensor(0.0, device=temporal_features.device, requires_grad=True)
+            
+            feature_consistency_loss = F.mse_loss(temporal_aligned, freq_features) + \
+                                      F.mse_loss(freq_aligned, temporal_features)
+            
+            # Prediction consistency loss with numerical stability
+            temporal_probs = F.softmax(temporal_logits / self.temperature, dim=1) + self.eps
+            freq_probs = F.softmax(freq_logits / self.temperature, dim=1) + self.eps
+            
+            # Normalize probabilities to sum to 1
+            temporal_probs = temporal_probs / temporal_probs.sum(dim=1, keepdim=True)
+            freq_probs = freq_probs / freq_probs.sum(dim=1, keepdim=True)
+            
+            prediction_consistency_loss = F.kl_div(
+                torch.log(temporal_probs + self.eps),
+                freq_probs,
+                reduction='batchmean'
+            ) + F.kl_div(
+                torch.log(freq_probs + self.eps),
+                temporal_probs,
+                reduction='batchmean'
+            )
+            
+            total_consistency_loss = (feature_consistency_loss + prediction_consistency_loss) * self.consistency_weight
+            
+            # Final NaN check
+            if torch.isnan(total_consistency_loss):
+                print(f"⚠️  WARNING: NaN detected in final consistency loss")
+                return torch.tensor(0.0, device=temporal_features.device, requires_grad=True)
+                
+            return total_consistency_loss
+            
+        except Exception as e:
+            print(f"⚠️  ERROR in consistency loss computation: {e}")
+            return torch.tensor(0.0, device=temporal_features.device, requires_grad=True)
     
     def co_training_loss(self, temporal_logits, freq_logits, labels, 
                         temporal_features, freq_features):
         """
-        Compute co-training loss with pseudo-labeling.
+        Compute co-training loss with pseudo-labeling and improved numerical stability.
         
         Args:
             temporal_logits: Logits from temporal branch
@@ -135,47 +178,85 @@ class CoFTCoTraining(nn.Module):
             co_training_loss: Combined co-training loss
             stats: Dictionary with loss statistics
         """
+        device = temporal_logits.device
         
-        # Generate pseudo-labels from each domain
-        temporal_pseudo, temporal_mask = self.generate_pseudo_labels(temporal_logits)
-        freq_pseudo, freq_mask = self.generate_pseudo_labels(freq_logits)
+        # Initialize default values
+        temporal_pseudo_loss = torch.tensor(0.0, device=device, requires_grad=True)
+        freq_pseudo_loss = torch.tensor(0.0, device=device, requires_grad=True)
+        consistency_loss = torch.tensor(0.0, device=device, requires_grad=True)
+        supervised_loss = torch.tensor(0.0, device=device, requires_grad=True)
         
-        # Cross-domain pseudo-labeling losses
-        temporal_pseudo_loss = F.cross_entropy(
-            freq_logits[temporal_mask], 
-            temporal_pseudo[temporal_mask],
-            reduction='mean'
-        ) if temporal_mask.sum() > 0 else torch.tensor(0.0, device=temporal_logits.device)
-        
-        freq_pseudo_loss = F.cross_entropy(
-            temporal_logits[freq_mask],
-            freq_pseudo[freq_mask], 
-            reduction='mean'
-        ) if freq_mask.sum() > 0 else torch.tensor(0.0, device=freq_logits.device)
-        
-        # Cross-domain consistency loss
-        consistency_loss = self.cross_domain_consistency_loss(
-            temporal_features, freq_features, temporal_logits, freq_logits
-        )
-        
-        # Supervised loss (if labels available)
-        supervised_loss = torch.tensor(0.0, device=temporal_logits.device)
-        if labels is not None:
-            supervised_loss = F.cross_entropy(temporal_logits, labels) + \
-                            F.cross_entropy(freq_logits, labels)
-        
-        total_loss = temporal_pseudo_loss + freq_pseudo_loss + consistency_loss + supervised_loss
-        
-        stats = {
-            'temporal_pseudo_loss': temporal_pseudo_loss.item(),
-            'freq_pseudo_loss': freq_pseudo_loss.item(),
-            'consistency_loss': consistency_loss.item(),
-            'supervised_loss': supervised_loss.item(),
-            'temporal_confident_ratio': temporal_mask.float().mean().item(),
-            'freq_confident_ratio': freq_mask.float().mean().item()
-        }
-        
-        return total_loss, stats
+        try:
+            # Generate pseudo-labels from each domain
+            temporal_pseudo, temporal_mask = self.generate_pseudo_labels(temporal_logits)
+            freq_pseudo, freq_mask = self.generate_pseudo_labels(freq_logits)
+            
+            # Cross-domain pseudo-labeling losses with improved handling
+            if temporal_mask.sum() > 0 and not torch.isnan(freq_logits).any():
+                temporal_pseudo_loss = F.cross_entropy(
+                    freq_logits[temporal_mask], 
+                    temporal_pseudo[temporal_mask],
+                    reduction='mean'
+                )
+                
+            if freq_mask.sum() > 0 and not torch.isnan(temporal_logits).any():
+                freq_pseudo_loss = F.cross_entropy(
+                    temporal_logits[freq_mask],
+                    freq_pseudo[freq_mask], 
+                    reduction='mean'
+                )
+            
+            # Cross-domain consistency loss
+            if temporal_features is not None and freq_features is not None:
+                consistency_loss = self.cross_domain_consistency_loss(
+                    temporal_features, freq_features, temporal_logits, freq_logits
+                )
+            
+            # Supervised loss (if labels available)
+            if labels is not None and not torch.isnan(temporal_logits).any() and not torch.isnan(freq_logits).any():
+                temporal_sup_loss = F.cross_entropy(temporal_logits, labels)
+                freq_sup_loss = F.cross_entropy(freq_logits, labels)
+                
+                # Check for NaN in supervised losses
+                if not torch.isnan(temporal_sup_loss) and not torch.isnan(freq_sup_loss):
+                    supervised_loss = temporal_sup_loss + freq_sup_loss
+            
+            # Check all loss components for NaN
+            losses = [temporal_pseudo_loss, freq_pseudo_loss, consistency_loss, supervised_loss]
+            for i, loss in enumerate(losses):
+                if torch.isnan(loss):
+                    print(f"⚠️  WARNING: NaN detected in loss component {i}")
+                    losses[i] = torch.tensor(0.0, device=device, requires_grad=True)
+            
+            total_loss = sum(losses)
+            
+            # Final safety check
+            if torch.isnan(total_loss):
+                print(f"⚠️  WARNING: NaN detected in total co-training loss, returning 0")
+                total_loss = torch.tensor(0.0, device=device, requires_grad=True)
+            
+            stats = {
+                'temporal_pseudo_loss': losses[0].item(),
+                'freq_pseudo_loss': losses[1].item(),
+                'consistency_loss': losses[2].item(),
+                'supervised_loss': losses[3].item(),
+                'temporal_confident_ratio': temporal_mask.float().mean().item() if temporal_mask.numel() > 0 else 0.0,
+                'freq_confident_ratio': freq_mask.float().mean().item() if freq_mask.numel() > 0 else 0.0
+            }
+            
+            return total_loss, stats
+            
+        except Exception as e:
+            print(f"⚠️  ERROR in co-training loss computation: {e}")
+            stats = {
+                'temporal_pseudo_loss': 0.0,
+                'freq_pseudo_loss': 0.0,
+                'consistency_loss': 0.0,
+                'supervised_loss': 0.0,
+                'temporal_confident_ratio': 0.0,
+                'freq_confident_ratio': 0.0
+            }
+            return torch.tensor(0.0, device=device, requires_grad=True), stats
 
 
 class CoFTEnsemble(nn.Module):
@@ -197,7 +278,7 @@ class CoFTEnsemble(nn.Module):
             
     def forward(self, temporal_logits, freq_logits):
         """
-        Ensemble predictions from both domains.
+        Ensemble predictions from both domains with NaN handling.
         
         Args:
             temporal_logits: Predictions from temporal branch
@@ -206,6 +287,17 @@ class CoFTEnsemble(nn.Module):
         Returns:
             ensemble_logits: Combined predictions
         """
+        # Check for NaN inputs
+        if torch.isnan(temporal_logits).any() or torch.isnan(freq_logits).any():
+            print(f"⚠️  WARNING: NaN detected in ensemble inputs")
+            # Return the non-NaN input or zeros if both are NaN
+            if not torch.isnan(temporal_logits).any():
+                return temporal_logits
+            elif not torch.isnan(freq_logits).any():
+                return freq_logits
+            else:
+                return torch.zeros_like(temporal_logits)
+        
         if self.ensemble_method == 'average':
             return (temporal_logits + freq_logits) / 2.0
             

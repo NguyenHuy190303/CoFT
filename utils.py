@@ -6,7 +6,7 @@ import sys
 import numpy as np
 import pandas as pd
 import torch
-from sklearn.metrics import classification_report, cohen_kappa_score, confusion_matrix, accuracy_score
+from sklearn.metrics import classification_report, cohen_kappa_score, confusion_matrix, accuracy_score, f1_score, precision_score, recall_score
 from torch import nn
 
 
@@ -59,11 +59,31 @@ def _calc_metrics(pred_labels, true_labels, log_dir, home_path):
     np.save(os.path.join(labels_save_path, "predicted_labels.npy"), pred_labels)
     np.save(os.path.join(labels_save_path, "true_labels.npy"), true_labels)
 
+    # Calculate comprehensive metrics
+    accuracy = accuracy_score(true_labels, pred_labels)
+    f1_macro = f1_score(true_labels, pred_labels, average='macro')
+    f1_weighted = f1_score(true_labels, pred_labels, average='weighted')
+    precision_macro = precision_score(true_labels, pred_labels, average='macro')
+    recall_macro = recall_score(true_labels, pred_labels, average='macro')
+    
+    # Enhanced console output
+    print(f"\n📊 FINAL TEST METRICS:")
+    print(f"   🎯 Test Accuracy: {accuracy*100:.2f}%")
+    print(f"   📈 F1 Score (Macro): {f1_macro*100:.2f}%")
+    print(f"   📊 F1 Score (Weighted): {f1_weighted*100:.2f}%")
+    print(f"   🎯 Precision (Macro): {precision_macro*100:.2f}%")
+    print(f"   📈 Recall (Macro): {recall_macro*100:.2f}%")
+
+    # Detailed classification report
     r = classification_report(true_labels, pred_labels, digits=6, output_dict=True)
     cm = confusion_matrix(true_labels, pred_labels)
     df = pd.DataFrame(r)
     df["cohen"] = cohen_kappa_score(true_labels, pred_labels)
-    df["accuracy"] = accuracy_score(true_labels, pred_labels)
+    df["accuracy"] = accuracy
+    df["f1_macro"] = f1_macro
+    df["f1_weighted"] = f1_weighted
+    df["precision_macro"] = precision_macro
+    df["recall_macro"] = recall_macro
     df = df * 100
 
     # save classification report
@@ -77,6 +97,15 @@ def _calc_metrics(pred_labels, true_labels, log_dir, home_path):
     cm_file_name = f"{exp_name}_{training_mode}_confusion_matrix.torch"
     cm_Save_path = os.path.join(home_path, log_dir, cm_file_name)
     torch.save(cm, cm_Save_path)
+    
+    # Return metrics for further use
+    return {
+        'accuracy': accuracy,
+        'f1_macro': f1_macro,
+        'f1_weighted': f1_weighted,
+        'precision_macro': precision_macro,
+        'recall_macro': recall_macro
+    }
 
 
 def _logger(logger_name, level=logging.DEBUG):

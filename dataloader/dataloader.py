@@ -62,22 +62,22 @@ def data_generator(data_path, configs, training_mode):
     persistent_workers = False  # Avoid worker lifecycle issues
 
     if "_1p" in training_mode:
-        train_dataset = torch.load(os.path.join(data_path, "train_1perc.pt"))
+        train_dataset = torch.load(os.path.join(data_path, "train_1p.pt"), weights_only=False)
     elif "_5p" in training_mode:
-        train_dataset = torch.load(os.path.join(data_path, "train_5perc.pt"))
+        train_dataset = torch.load(os.path.join(data_path, "train_5p.pt"), weights_only=False)
     elif "_10p" in training_mode:
-        train_dataset = torch.load(os.path.join(data_path, "train_10perc.pt"))
+        train_dataset = torch.load(os.path.join(data_path, "train_10p.pt"), weights_only=False)
     elif "_50p" in training_mode:
-        train_dataset = torch.load(os.path.join(data_path, "train_50perc.pt"))
+        train_dataset = torch.load(os.path.join(data_path, "train_50p.pt"), weights_only=False)
     elif "_75p" in training_mode:
-        train_dataset = torch.load(os.path.join(data_path, "train_75perc.pt"))
-    elif training_mode == "SupCon":
-        train_dataset = torch.load(os.path.join(data_path, "pseudo_train_data.pt"))
+        train_dataset = torch.load(os.path.join(data_path, "train_75p.pt"), weights_only=False)
+    elif "SupCon" in training_mode:
+        train_dataset = torch.load(os.path.join(data_path, "pseudo_train_data.pt"), weights_only=False)
     else:
-        train_dataset = torch.load(os.path.join(data_path, "train.pt"))
+        train_dataset = torch.load(os.path.join(data_path, "train.pt"), weights_only=False)
 
-    valid_dataset = torch.load(os.path.join(data_path, "val.pt"))
-    test_dataset = torch.load(os.path.join(data_path, "test.pt"))
+    valid_dataset = torch.load(os.path.join(data_path, "val.pt"), weights_only=False)
+    test_dataset = torch.load(os.path.join(data_path, "test.pt"), weights_only=False)
 
     train_dataset = Load_Dataset(train_dataset, configs, training_mode)
     valid_dataset = Load_Dataset(valid_dataset, configs, training_mode)

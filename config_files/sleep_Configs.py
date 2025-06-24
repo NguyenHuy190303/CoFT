@@ -4,7 +4,7 @@ class Config(object):
         self.input_channels = 1
         self.final_out_channels = 128
         self.num_classes = 5
-        self.dropout = 0.35
+        self.dropout = 0.1
 
         self.kernel_size = 25
         self.stride = 3
@@ -18,6 +18,7 @@ class Config(object):
         self.beta1 = 0.9
         self.beta2 = 0.99
         self.lr = 3e-4
+        self.weight_decay = 3e-4
 
         # data parameters
         self.drop_last = True
@@ -30,9 +31,18 @@ class Config(object):
 
 class augmentations(object):
     def __init__(self):
-        self.jitter_scale_ratio = 1.5
-        self.jitter_ratio = 2
-        self.max_seg = 12
+        self.jitter_scale_ratio = 2.0
+        self.jitter_ratio = 0.8
+        self.max_seg = 20
+        
+        # *** NEW FEATURE SWITCH: InfoTS Augmentation Integration ***
+        self.use_infots_augmentation = False  # Set to True to use InfoTS advanced augmentations
+        
+        # InfoTS augmentation parameters (used when use_infots_augmentation=True)
+        self.infots_aug_p1 = 0.7  # Probability of applying first augmentation
+        self.infots_aug_p2 = 0.0  # Probability of applying second augmentation  
+        self.infots_used_augs = None  # None = use all augmentations, or list of bools
+        self.infots_temperature = 1.0  # Temperature for learnable augmentation weights
 
 
 class Context_Cont_configs(object):
@@ -44,4 +54,4 @@ class Context_Cont_configs(object):
 class TC(object):
     def __init__(self):
         self.hidden_dim = 64
-        self.timesteps = 50
+        self.timesteps = int(0.4 * 127)  # 40% of features_len (127) = 50.8 ≈ 51

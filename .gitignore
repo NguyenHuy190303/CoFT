@@ -1,15 +1,17 @@
-# Ignore data directories
+# CoFT Project .gitignore
+# ====================
+
+# ===== DATA FILES =====
+# Ignore extracted data directories but allow compressed archives
 data/epilepsy/
 data/HAR/
 data/sleep/
 data/SleepEDF/
-experiments_logs
-# Python cache
-__pycache__/
-*.pyc 
-.cursor
 
-# Large files and experiment data
+# Allow .tar.gz archives for distribution
+!data/*.tar.gz
+
+# Ignore other data formats
 *.pt
 *.pth  
 *.pkl
@@ -21,7 +23,7 @@ optimization_results_*/
 diagnostic_test_*/
 colab_*/
 quick_*/
-
+.cursorignore
 # Large data files
 data/
 *.csv
@@ -29,13 +31,13 @@ data/
 *.h5
 *.hdf5
 
-# Temporary files
+# ===== TEMPORARY FILES =====
 *.tmp
 *.backup
 *.bak
 *.log
 
-# Model checkpoints
+# ===== MODEL CHECKPOINTS =====
 saved_models/
 checkpoints/
 
@@ -45,5 +47,11 @@ data/
 # Ignore all files in the experiments_logs directory
 experiments_logs/
 
-# Ignore all files in the optimization_results_ directory
-optimization_results_/
+# ===== ENVIRONMENT =====
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
