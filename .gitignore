@@ -1,13 +1,15 @@
 # CoFT Project .gitignore
 # ====================
-
+__pycache__
 # ===== DATA FILES =====
 # Ignore extracted data directories but allow compressed archives
 data/epilepsy/
 data/HAR/
 data/sleep/
 data/SleepEDF/
-
+experiments_logs/
+.pyc
+.log
 # Allow .tar.gz archives for distribution
 !data/*.tar.gz
 

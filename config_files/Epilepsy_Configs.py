@@ -45,11 +45,6 @@ class augmentations(object):
         # self.infots_temperature = 1.0
         # --- END LEGACY CODE ---
 
-    def set_supervised_configs(self):
-        # supervised learning configs
-        pass
-
-
 class Context_Cont_configs(object):
     def __init__(self):
         self.temperature = 0.2
@@ -59,8 +54,4 @@ class Context_Cont_configs(object):
 class TC(object):
     def __init__(self):
         self.hidden_dim = 100
-        self.timesteps = int(0.4 * 24)  # 40% of features_len (24) = 9.6 ≈ 10
-
-
-class Sleep_Configs(object):
-    # ... existing code ...
+        self.timesteps = 10
