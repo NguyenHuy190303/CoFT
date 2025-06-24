@@ -64,16 +64,20 @@ def execute_training_mode(args, mode_name, overall_start_time):
     #####################################################
     
     # Override InfoTS setting if specified via command line
-    if args.enable_infots:
-        configs.augmentation.use_infots_augmentation = True
-        print(f"🎨 InfoTS augmentation ENABLED via command line for {data_type} dataset")
-    else:
-        # Keep default config setting
-        infots_status = getattr(configs.augmentation, 'use_infots_augmentation', False)
-        if infots_status:
-            print(f"🎨 InfoTS augmentation ENABLED via config for {data_type} dataset")
-        else:
-            print(f"📊 InfoTS augmentation DISABLED for {data_type} dataset (using CoFT baseline)")
+    # --- BEGIN LEGACY CODE ---
+    # if args.enable_infots:
+    #     configs.augmentation.use_infots_augmentation = True
+    #     print(f"🎨 InfoTS augmentation ENABLED via command line for {data_type} dataset")
+    # --- END LEGACY CODE ---
+
+    # Log augmentation status
+    # --- BEGIN LEGACY CODE ---
+    # infots_status = getattr(configs.augmentation, 'use_infots_augmentation', False)
+    # if infots_status:
+    #     print(f"🎨 InfoTS augmentation ENABLED via config for {data_type} dataset")
+    # else:
+    #     print(f"📊 InfoTS augmentation DISABLED for {data_type} dataset (using CoFT baseline)")
+    # --- END LEGACY CODE ---
 
     # Memory Optimization Configuration
     if args.memory_efficient or args.reduced_batch_size or args.enable_coft:
@@ -504,7 +508,9 @@ def training_orchestrator(args):
     print(f"🗂️ Dataset: {args.selected_dataset}")
     print(f"📊 Label Percentage: {args.label_percentage}%")
     print(f"🔄 CoFT: {'Enabled' if args.enable_coft else 'Disabled'}")
-    print(f"🎨 InfoTS: {'Enabled' if args.enable_infots else 'Disabled'}")
+    # --- BEGIN LEGACY CODE ---
+    # print(f"🎨 InfoTS: {'Enabled' if args.enable_infots else 'Disabled'}")
+    # --- END LEGACY CODE ---
     print(f"⏰ Start Time: {overall_start_time.strftime('%Y-%m-%d %H:%M:%S')}")
     
     successful_modes = []
@@ -627,8 +633,10 @@ if __name__ == "__main__":
                         help='Label percentage for training (1, 5, 75). Controls which dataset split to use.')
 
     ######################## InfoTS Augmentation Configuration ########################  
-    parser.add_argument('--enable_infots',             action='store_true',        default=False,
-                        help='Enable InfoTS augmentation for ALL datasets (overrides config file settings)')
+    # --- BEGIN LEGACY CODE ---
+    # parser.add_argument('--enable_infots',             action='store_true',        default=False,
+    #                     help='Enable InfoTS augmentation for ALL datasets (overrides config file settings)')
+    # --- END LEGACY CODE ---
 
     args = parser.parse_args()
 

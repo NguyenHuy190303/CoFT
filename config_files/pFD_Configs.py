@@ -34,14 +34,14 @@ class augmentations(object):
         self.jitter_ratio = 0.8
         self.max_seg = 10
         
-        # *** NEW FEATURE SWITCH: InfoTS Augmentation Integration ***
-        self.use_infots_augmentation = False  # Set to True to use InfoTS advanced augmentations
+        # # *** NEW FEATURE SWITCH: InfoTS Augmentation Integration ***
+        # self.use_infots_augmentation = False  # Set to True to use InfoTS advanced augmentations
         
-        # InfoTS augmentation parameters (used when use_infots_augmentation=True)
-        self.infots_aug_p1 = 0.7  # Probability of applying first augmentation
-        self.infots_aug_p2 = 0.0  # Probability of applying second augmentation  
-        self.infots_used_augs = None  # None = use all augmentations, or list of bools
-        self.infots_temperature = 1.0  # Temperature for learnable augmentation weights
+        # # InfoTS augmentation parameters (used when use_infots_augmentation=True)
+        # self.infots_aug_p1 = 0.7  # Probability of applying first augmentation
+        # self.infots_aug_p2 = 0.0  # Probability of applying second augmentation  
+        # self.infots_used_augs = None  # None = use all augmentations, or list of bools
+        # self.infots_temperature = 1.0  # Temperature for learnable augmentation weights
 
 
 class Context_Cont_configs(object):
