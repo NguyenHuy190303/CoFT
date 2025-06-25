@@ -66,7 +66,7 @@ def execute_training_mode(args, mode_name, overall_start_time):
     # Dynamic import of dataset config
     if data_type == "HAR":
         from config_files.HAR_Configs import Config as Configs
-    elif data_type == "sleep":
+    elif data_type == "sleep" or data_type == "SleepEDF":
         from config_files.sleep_Configs import Config as Configs  
     elif data_type == "Epilepsy":
         from config_files.Epilepsy_Configs import Config as Configs

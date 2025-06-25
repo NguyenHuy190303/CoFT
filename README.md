@@ -21,16 +21,16 @@ python3 main.py --training_mode full_run --selected_dataset HAR --label_percenta
 Enable advanced InfoTS augmentation for ANY dataset:
 ```bash
 # Enable InfoTS for any dataset via command line
-python3 main.py --training_mode full_run --selected_dataset sleep --enable_infots
-python3 main.py --training_mode full_run --selected_dataset Epilepsy --enable_infots
-python3 main.py --training_mode full_run --selected_dataset pFD --enable_infots
+python3 main.py --training_mode full_run --selected_dataset sleep
+python3 main.py --training_mode full_run --selected_dataset Epilepsy
+python3 main.py --training_mode full_run --selected_dataset pFD
 ```
 
 ### **⚡ Combined Power**
 Combine all features for maximum performance:
 ```bash
 # CoFT + InfoTS + 5% labels
-python3 main.py --training_mode full_run --selected_dataset HAR --enable_coft --enable_infots --label_percentage 5
+python3 main.py --training_mode full_run --selected_dataset HAR --enable_coft --label_percentage 5
 ```
 
 ## 🛠️ **Quick Setup**
@@ -80,7 +80,7 @@ chmod +x *.sh
 python3 main.py --training_mode full_run --selected_dataset HAR
 
 # Advanced training  
-python3 main.py --training_mode full_run --selected_dataset HAR --enable_coft --enable_infots --label_percentage 5
+python3 main.py --training_mode full_run --selected_dataset HAR --enable_coft --label_percentage 5
 ```
 
 ## 📋 **Command Line Arguments**
