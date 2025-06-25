@@ -488,7 +488,7 @@ class InfoTS:
         Args:
             fn (str): filename.
         '''
-        state_dict = torch.load(fn, map_location=self.device, weights_only=False)
+        state_dict = torch.load(fn, map_location=self.device)
         self.net.load_state_dict(state_dict)
 
     def _eval_with_pooling(self, x, mask=None, slicing=None, encoding_window=None):

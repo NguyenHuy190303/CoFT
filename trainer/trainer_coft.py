@@ -33,9 +33,14 @@ def CoFTTrainer(model, temporal_contr_model, frequency_model, frequency_contr_mo
     print(f"🕐 CoFT Training started at: {datetime.now().strftime('%H:%M:%S')}")
     
     # Memory optimization setup
-    if mixed_precision:
+    if mixed_precision and hasattr(torch, 'amp'):
         scaler = torch.cuda.amp.GradScaler()
         logger.debug("🚀 Mixed precision training enabled")
+    elif mixed_precision:
+        # Fallback for older PyTorch versions
+        mixed_precision = False  # Disable mixed precision if not available
+        scaler = None
+        logger.debug("⚠️ Mixed precision not available on this PyTorch version - disabled")
     else:
         scaler = None
     
@@ -190,8 +195,16 @@ def coft_model_train(model, temporal_contr_model, frequency_model, frequency_con
         data, labels = data.float().to(device), labels.long().to(device)
         aug1, aug2 = aug1.float().to(device), aug2.float().to(device)
 
-        # Forward pass with mixed precision if enabled
-        with torch.amp.autocast('cuda', enabled=mixed_precision):
+        # Forward pass with mixed precision if enabled and available
+        # Check if torch.amp is available (PyTorch >= 1.6)
+        has_amp = hasattr(torch, 'amp') and mixed_precision
+        if has_amp:
+            autocast_context = torch.amp.autocast('cuda', enabled=True)
+        else:
+            from contextlib import nullcontext
+            autocast_context = nullcontext()
+            
+        with autocast_context:
             temporal_outputs = {}
             frequency_outputs = {}
 
