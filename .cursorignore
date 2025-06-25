@@ -1,6 +1,5 @@
 # Add directories or file patterns to ignore during indexing (e.g. foo/ or *.csv)
 __pycache__
-data_preprocessing
 data
 experiments_logs
 sleepEDF20_fpzcz_subjects
