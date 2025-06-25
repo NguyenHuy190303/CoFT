@@ -111,8 +111,7 @@ def _apply_infots_augmentation(sample, config):
         aug_p1 = getattr(config.augmentation, 'infots_aug_p1', 0.7)
         aug_p2 = getattr(config.augmentation, 'infots_aug_p2', 0.7)
         
-        # Reduced logging - only show parameters once
-        # print(f"🎨 Applying InfoTS augmentations with p1={aug_p1}, p2={aug_p2}")
+        print(f"🎨 Applying InfoTS augmentations with p1={aug_p1}, p2={aug_p2}")
         
         # Convert tensor to numpy if needed
         if torch.is_tensor(sample):
@@ -184,18 +183,12 @@ def DataTransform_TD(sample, config, enable_coft=False):
     
     # CoFT mode: Use InfoTS-inspired augmentations as default
     if enable_coft:
-        # Only print once at the beginning
-        if not hasattr(DataTransform_TD, '_coft_msg_shown'):
-            print("🎨 CoFT Mode: Using InfoTS-inspired augmentations")
-            DataTransform_TD._coft_msg_shown = True
+        print("🎨 CoFT Mode: Using InfoTS-inspired augmentations")
         return _apply_infots_augmentation(sample, config)
     
     # Normal mode: Use traditional strong/weak augmentations
     else:
-        # Only print once at the beginning  
-        if not hasattr(DataTransform_TD, '_normal_msg_shown'):
-            print("📊 Normal Mode: Using strong/weak augmentations")
-            DataTransform_TD._normal_msg_shown = True
+        print("📊 Normal Mode: Using strong/weak augmentations")
         weak_aug = scaling(sample, config.augmentation.jitter_scale_ratio)
         strong_aug = jitter(permutation(sample, max_segments=config.augmentation.max_seg), config.augmentation.jitter_ratio)
         return weak_aug, strong_aug

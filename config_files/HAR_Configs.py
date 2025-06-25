@@ -38,11 +38,11 @@ class augmentations(object):
         # *** NEW FEATURE SWITCH: InfoTS Augmentation Integration ***
         self.use_infots_augmentation = False  # Set to True to use InfoTS advanced augmentations
 
-        # InfoTS augmentation parameters (used when use_infots_augmentation=True)
-        self.infots_aug_p1 = 0.7  # Probability of applying first augmentation
-        self.infots_aug_p2 = 0.7  # Probability of applying second augmentation
-        self.infots_used_augs = None  # None = use all augmentations, or list of bools
-        self.infots_temperature = 1.0  # Temperature for learnable augmentation weights
+        # InfoTS-inspired augmentation parameters
+        self.infots_aug_p1 = 0.3  # Reduced from 0.7 - probability of first augmentation
+        self.infots_aug_p2 = 0.3  # Reduced from 0.7 - probability of second augmentation
+        self.infots_used_augs = None  # Will use random selection
+        self.infots_temperature = 1.0
 
     def set_supervised_configs(self):
         # supervised learning configs

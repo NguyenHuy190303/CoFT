@@ -30,7 +30,7 @@ python3 main.py --training_mode full_run --selected_dataset pFD --enable_infots
 Combine all features for maximum performance:
 ```bash
 # CoFT + InfoTS + 5% labels
-python3 main.py --training_mode full_run --selected_dataset HAR --enable_coft --enable_infots --label_percentage 5
+python3 main.py --training_mode full_run --selected_dataset sleep --enable_coft --enable_infots --label_percentage 5
 ```
 
 ## 🛠️ **Quick Setup**
