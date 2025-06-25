@@ -19,21 +19,11 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 
 def safe_torch_load(filepath, device=None, **kwargs):
-    """Safe torch.load wrapper that handles compatibility issues"""
-    try:
-        if device:
-            return torch.load(filepath, map_location=device, weights_only=False, **kwargs)
-        else:
-            return torch.load(filepath, weights_only=False, **kwargs)
-    except TypeError as e:
-        if "weights_only" in str(e):
-            # Fallback for older PyTorch versions
-            if device:
-                return torch.load(filepath, map_location=device, **kwargs)
-            else:
-                return torch.load(filepath, **kwargs)
-        else:
-            raise e
+    """Safe torch.load wrapper that avoids weights_only for compatibility"""
+    if device:
+        return torch.load(filepath, map_location=device, **kwargs)
+    else:
+        return torch.load(filepath, **kwargs)
 
 def execute_training_mode(args, mode_name, overall_start_time):
     """
@@ -99,209 +89,121 @@ def execute_training_mode(args, mode_name, overall_start_time):
     #     print(f"🎨 InfoTS augmentation ENABLED via config for {data_type} dataset")
     # else:
     #     print(f"📊 InfoTS augmentation DISABLED for {data_type} dataset (using CoFT baseline)")
-    # --- END LEGACY CODE ---
+        # --- END LEGACY CODE ---
 
-    # Memory Optimization Configuration
+    # Memory Optimization Configuration (Reduced Output)
     if args.memory_efficient or args.reduced_batch_size or args.enable_coft:
         # Auto-detect memory constraints and apply optimizations
         if torch.cuda.is_available():
             total_memory_gb = torch.cuda.get_device_properties(0).total_memory / 1e9
             device_name = torch.cuda.get_device_name(0)
             
-            print(f"\n🔍 GPU Detection:")
-            print(f"   Device: {device_name}")
-            print(f"   VRAM: {total_memory_gb:.1f} GB")
+            # Simplified GPU info
+            print(f"🔍 GPU: {device_name} ({total_memory_gb:.1f} GB)")
             
             # High-end GPU configuration (24GB+)
             if total_memory_gb >= 24.0:
-                #print(f"🚀 High-end GPU detected ({total_memory_gb:.1f}GB) - Premium optimizations available")
+                # print(f"🚀 High-end GPU detected ({total_memory_gb:.1f}GB) - Premium optimizations available")
                 
                 # For high-end GPUs, focus on speed rather than memory savings
-                if args.reduced_batch_size is None:
-                    # Can use larger batch sizes for better accuracy
-                    if args.enable_coft:
-                        if args.preserve_accuracy:
-                            args.reduced_batch_size = 384  # 3x original for maximum accuracy
-                        else:
-                            args.reduced_batch_size = 256  # 2x original for better gradient estimates
-                    else:
-                        if args.preserve_accuracy:
-                            args.reduced_batch_size = 256  # 2x for baseline
-                        else:
-                            args.reduced_batch_size = 192  # 1.5x original
+                if args.reduced_batch_size:
+                    configs.batch_size = min(configs.batch_size * 2, 512)  # Conservative boost
+                    # print(f"📊 Batch size boosted to {configs.batch_size} for high-end GPU")
                 
-                # Enable performance optimizations
-                if not args.mixed_precision and not args.high_precision_mode:
-                    args.mixed_precision = True
-                    #print("🚀 Auto-enabled mixed precision for speed boost")
-                elif args.high_precision_mode:
-                    args.mixed_precision = False
-                    print("🎯 High precision mode: Mixed precision disabled for maximum accuracy")
-                
-                # Minimal gradient accumulation for speed
-                if args.gradient_accumulation == 1:
-                    args.gradient_accumulation = 1  # Keep at 1 for maximum speed
-                
-                # Less frequent cache clearing
-                if args.clear_cache_freq == 10:
-                    args.clear_cache_freq = 50  # Less frequent for high-end
-                    
-            elif total_memory_gb >= 16.0:
-                # High-end GPU configuration (16-24GB)
-                print(f"🎯 High-performance GPU detected ({total_memory_gb:.1f}GB) - Balanced optimizations")
-                
-                if args.reduced_batch_size is None:
-                    if args.enable_coft:
-                        args.reduced_batch_size = 128  # Keep original or slightly higher
-                    else:
-                        args.reduced_batch_size = 160  # Slightly higher than original
-                
-                # Optional mixed precision for speed boost
-                if not args.mixed_precision and args.enable_coft:
-                    args.mixed_precision = True
-                    print("🔧 Auto-enabled mixed precision for CoFT performance")
-                
-            elif total_memory_gb >= 12.0:
-                # Medium VRAM - moderate optimizations
-                print(f"⚖️ Medium VRAM detected ({total_memory_gb:.1f}GB) - Moderate optimizations")
-                
-                if args.reduced_batch_size is None and args.enable_coft:
-                    args.reduced_batch_size = 64
-                    print("🔧 Moderate batch size reduction for CoFT on medium VRAM")
-                    
-            elif total_memory_gb <= 8.5:
-                # RTX 4060 with 8GB or less - apply aggressive memory optimizations
-                print(f"⚠️ Low VRAM detected ({total_memory_gb:.1f}GB) - Applying aggressive memory optimizations")
-                
-                # Reduce batch size automatically if not specified
-                if args.reduced_batch_size is None:
-                    if args.enable_coft:
-                        args.reduced_batch_size = 32  # Aggressive reduction for CoFT
-                    else:
-                        args.reduced_batch_size = 64  # Moderate reduction for baseline
-                
-                # Enable memory-efficient options automatically
-                args.memory_efficient = True
+                # Enable mixed precision by default for high-end GPUs
                 if not args.mixed_precision:
                     args.mixed_precision = True
-                    print("🔧 Auto-enabled mixed precision training")
+                    # print("🚀 Auto-enabled mixed precision for high-end GPU")
+                    
+            # Mid-range GPU configuration (8-24GB)  
+            elif total_memory_gb >= 8.0:
+                # print(f"⚡ Mid-range GPU detected ({total_memory_gb:.1f}GB) - Balanced optimizations")
                 
-                if args.gradient_accumulation == 1:
-                    args.gradient_accumulation = 4  # Maintain effective batch size
-                    print(f"🔧 Auto-enabled gradient accumulation (steps={args.gradient_accumulation})")
-        
-        # Apply reduced batch size to config and log changes
-        if args.reduced_batch_size:
-            original_batch_size = configs.batch_size
-            configs.batch_size = args.reduced_batch_size
-            effective_batch_size = configs.batch_size * args.gradient_accumulation
-            
-            print(f"\n📊 BATCH SIZE CONFIGURATION:")
-            print(f"   Original Batch Size: {original_batch_size}")
-            print(f"   New Batch Size: {configs.batch_size}")
-            print(f"   Gradient Accumulation: {args.gradient_accumulation}")
-            print(f"   Effective Batch Size: {effective_batch_size}")
-            
-            # Accuracy preservation warning
-            if effective_batch_size < original_batch_size * 0.8:
-                print(f"⚠️  ACCURACY NOTE: Effective batch size reduced by {((original_batch_size - effective_batch_size) / original_batch_size * 100):.1f}%")
-                print(f"   💡 Recommendation: Monitor accuracy and consider increasing gradient_accumulation")
-            elif effective_batch_size > original_batch_size * 1.2:
-                print(f"🎯 ACCURACY BOOST: Effective batch size increased by {((effective_batch_size - original_batch_size) / original_batch_size * 100):.1f}%")
-                print(f"   💡 Expected: Better gradient estimates and potentially higher accuracy")
-        
-        # Memory optimization summary with detailed parameter changes
-        if args.memory_efficient or args.mixed_precision or args.gradient_accumulation > 1:
-            print(f"\n🚀 MEMORY OPTIMIZATION SUMMARY:")
+                if args.reduced_batch_size:
+                    configs.batch_size = int(configs.batch_size * 1.5)  # Moderate boost
+                    # print(f"📊 Batch size adjusted to {configs.batch_size}")
+                    
+            # Entry-level GPU configuration (<8GB)
+            else:
+                # print(f"💾 Entry-level GPU detected ({total_memory_gb:.1f}GB) - Memory-focused optimizations")
+                
+                # Aggressive memory optimizations for entry-level GPUs
+                if not args.memory_efficient:
+                    args.memory_efficient = True
+                    # print("💾 Auto-enabled memory optimizations")
+                
+                if not args.mixed_precision:
+                    args.mixed_precision = True
+                    # print("🚀 Auto-enabled mixed precision for memory savings")
+                
+                if args.gradient_accumulation < 2:
+                    args.gradient_accumulation = 2
+                    # print("📈 Auto-enabled gradient accumulation")
+                
+                if args.reduced_batch_size:
+                    configs.batch_size = max(configs.batch_size // 2, 16)  # Reduce batch size
+                    # print(f"📊 Reduced batch size to {configs.batch_size} for memory efficiency")
+                    
+            # Batch size configuration summary
+            if args.reduced_batch_size or args.memory_efficient or args.enable_coft:
+                original_batch_size = 128  # Default from configs
+                effective_batch_size = configs.batch_size * args.gradient_accumulation
+                
+                # print(f"\n📊 BATCH SIZE CONFIGURATION:")
+                # print(f"   Original Batch Size: {original_batch_size}")
+                # print(f"   New Batch Size: {configs.batch_size}")
+                # print(f"   Gradient Accumulation: {args.gradient_accumulation}")
+                # print(f"   Effective Batch Size: {effective_batch_size}")
+                
+                if effective_batch_size > original_batch_size:
+                    boost_percentage = ((effective_batch_size - original_batch_size) / original_batch_size) * 100
+                    # print(f"🎯 ACCURACY BOOST: Effective batch size increased by {boost_percentage:.1f}%")
+                    # print(f"   💡 Expected: Better gradient estimates and potentially higher accuracy")
+                elif effective_batch_size < original_batch_size:
+                    reduction_percentage = ((original_batch_size - effective_batch_size) / original_batch_size) * 100
+                    # print(f"💾 MEMORY SAVING: Effective batch size reduced by {reduction_percentage:.1f}%")
+                    # print(f"   💡 Expected: Lower memory usage, maintain performance via grad accumulation")
+                    
+            # Memory optimization summary
             optimizations = []
-            accuracy_impact = []
+            estimated_savings = 0
             
             if args.mixed_precision:
-                optimizations.append("Mixed Precision (FP16)")
-                accuracy_impact.append("Minimal impact (<0.1%)")
+                optimizations.append("Mixed Precision (FP16) - Minimal impact (<0.1%)")
+                estimated_savings += 30
             if args.gradient_accumulation > 1:
-                optimizations.append(f"Gradient Accumulation x{args.gradient_accumulation}")
-                accuracy_impact.append("Maintains accuracy")
+                optimizations.append(f"Gradient Accumulation (x{args.gradient_accumulation}) - No impact")
             if args.gradient_checkpointing:
-                optimizations.append("Gradient Checkpointing")
-                accuracy_impact.append("No accuracy impact")
+                optimizations.append("Gradient Checkpointing - Small impact (~1-2%)")
+                estimated_savings += 40
             if args.clear_cache_freq > 0:
-                optimizations.append(f"Memory Management (every {args.clear_cache_freq} batches)")
-                accuracy_impact.append("No impact")
-                
-            for i, opt in enumerate(optimizations):
-                print(f"   ✅ {opt} - {accuracy_impact[i]}")
+                optimizations.append("Memory Management (every 50 batches) - No impact")
             
-            # Memory savings estimate
-            memory_savings = 0
-            if args.reduced_batch_size and args.reduced_batch_size < 128:
-                memory_savings += (128 - args.reduced_batch_size) / 128 * 60  # Rough estimate
-            if args.mixed_precision:
-                memory_savings += 30  # Additional 30% from FP16
-            if args.gradient_checkpointing:
-                memory_savings += 25  # Additional 25% from checkpointing
-                
-            if memory_savings > 0:
-                print(f"   💾 Estimated Memory Savings: ~{min(memory_savings, 80):.0f}%")
-        
-        # Learning rate adjustment for different batch sizes
-        if args.reduced_batch_size and args.reduced_batch_size != 128:
-            effective_batch_size = args.reduced_batch_size * args.gradient_accumulation
-            lr_scale = (effective_batch_size / 128) ** 0.5  # Square root scaling
+            if optimizations:
+                # print(f"\n🚀 MEMORY OPTIMIZATION SUMMARY:")
+                for opt in optimizations:
+                    # print(f"   ✅ {opt}")
+                    pass
+                if estimated_savings > 0:
+                    # print(f"   💾 Estimated Memory Savings: ~{estimated_savings}%")
+                    pass
             
-            if lr_scale != 1.0:
-                print(f"\n🎯 LEARNING RATE RECOMMENDATION:")
-                print(f"   Current LR: {configs.lr}")
-                print(f"   Recommended LR: {configs.lr * lr_scale:.2e} (scale factor: {lr_scale:.3f})")
+            # Learning rate scaling recommendation
+            if args.reduced_batch_size and effective_batch_size != original_batch_size:
+                scale_factor = (effective_batch_size / original_batch_size) ** 0.5
+                recommended_lr = configs.lr * scale_factor
                 
-                # Auto-scale learning rate if requested
+                # print(f"\n🎯 LEARNING RATE RECOMMENDATION:")
+                # print(f"   Current LR: {configs.lr}")
+                # print(f"   Recommended LR: {recommended_lr:.2e} (scale factor: {scale_factor:.3f})")
+                # print(f"   💡 Add --lr_auto_scale to apply automatically")
+                
                 if args.lr_auto_scale:
-                    original_lr = configs.lr
-                    configs.lr = configs.lr * lr_scale
-                    print(f"   ✅ AUTO-SCALED: {original_lr:.2e} → {configs.lr:.2e}")
-                else:
-                    print(f"   💡 Add --lr_auto_scale to apply automatically")
-
-        # Accuracy preservation settings
-        if args.preserve_accuracy:
-            print(f"\n🎯 ACCURACY PRESERVATION MODE ACTIVE:")
-            
-            # Override mixed precision for accuracy
-            if args.mixed_precision:
-                args.mixed_precision = False
-                print("   ⚠️  Mixed precision disabled for maximum accuracy")
-            
-            # Increase gradient accumulation if batch size is small
-            if args.reduced_batch_size and args.reduced_batch_size < 64:
-                min_accumulation = max(4, 128 // args.reduced_batch_size)
-                if args.gradient_accumulation < min_accumulation:
-                    args.gradient_accumulation = min_accumulation
-                    print(f"   ✅ Gradient accumulation increased to {args.gradient_accumulation}")
-            
-            # Disable gradient checkpointing
-            if args.gradient_checkpointing:
-                args.gradient_checkpointing = False
-                print("   ⚠️  Gradient checkpointing disabled for accuracy")
-            
-            print("   💡 These settings prioritize accuracy over memory efficiency")
-
-        # High precision mode settings
-        if args.high_precision_mode:
-            print(f"\n🔬 HIGH PRECISION MODE ACTIVE:")
-            
-            # Force disable all potentially accuracy-affecting optimizations
-            args.mixed_precision = False
-            args.gradient_checkpointing = False
-            
-            # Ensure minimal gradient accumulation
-            if args.gradient_accumulation > 2:
-                args.gradient_accumulation = max(1, args.gradient_accumulation // 2)
-                print(f"   ✅ Gradient accumulation reduced to {args.gradient_accumulation}")
-            
-            # More frequent cache clearing for consistency
-            args.clear_cache_freq = 5
-            print("   ✅ All precision-affecting optimizations disabled")
-            print("   💡 Maximum accuracy mode - may require more memory")
+                    configs.lr = recommended_lr
+                    # print(f"   ✅ Auto-applied: LR scaled to {configs.lr:.2e}")
+        else:
+            # print("⚠️  GPU not available - CPU mode with conservative settings")
+            pass
 
     experiment_log_dir = os.path.join(logs_save_dir, experiment_description, run_description,
                                       training_mode + f"_seed_{SEED}")
@@ -319,7 +221,7 @@ def execute_training_mode(args, mode_name, overall_start_time):
     try:
         # Load datasets
         data_path = os.path.join(args.data_path, data_type)
-        train_dl, valid_dl, test_dl = data_generator(data_path, configs, training_mode)
+        train_dl, valid_dl, test_dl = data_generator(data_path, configs, training_mode, args.enable_coft)
         logger.debug("Data loaded ...")
 
         # Load Model
