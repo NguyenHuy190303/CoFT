@@ -2,6 +2,7 @@ import argparse
 import os
 import sys
 from datetime import datetime, timedelta
+import warnings
 
 import numpy as np
 import torch
@@ -12,6 +13,27 @@ from models.model import base_Model
 from trainer.trainer import Trainer, model_evaluate, gen_pseudo_labels
 from utils import _calc_metrics, copy_Files
 from utils import _logger, set_requires_grad
+
+# Suppress warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
+
+def safe_torch_load(filepath, device=None, **kwargs):
+    """Safe torch.load wrapper that handles compatibility issues"""
+    try:
+        if device:
+            return torch.load(filepath, map_location=device, weights_only=False, **kwargs)
+        else:
+            return torch.load(filepath, weights_only=False, **kwargs)
+    except TypeError as e:
+        if "weights_only" in str(e):
+            # Fallback for older PyTorch versions
+            if device:
+                return torch.load(filepath, map_location=device, **kwargs)
+            else:
+                return torch.load(filepath, **kwargs)
+        else:
+            raise e
 
 def execute_training_mode(args, mode_name, overall_start_time):
     """
@@ -92,7 +114,7 @@ def execute_training_mode(args, mode_name, overall_start_time):
             
             # High-end GPU configuration (24GB+)
             if total_memory_gb >= 24.0:
-                print(f"🚀 High-end GPU detected ({total_memory_gb:.1f}GB) - Premium optimizations available")
+                #print(f"🚀 High-end GPU detected ({total_memory_gb:.1f}GB) - Premium optimizations available")
                 
                 # For high-end GPUs, focus on speed rather than memory savings
                 if args.reduced_batch_size is None:
@@ -111,7 +133,7 @@ def execute_training_mode(args, mode_name, overall_start_time):
                 # Enable performance optimizations
                 if not args.mixed_precision and not args.high_precision_mode:
                     args.mixed_precision = True
-                    print("🚀 Auto-enabled mixed precision for speed boost")
+                    #print("🚀 Auto-enabled mixed precision for speed boost")
                 elif args.high_precision_mode:
                     args.mixed_precision = False
                     print("🎯 High precision mode: Mixed precision disabled for maximum accuracy")
@@ -335,7 +357,7 @@ def execute_training_mode(args, mode_name, overall_start_time):
             else:
                 load_from = os.path.join(
                     os.path.join(logs_save_dir, experiment_description, run_description, f"SupCon_seed_{SEED}", "saved_models"))
-            chkpoint = torch.load(os.path.join(load_from, "ckp_last.pt"), map_location=device, weights_only=False)
+            chkpoint = safe_torch_load(os.path.join(load_from, "ckp_last.pt"), device)
             pretrained_dict = chkpoint["model_state_dict"]
             model_dict = model.state_dict()
             del_list = ['logits']
@@ -351,7 +373,7 @@ def execute_training_mode(args, mode_name, overall_start_time):
             ft_perc = f"{args.label_percentage}p"
             load_from = os.path.join(
                 os.path.join(logs_save_dir, experiment_description, run_description, f"ft_{ft_perc}_seed_{SEED}", "saved_models"))
-            chkpoint = torch.load(os.path.join(load_from, "ckp_last.pt"), map_location=device, weights_only=False)
+            chkpoint = safe_torch_load(os.path.join(load_from, "ckp_last.pt"), device)
             pretrained_dict = chkpoint["model_state_dict"]
             model.load_state_dict(pretrained_dict)
             gen_pseudo_labels(model, train_dl, device, data_path)
@@ -367,7 +389,7 @@ def execute_training_mode(args, mode_name, overall_start_time):
             else:
                 load_from = os.path.join(
                     os.path.join(logs_save_dir, experiment_description, run_description, f"SupCon_seed_{SEED}", "saved_models"))
-            chkpoint = torch.load(os.path.join(load_from, "ckp_last.pt"), map_location=device, weights_only=False)
+            chkpoint = safe_torch_load(os.path.join(load_from, "ckp_last.pt"), device)
             pretrained_dict = chkpoint["model_state_dict"]
             model_dict = model.state_dict()
 
@@ -402,7 +424,7 @@ def execute_training_mode(args, mode_name, overall_start_time):
             data_perc = str(args.label_percentage)  # Use configurable percentage
             load_from = os.path.join(       
                 os.path.join(logs_save_dir, experiment_description, run_description, f"ft_{data_perc}p_seed_{SEED}", "saved_models"))      
-            chkpoint = torch.load(os.path.join(load_from, "ckp_last.pt"), map_location=device, weights_only=False)      
+            chkpoint = safe_torch_load(os.path.join(load_from, "ckp_last.pt"), device)      
             pretrained_dict = chkpoint["model_state_dict"]      
             model.load_state_dict(pretrained_dict)     
 
@@ -430,7 +452,7 @@ def execute_training_mode(args, mode_name, overall_start_time):
             # Basic memory management
             torch.cuda.empty_cache()
             
-            print(f"CUDA optimizations enabled for {torch.cuda.get_device_name()}")
+            #print(f"CUDA optimizations enabled for {torch.cuda.get_device_name()}")
             print(f"CUDA Memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.1f} GB")
             print("Conservative settings: TF32 disabled for accuracy preservation")
         else:

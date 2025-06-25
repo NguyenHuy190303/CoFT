@@ -2,11 +2,12 @@ import os
 import torch
 import numpy as np
 from torch.utils.data import Dataset
-from dataloader.augmentations import DataTransform
+from dataloader.augmentations import DataTransform_TD as DataTransform
 
 class Load_Dataset(Dataset):
-    def __init__(self, dataset, config, training_mode):
+    def __init__(self, dataset, config, training_mode, enable_coft=False):
         self.training_mode = training_mode
+        self.enable_coft = enable_coft
         X_train = dataset["samples"]
         y_train = dataset["labels"]
 
@@ -31,7 +32,7 @@ class Load_Dataset(Dataset):
         
         # Pre-compute augmentations for self-supervised modes
         if training_mode == "self_supervised" or training_mode == "SupCon":
-            self.aug1, self.aug2 = DataTransform(self.x_data, config)
+            self.aug1, self.aug2 = DataTransform(self.x_data, config, enable_coft)
             # Safe conversion to tensors
             if isinstance(self.aug1, np.ndarray):
                 self.aug1 = torch.from_numpy(self.aug1)
@@ -53,7 +54,7 @@ class Load_Dataset(Dataset):
         return self.len
 
 
-def data_generator(data_path, configs, training_mode):
+def data_generator(data_path, configs, training_mode, enable_coft=False):
     batch_size = configs.batch_size
     
     # Simple, stable DataLoader configuration
@@ -79,9 +80,9 @@ def data_generator(data_path, configs, training_mode):
     valid_dataset = torch.load(os.path.join(data_path, "val.pt"), weights_only=False)
     test_dataset = torch.load(os.path.join(data_path, "test.pt"), weights_only=False)
 
-    train_dataset = Load_Dataset(train_dataset, configs, training_mode)
-    valid_dataset = Load_Dataset(valid_dataset, configs, training_mode)
-    test_dataset = Load_Dataset(test_dataset, configs, training_mode)
+    train_dataset = Load_Dataset(train_dataset, configs, training_mode, enable_coft)
+    valid_dataset = Load_Dataset(valid_dataset, configs, training_mode, enable_coft)
+    test_dataset = Load_Dataset(test_dataset, configs, training_mode, enable_coft)
 
     if train_dataset.__len__() < batch_size:
         batch_size = 16

@@ -25,7 +25,7 @@ echo "📦 Extracting data files..."
 
 if [ -f "data/epilepsy.tar.gz" ]; then
     echo "   🔄 Extracting epilepsy data..."
-    tar -xzf data/epilepsy.tar.gz -C data/epilepsy/
+    tar -xzf data/epilepsy.tar.gz -C data/epilepsy/ --strip-components=1
     echo "   ✅ Epilepsy data extracted"
 else
     echo "   ⚠️  epilepsy.tar.gz not found"
@@ -33,7 +33,7 @@ fi
 
 if [ -f "data/har.tar.gz" ]; then
     echo "   🔄 Extracting HAR data..."
-    tar -xzf data/har.tar.gz -C data/HAR/
+    tar -xzf data/har.tar.gz -C data/HAR/ --strip-components=1
     echo "   ✅ HAR data extracted"
 else
     echo "   ⚠️  har.tar.gz not found"
@@ -41,7 +41,7 @@ fi
 
 if [ -f "data/sleep.tar.gz" ]; then
     echo "   🔄 Extracting sleep data..."
-    tar -xzf data/sleep.tar.gz -C data/sleep/
+    tar -xzf data/sleep.tar.gz -C data/sleep/ --strip-components=1
     echo "   ✅ Sleep data extracted"
 else
     echo "   ⚠️  sleep.tar.gz not found"
@@ -49,19 +49,11 @@ fi
 
 if [ -f "data/sleepedf.tar.gz" ]; then
     echo "   🔄 Extracting SleepEDF data..."
-    tar -xzf data/sleepedf.tar.gz -C data/SleepEDF/
+    tar -xzf data/sleepedf.tar.gz -C data/SleepEDF/ --strip-components=1
     echo "   ✅ SleepEDF data extracted"
 else
     echo "   ⚠️  sleepedf.tar.gz not found"
 fi
-
-# Make scripts executable
-echo "🔧 Setting up executable permissions..."
-chmod +x quick_examples.sh
-chmod +x optimize_coft.sh
-chmod +x optimize_coft_colab.sh
-chmod +x compare_performance.sh
-chmod +x test_enable_infots.py
 
 # Install Python dependencies if requirements.txt exists
 if [ -f "requirements.txt" ]; then

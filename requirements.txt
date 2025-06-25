@@ -5,3 +5,7 @@ openpyxl
 mne==0.20.7
 mat4py
 einops
+torch==2.2.2
+torchvision==0.17.2
+torchaudio==2.2.2
+tsaug

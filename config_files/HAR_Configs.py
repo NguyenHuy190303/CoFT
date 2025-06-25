@@ -32,18 +32,17 @@ class augmentations(object):
     def __init__(self):
         self.jitter_scale_ratio = 2.0
         self.jitter_ratio = 0.8
+        self.jitter_ratio_FD = 0.8  # Frequency domain jitter ratio
         self.max_seg = 8
 
-        # --- BEGIN LEGACY CODE ---
         # *** NEW FEATURE SWITCH: InfoTS Augmentation Integration ***
-        # self.use_infots_augmentation = False  # Set to True to use InfoTS advanced augmentations
-        #
-        # # InfoTS augmentation parameters (used when use_infots_augmentation=True)
-        # self.infots_aug_p1 = 0.7  # Probability of applying first augmentation
-        # self.infots_aug_p2 = 0.0  # Probability of applying second augmentation
-        # self.infots_used_augs = None  # None = use all augmentations, or list of bools
-        # self.infots_temperature = 1.0  # Temperature for learnable augmentation weights
-        # --- END LEGACY CODE ---
+        self.use_infots_augmentation = False  # Set to True to use InfoTS advanced augmentations
+
+        # InfoTS augmentation parameters (used when use_infots_augmentation=True)
+        self.infots_aug_p1 = 0.7  # Probability of applying first augmentation
+        self.infots_aug_p2 = 0.7  # Probability of applying second augmentation
+        self.infots_used_augs = None  # None = use all augmentations, or list of bools
+        self.infots_temperature = 1.0  # Temperature for learnable augmentation weights
 
     def set_supervised_configs(self):
         # supervised learning configs
