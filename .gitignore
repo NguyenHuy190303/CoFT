@@ -49,4 +49,4 @@ checkpoints/
 *.bak
 
 # --- IDE / Editor specific ---
-.cursorignore
+.cursorignore*.tar.gz
