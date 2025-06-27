@@ -81,19 +81,19 @@ class CoFTA100Optimizer:
             return {
                 'lambda_ct': [0.001, 0.01, 0.1],
                 'lambda_cs': [0.1, 0.3, 0.5], 
-                'ensemble': ['temporal_only', 'simple_average']
+                'ensemble': ['temporal_only', 'frequency_only', 'simple_average']
             }
         elif self.mode == 'quick':
             return {
                 'lambda_ct': [0.0001, 0.0005, 0.001],
                 'lambda_cs': [0.1, 0.15],
-                'ensemble': ['temporal_only', 'simple_average']  
+                'ensemble': ['temporal_only', 'frequency_only', 'simple_average']  
             }
         elif self.mode == 'optimize':
             return {
                 'lambda_ct': [0.0001, 0.0002, 0.0005, 0.001, 0.002, 0.005],
                 'lambda_cs': [0.05, 0.1, 0.15, 0.2, 0.3],
-                'ensemble': ['temporal_only', 'simple_average']
+                'ensemble': ['temporal_only', 'frequency_only', 'simple_average']
             }
         else:
             raise ValueError(f"Unknown mode: {self.mode}")
@@ -147,10 +147,32 @@ class CoFTA100Optimizer:
                     'final_predictions = predictions  # TEMPORAL_ONLY',
                     content
                 )
+                content = re.sub(
+                    r'final_predictions\s*=\s*freq_predictions\s*#\s*FREQUENCY_ONLY.*',
+                    'final_predictions = predictions  # TEMPORAL_ONLY',
+                    content
+                )
+            elif method == 'frequency_only':
+                # Use only frequency predictions  
+                content = re.sub(
+                    r'final_predictions\s*=\s*\(predictions\s*\+\s*freq_predictions\)\s*/\s*2.*',
+                    'final_predictions = freq_predictions  # FREQUENCY_ONLY',
+                    content
+                )
+                content = re.sub(
+                    r'final_predictions\s*=\s*predictions\s*#\s*TEMPORAL_ONLY.*',
+                    'final_predictions = freq_predictions  # FREQUENCY_ONLY',
+                    content
+                )
             else:  # simple_average
                 # Use average of temporal and frequency predictions
                 content = re.sub(
                     r'final_predictions\s*=\s*predictions\s*#\s*TEMPORAL_ONLY.*',
+                    'final_predictions = (predictions + freq_predictions) / 2  # SIMPLE_AVERAGE',
+                    content
+                )
+                content = re.sub(
+                    r'final_predictions\s*=\s*freq_predictions\s*#\s*FREQUENCY_ONLY.*',
                     'final_predictions = (predictions + freq_predictions) / 2  # SIMPLE_AVERAGE',
                     content
                 )
@@ -182,6 +204,8 @@ class CoFTA100Optimizer:
             with open('trainer/trainer_coft.py', 'r') as f:
                 content = f.read()
                 if ensemble == 'temporal_only' and 'TEMPORAL_ONLY' in content:
+                    score += 1
+                elif ensemble == 'frequency_only' and 'FREQUENCY_ONLY' in content:
                     score += 1
                 elif ensemble == 'simple_average' and 'SIMPLE_AVERAGE' in content:
                     score += 1
