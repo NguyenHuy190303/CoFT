@@ -50,3 +50,5 @@ checkpoints/
 
 # --- IDE / Editor specific ---
 .cursorignore*.tar.gz
+*.tar.gz
+data/*.tar.gz
