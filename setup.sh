@@ -7,6 +7,13 @@ set -e  # Exit on any error
 echo "🚀 Setting up CoFT Project Environment"
 echo "======================================"
 
+# DEBUG: Show current directory and files
+echo "🔍 DEBUG INFO:"
+echo "   Current directory: $(pwd)"
+echo "   Files in current dir: $(ls -la | grep -E '(setup|data)' | wc -l) setup/data related files"
+echo "   Checking for data/sleep.tar.gz: $([ -f 'data/sleep.tar.gz' ] && echo 'EXISTS' || echo 'NOT FOUND')"
+echo ""
+
 # Check if we're on Linux
 if [[ "$OSTYPE" != "linux-gnu"* ]]; then
     echo "⚠️  This script is designed for Linux systems"
@@ -45,6 +52,8 @@ if [ -f "data/sleep.tar.gz" ]; then
     echo "   ✅ Sleep data extracted"
 else
     echo "   ⚠️  sleep.tar.gz not found"
+    echo "   🔍 PWD: $(pwd)"
+    echo "   🔍 LS data/: $(ls -la data/ 2>/dev/null || echo 'data/ not found')"
 fi
 
 if [ -f "data/sleepedf.tar.gz" ]; then
