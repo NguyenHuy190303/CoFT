@@ -18,13 +18,25 @@ class CoFTHybridLoss(nn.Module):
         self.mode = mode
         self.batch_size = configs.batch_size
         
-        # Loss weight configuration
+        # Loss weight configuration - Use dataset-specific optimal parameters if available
         self.lambda_temporal = 1.0      # Temporal contrastive weight
         self.lambda_frequency = 1.0     # Frequency contrastive weight  
         self.lambda_temporal_ntxent = 0.7   # Temporal NT-Xent weight
         self.lambda_freq_ntxent = 0.7       # Frequency NT-Xent weight
-        self.lambda_cotraining = 0.0001        # Co-training weight (OPTIMAL: 0.7632%)
-        self.lambda_consistency = 0.15       # Cross-domain consistency weight (OPTIMAL: 0.7632%)
+        
+        # Use dataset-specific optimal parameters if available
+        if hasattr(configs, 'CoFT'):
+            # HAR dataset optimal parameters (85.54% accuracy)
+            self.lambda_cotraining = configs.CoFT.lambda_cotraining     # 0.0001 (HAR optimal)
+            self.lambda_consistency = configs.CoFT.lambda_consistency   # 0.01 (HAR optimal)
+            self.ensemble_method = configs.CoFT.ensemble_method         # "temporal_only"
+            print(f"🎯 Using HAR optimal CoFT parameters: λ_ct={self.lambda_cotraining}, λ_cs={self.lambda_consistency}, ensemble={self.ensemble_method}")
+        else:
+            # Fallback to previous optimal values
+            self.lambda_cotraining = 0.0001        # Co-training weight (OPTIMAL: 0.7632%)
+            self.lambda_consistency = 0.15         # Cross-domain consistency weight (OPTIMAL: 0.7632%)
+            self.ensemble_method = "temporal_only"  # Default to best performing ensemble
+            print(f"⚠️  Using fallback CoFT parameters: λ_ct={self.lambda_cotraining}, λ_cs={self.lambda_consistency}")
         
         # Initialize loss functions
         self.nt_xent_criterion = NTXentLoss(

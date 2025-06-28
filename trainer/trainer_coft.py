@@ -99,7 +99,7 @@ def CoFTTrainer(model, temporal_contr_model, frequency_model, frequency_contr_mo
         
         valid_loss, valid_acc, _, _ = coft_model_evaluate(
             model, temporal_contr_model, frequency_model, frequency_contr_model,
-            valid_dl, device, training_mode, enable_coft, ensemble_module
+            valid_dl, device, training_mode, enable_coft, ensemble_module, config
         )
         
         if (training_mode != "self_supervised") and (training_mode != "SupCon"):
@@ -137,7 +137,7 @@ def CoFTTrainer(model, temporal_contr_model, frequency_model, frequency_contr_mo
         logger.debug('\nEvaluate on the Test set:')
         test_loss, test_acc, pred_labels, true_labels = coft_model_evaluate(
             model, temporal_contr_model, frequency_model, frequency_contr_model,
-            test_dl, device, training_mode, enable_coft, ensemble_module
+            test_dl, device, training_mode, enable_coft, ensemble_module, config
         )
         
         # Calculate F1 score if we have predictions
@@ -382,7 +382,7 @@ def coft_model_train(model, temporal_contr_model, frequency_model, frequency_con
 
 
 def coft_model_evaluate(model, temporal_contr_model, frequency_model, frequency_contr_model,
-                        test_dl, device, training_mode, enable_coft, ensemble_module):
+                        test_dl, device, training_mode, enable_coft, ensemble_module, config=None):
     """Evaluation loop for CoFT model."""
     model.eval()
     temporal_contr_model.eval()
@@ -413,8 +413,22 @@ def coft_model_evaluate(model, temporal_contr_model, frequency_model, frequency_
                 # Get frequency predictions and ensemble if CoFT enabled
                 if enable_coft:
                     freq_predictions, freq_features = frequency_model(data)
-                    # Use simple average ensemble for CoFT
-                    final_predictions = (predictions + freq_predictions) / 2  # SIMPLE_AVERAGE
+                    
+                    # Use optimal ensemble method from HAR config if available
+                    if config is not None and hasattr(config, 'CoFT') and hasattr(config.CoFT, 'ensemble_method'):
+                        if config.CoFT.ensemble_method == "temporal_only":
+                            final_predictions = predictions  # TEMPORAL_ONLY (HAR optimal: 85.54%)
+                        elif config.CoFT.ensemble_method == "frequency_only":
+                            final_predictions = freq_predictions  # FREQUENCY_ONLY
+                        elif config.CoFT.ensemble_method == "simple_average":
+                            final_predictions = (predictions + freq_predictions) / 2  # SIMPLE_AVERAGE
+                        else:
+                            # Fallback to temporal_only for unknown methods
+                            final_predictions = predictions  # TEMPORAL_ONLY (default)
+                    else:
+                        # Legacy fallback: simple average
+                        final_predictions = (predictions + freq_predictions) / 2  # SIMPLE_AVERAGE
+                    
                     # ensemble_predictions = ensemble_module(predictions, freq_predictions)  # Advanced ensemble
                 else:
                     # CA-TCC baseline: only temporal predictions

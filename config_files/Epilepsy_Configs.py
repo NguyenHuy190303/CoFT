@@ -26,6 +26,7 @@ class Config(object):
         self.Context_Cont = Context_Cont_configs()
         self.TC = TC()
         self.augmentation = augmentations()
+        self.CoFT = CoFT_configs()
 
 
 class augmentations(object):
@@ -55,3 +56,38 @@ class TC(object):
     def __init__(self):
         self.hidden_dim = 100
         self.timesteps = 10
+
+
+class CoFT_configs(object):
+    """
+    CoFT configuration for Epilepsy dataset based on HAR transfer with EEG-specific adjustments.
+    Expected performance: 75-85% accuracy (EEG signal complexity consideration).
+    """
+    def __init__(self):
+        # *** ADAPTED PARAMETERS FROM HAR OPTIMAL ***
+        # HAR achieved 85.54%, adapting for EEG signal characteristics
+        
+        # Co-training weights (even lower for EEG signal sensitivity)
+        self.lambda_cotraining = 0.00005     # Even lower than HAR for EEG signal sensitivity
+        self.lambda_consistency = 0.05       # Slightly higher for EEG signal complexity
+        
+        # Domain weighting strategy
+        self.lambda_temporal = 1.0           # Temporal domain weight
+        self.lambda_frequency = 1.0          # Frequency domain weight
+        
+        # Ensemble strategy (temporal likely optimal for EEG)
+        self.ensemble_method = "temporal_only"  # EEG temporal patterns expected to dominate
+        
+        # Training strategy
+        self.warmup_epochs_ratio = 0.25      # 25% of epochs for co-training warmup
+        self.cotraining_start_epoch = 0      # Start co-training from beginning
+        
+        # Cross-domain consistency
+        self.consistency_regularization = True
+        self.consistency_weight_schedule = "constant"
+        
+        # Performance predictions (EEG-specific considerations)
+        self.expected_accuracy_range = (75.0, 85.0)  # EEG complexity consideration
+        self.har_baseline_reference = 85.54          # HAR optimal for comparison
+        self.transfer_confidence = "medium"          # Signal processing differences
+        self.signal_type = "EEG"                     # Medical EEG signal characteristics
