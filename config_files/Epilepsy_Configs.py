@@ -67,9 +67,9 @@ class CoFT_configs(object):
         # *** ADAPTED PARAMETERS FROM HAR OPTIMAL ***
         # HAR achieved 85.54%, adapting for EEG signal characteristics
         
-        # Co-training weights (even lower for EEG signal sensitivity)
-        self.lambda_cotraining = 0.00005     # Even lower than HAR for EEG signal sensitivity
-        self.lambda_consistency = 0.05       # Slightly higher for EEG signal complexity
+        # Co-training weights (optimized based on HAR transfer analysis)
+        self.lambda_cotraining = 0.00005     # 0.5x HAR optimal (EEG signal sensitivity)
+        self.lambda_consistency = 0.025      # 2.5x HAR optimal (medical complexity, reduced from 0.05)
         
         # Domain weighting strategy
         self.lambda_temporal = 1.0           # Temporal domain weight
@@ -86,8 +86,9 @@ class CoFT_configs(object):
         self.consistency_regularization = True
         self.consistency_weight_schedule = "constant"
         
-        # Performance predictions (EEG-specific considerations)
-        self.expected_accuracy_range = (75.0, 85.0)  # EEG complexity consideration
+        # Performance predictions (based on HAR transfer analysis)
+        self.expected_accuracy_range = (75.0, 85.0)  # Binary classification advantage vs EEG complexity
         self.har_baseline_reference = 85.54          # HAR optimal for comparison
-        self.transfer_confidence = "medium"          # Signal processing differences
+        self.transfer_confidence = "medium"          # Binary task advantage, but EEG signal differences
         self.signal_type = "EEG"                     # Medical EEG signal characteristics
+        self.sequence_length_ratio = 1.4             # 178 vs 128 timesteps (1.4x HAR)

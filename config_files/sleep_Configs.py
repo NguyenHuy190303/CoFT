@@ -67,9 +67,9 @@ class CoFT_configs(object):
         # *** TRANSFER PARAMETERS FROM HAR OPTIMAL ***
         # HAR achieved 85.54% with these parameters
         
-        # Co-training weights (start with HAR optimal)
-        self.lambda_cotraining = 0.0001      # HAR optimal: ultra-low approach proven
-        self.lambda_consistency = 0.01       # HAR optimal: robust across values
+        # Co-training weights (optimized based on HAR transfer analysis)
+        self.lambda_cotraining = 0.0002      # 2x HAR optimal (long sequences can handle higher λ_ct)
+        self.lambda_consistency = 0.015      # 1.5x HAR optimal (EEG noise robustness)
         
         # Domain weighting strategy
         self.lambda_temporal = 1.0           # Temporal domain weight
