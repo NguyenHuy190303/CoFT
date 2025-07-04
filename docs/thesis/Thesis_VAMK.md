@@ -44,68 +44,60 @@ Keywords: Time Series Analysis, Semi-Supervised Learning, Self-Supervised Learni
 ---
 # TABLE OF CONTENTS
 
-ABSTRACT ................................................................................ 2
-LIST OF FIGURES .................................................................... 5
-LIST OF TABLES ..................................................................... 6
-ABBREVIATIONS .................................................................... 7
-NOTATION TABLE ................................................................... 8
-
-# 1 INTRODUCTION .................................................................... 9
-1.1 The Challenge of Label Scarcity in Modern Time Series Analysis .. 9
-1.2 Thesis Objectives and Research Questions ............................. 11
-1.2.1 Thesis Objectives .................................................... 11
-1.2.2 Research Questions ................................................. 11
-1.3 Thesis Structure ................................................................. 12
-1.4 Use of AI in this thesis ...................................................... 12
-
-# 2 KNOWLEDGE BASE AND THEORY ........................................... 14
-2.1 Paradigms in Learning from Limited Labeled Data ................. 14
-2.2 Self-Supervised Learning: The Art of Learning from the Data Itself 15
-2.2.1 Predictive vs. Contrastive Approaches ...................... 16
-2.2.2 Why Contrastive Learning for this Thesis? ................... 17
-2.3 The Anatomy of Contrastive Learning for Time Series .............. 18
-2.3.1 The Cornerstone: Data Augmentation ........................ 18
-2.3.2 The Engine: NT-Xent Loss Function .......................... 19
-2.3.3 The Baseline: CA-TCC Multi-Stage Pipeline ................ 21
-2.4 Multi-Domain Fusion: From Simple Fusion to Co-Training ........ 28
-2.4.1 A Spectrum of Fusion Strategies .............................. 28
-2.4.2 Why Co-Training? A More Principled Approach ............ 29
-2.5 Conclusion: Building on a Strong Foundation ...................... 31
-
-# 3 IMPLEMENTATION AND METHODOLOGY .................................... 32
-3.1 The Methodological Journey: Justification and Challenges ........ 32
-3.1.1 Choosing the Battlefield: Baseline and Benchmark Selection 32
-3.1.2 The Gauntlet of Reproducibility: Technical and Data-Centric Hurdles ............................................................................ 33
-3.2 Guiding Principles for Reproducibility .................................. 34
-3.3 Technology and Implementation .......................................... 35
-3.4 Benchmark Datasets .......................................................... 36
-3.4.1 Human Activity Recognition (HAR) ............................. 37
-3.4.2 Sleep-EDF (Sleep Stage Classification) ........................ 37
-3.4.3 Epilepsy (Seizure Detection) .................................... 38
-3.4.4 Semi-Supervised Data Splitting Methodology .............. 38
-3.5 The CoFT Framework: Architecture and Procedures ................ 39
-3.5.1 Dual-Branch Architecture: Design and Implementation .. 39
-3.5.2 The Hybrid Loss Function: A Detailed Anatomy ............. 43
-3.5.3 Six-Stage Training Pipeline: A Step-by-Step Recipe ...... 44
-3.5.4 Data Augmentation ................................................. 46
-
-# 4 RESULTS AND ANALYSIS ...................................................... 47
-4.1 Answering Research Question 1: Can CoFT Outperform a State-of-the-Art Baseline? .................................................................... 47
-4.2 Answering Research Question 2: What is the True Source of Performance Gains? .................................................................... 49
-4.3 Answering Research Question 3: The Research Journey to Optimal Knowledge Transfer .................................................................... 51
-4.3.1 Initial Hypothesis and Early Failures: The Peril of Strong Coupling ............................................................................ 51
-4.3.2 The "Less is More" Discovery: A Systematic Investigation 52
-4.3.3 Ensemble Method Dynamics: The Flip Phenomenon ....... 53
-4.4 Answering Research Question 4: Can Principles be Transferred to New Datasets? ............................................................................ 54
-
-# 5 CONCLUSION ..................................................................... 56
-5.1 Summary of the Research Journey ...................................... 56
-5.2 Limitations of the Study .................................................... 57
-5.3 Future Research Directions ................................................. 58
-5.4 Final Reflections ............................................................... 59
-
-REFERENCES ........................................................................... 60
-APPENDICES ........................................................................... 63
+- [ABSTRACT](#abstract)
+- [LIST OF FIGURES](#list-of-figures)
+- [LIST OF TABLES](#list-of-tables)
+- [ABBREVIATIONS](#abbreviations)
+- [NOTATION TABLE](#notation-table)
+- [1 INTRODUCTION](#1-introduction)
+  - [1.1 The Challenge of Label Scarcity in Modern Time Series Analysis](#11-the-challenge-of-label-scarcity-in-modern-time-series-analysis)
+  - [1.2 Thesis Objectives and Research Questions](#12-thesis-objectives-and-research-questions)
+    - [1.2.1 Thesis Objectives](#121-thesis-objectives)
+    - [1.2.2 Research Questions](#122-research-questions)
+  - [1.3 Thesis Structure](#13-thesis-structure)
+  - [1.4 Use of AI in this thesis](#14-use-of-ai-in-this-thesis)
+- [2 KNOWLEDGE BASE AND THEORY](#2-knowledge-base-and-theory)
+  - [2.1 Paradigms in Learning from Limited Labeled Data](#21-paradigms-in-learning-from-limited-labeled-data)
+  - [2.2 Self-Supervised Learning: The Art of Learning from the Data Itself](#22-self-supervised-learning-the-art-of-learning-from-the-data-itself)
+    - [2.2.1 Data Augmentation Strategies](#221-data-augmentation-strategies)
+    - [2.2.2 The NT-Xent Loss Function: A Mathematical Deep Dive](#222-the-nt-xent-loss-function-a-mathematical-deep-dive)
+    - [2.2.3 The CA-TCC Baseline: A Rigorous Multi-Stage Semi-Supervised Pipeline](#223-the-ca-tcc-baseline-a-rigorous-multi-stage-semi-supervised-pipeline)
+  - [2.3 Co-Training and Frequency-Temporal Domain Fusion](#23-co-training-and-frequency-temporal-domain-fusion)
+    - [2.3.1 Traditional Fusion Approaches](#231-traditional-fusion-approaches)
+    - [2.3.2 CoFT: A True Co-Training Framework](#232-coft-a-true-co-training-framework)
+  - [2.4 Conclusion: Building on a Strong Foundation](#24-conclusion-building-on-a-strong-foundation)
+- [3 IMPLEMENTATION AND METHODOLOGY](#3-implementation-and-methodology)
+  - [3.1 The Methodological Journey: Justification and Challenges](#31-the-methodological-journey-justification-and-challenges)
+    - [3.1.1 Choosing the Battlefield: Baseline and Benchmark Selection](#311-choosing-the-battlefield-baseline-and-benchmark-selection)
+    - [3.1.2 The Gauntlet of Reproducibility: Technical and Data-Centric Hurdles](#312-the-gauntlet-of-reproducibility-technical-and-data-centric-hurdles)
+  - [3.2 Guiding Principles for Reproducibility](#32-guiding-principles-for-reproducibility)
+  - [3.3 Technology and Implementation](#33-technology-and-implementation)
+  - [3.4 Benchmark Datasets](#34-benchmark-datasets)
+    - [3.4.1 Human Activity Recognition (HAR)](#341-human-activity-recognition-har)
+    - [3.4.2 Sleep-EDF (Sleep Stage Classification)](#342-sleep-edf-sleep-stage-classification)
+    - [3.4.3 Epilepsy (Seizure Detection)](#343-epilepsy-seizure-detection)
+    - [3.4.4 Semi-Supervised Data Splitting Methodology](#344-semi-supervised-data-splitting-methodology)
+  - [3.5 The CoFT Framework: Architecture and Procedures](#35-the-coft-framework-architecture-and-procedures)
+    - [3.5.1 Dual-Branch Architecture: Design and Implementation](#351-dual-branch-architecture-design-and-implementation)
+    - [3.5.2 The Hybrid Loss Function: A Detailed Anatomy](#352-the-hybrid-loss-function-a-detailed-anatomy)
+    - [3.5.3 Six-Stage Training Pipeline: A Step-by-Step Recipe](#353-six-stage-training-pipeline-a-step-by-step-recipe)
+    - [3.5.4 Data Augmentation](#354-data-augmentation)
+- [4 RESULTS AND ANALYSIS](#4-results-and-analysis)
+  - [4.1 Answering Research Question 1: Can CoFT Outperform a State-of-the-Art Baseline?](#41-answering-research-question-1-can-coft-outperform-a-state-of-the-art-baseline)
+  - [4.2 Answering Research Question 2: What is the True Source of Performance Gains?](#42-answering-research-question-2-what-is-the-true-source-of-performance-gains)
+  - [4.3 Answering Research Question 3: The Research Journey to Optimal Knowledge Transfer](#43-answering-research-question-3-the-research-journey-to-optimal-knowledge-transfer)
+    - [4.3.1 Initial Hypothesis and Early Failures: The Peril of Strong Coupling](#431-initial-hypothesis-and-early-failures-the-peril-of-strong-coupling)
+    - [4.3.2 The "Less is More" Discovery: A Systematic Investigation](#432-the-less-is-more-discovery-a-systematic-investigation)
+    - [4.3.3 Ensemble Method Dynamics: The Flip Phenomenon](#433-ensemble-method-dynamics-the-flip-phenomenon)
+  - [4.4 Answering Research Question 4: Can Principles be Transferred to New Datasets?](#44-answering-research-question-4-can-principles-be-transferred-to-new-datasets)
+- [5 CONCLUSION](#5-conclusion)
+  - [5.1 Summary of the Research Journey](#51-summary-of-the-research-journey)
+  - [5.2 Limitations of the Study](#52-limitations-of-the-study)
+  - [5.3 Future Research Directions](#53-future-research-directions)
+  - [5.4 Final Reflections](#54-final-reflections)
+- [REFERENCES](#references)
+- [APPENDICES](#appendices)
+  - [Appendix A: Hyperparameter Configuration Tables](#appendix-a-hyperparameter-configuration-tables)
 
 ---
 # LIST OF FIGURES
