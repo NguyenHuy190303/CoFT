@@ -1,28 +1,25 @@
 ---
-title: "CoFT: Một Framework Học Bán Giám Sát Hai Nhánh cho Phân Tích Chuỗi Thời Gian thông qua Co-Training Đa Miền"
+title: "CoFT: A Dual-Branch, Semi-Supervised Learning Framework for Time Series Analysis via Cross-Domain Co-Training"
 author: "Nguyen Quoc Huy (e21010198)"
-supervisor: "[Tên người hướng dẫn]"
-date: "Tháng 7, 2024"
-degree: "Cử nhân Kỹ thuật"
-programme: "[Tên Chương trình cấp bằng]"
-school: "[Tên Trường, ví dụ: Trường Công nghệ]"
+supervisor: "Tommi Rintala"
+date: "July 2024"
+degree: "Bachelor of Engineering"
+programme: "Information Technology"
+school: "Vaasa University of Applied Sciences VAMK"
 university: "VAASAN AMMATTIKORKEAKOULU"
 ---
 
-# **CoFT: Một Framework Học Bán Giám Sát Hai Nhánh cho Phân Tích Chuỗi Thời Gian thông qua Co-Training Đa Miền**
+# **CoFT: A Dual-Branch, Semi-Supervised Learning Framework for Time Series Analysis via Cross-Domain Co-Training**
 
 **Nguyen Quoc Huy**
 **e21010198**
 
-**Luận văn**
-**Tháng 7, 2024**
-**Chương trình cấp bằng [Tên Chương trình cấp bằng]**
-**[Tên Trường, ví dụ: Trường Công nghệ]**
+**Thesis**
+**July 2024**
+**Degree Programme in Information Technology**
 
 **VAASAN AMMATTIKORKEAKOULU**
-**TRƯỜNG ĐẠI HỌC KHOA HỌC ỨNG DỤNG**
-
-**[HÀNH ĐỘNG BẮT BUỘC: Người dùng cung cấp chi tiết về Người hướng dẫn, Chương trình cấp bằng, v.v.]**
+**UNIVERSITY OF APPLIED SCIENCES**
 
 ---
 # TÓM TẮT
