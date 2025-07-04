@@ -334,10 +334,34 @@ The CoFT framework is firmly grounded in the principles of self-supervised contr
 
 # 3 IMPLEMENTATION AND METHODOLOGY
 
-This chapter provides a detailed, step-by-step guide to the implementation of the CoFT framework, designed with the primary goal of ensuring full reproducibility. It answers the question: "How, precisely, was this research conducted?" We will cover the guiding principles, the technology stack with justifications, the benchmark datasets, and a granular breakdown of the architectural and procedural components of the CoFT model.
+This chapter provides a detailed, step-by-step guide to the implementation of the CoFT framework. However, beyond a simple recipe, it also documents the **methodological journey**, including the critical decisions, technical challenges, and the rigorous process required to ensure that the experimental results are both valid and reproducible. It answers the question: "How, precisely, and with what considerations, was this research conducted?"
 
-## 3.1 Guiding Principles for Reproducibility
+## 3.1 The Methodological Journey: Justification and Challenges
 
+The path to a final, working model was not linear. It began with broad strategic decisions informed by literature, followed by meticulous execution that encountered and overcame significant practical hurdles.
+
+### 3.1.1 Choosing the Battlefield: Baseline and Benchmark Selection
+The first critical decision was to select a strong, state-of-the-art baseline against which CoFT could be fairly judged. **CA-TCC (Contrastive Augmentation - Temporal Contrastive Clustering)** [7] was chosen for three key reasons:
+1.  **State-of-the-Art Performance:** At the time of this research, CA-TCC represented one of the most powerful and well-regarded semi-supervised learning pipelines for time series classification. Outperforming it would represent a meaningful scientific contribution.
+2.  **Well-Defined Pipeline:** Its multi-stage process (contrastive pre-training, supervised fine-tuning, pseudo-labeling, and representation refinement) provided a complete and logical framework that could be systematically extended.
+3.  **Publicly Available Benchmarks:** The original authors evaluated their model on established public datasets (HAR, Sleep-EDF, Epilepsy). By using the exact same datasets, we could aim for a true "apples-to-apples" comparison, isolating the performance impact of our proposed architecture from confounding variables.
+
+### 3.1.2 The Gauntlet of Reproducibility: Technical and Data-Centric Hurdles
+Merely choosing the same datasets was not enough to guarantee a fair comparison. A significant portion of the research effort was dedicated to overcoming challenges related to reproducibility—an often-understated but critical aspect of computational science.
+
+**1. The Data Preprocessing Challenge:** The original CA-TCC paper described its data splitting methodology (e.g., 1% and 5% stratified splits) but did not release the code for this process. To ensure academic fairness, it was imperative to replicate this procedure *exactly*. This involved a painstaking process of:
+    *   Carefully implementing our own stratified sampling scripts based on the paper's description.
+    *   Cross-validating the class distributions in our generated splits to ensure they matched the theoretical distributions.
+    *   Maintaining these exact splits across every single experiment, including all baseline runs and ablation studies.
+    This effort, while time-consuming, was non-negotiable for the integrity of our findings.
+
+**2. The Environment Cages:** A significant challenge was establishing a stable and consistent software environment. Initial attempts were plagued by common but frustrating technical issues:
+    *   **Package Conflicts:** Different libraries required conflicting versions of dependencies. For instance, early versions of `numpy` were incompatible with the `scikit-learn` version needed for evaluation, leading to import errors. Resolving these required creating a carefully constrained environment with specific, co-compatible package versions.
+    *   **Cross-Platform Consistency:** Ensuring that experiments run on a local Windows machine produced identical results to those on a Linux-based server (like Google Colab or an A100 instance) required meticulous management of random seeds, PyTorch's CUDA determinism settings, and data loading procedures.
+
+These efforts culminated in a stable, reproducible "sandbox" where the only variable being tested was the method itself.
+
+## 3.2 Guiding Principles for Reproducibility
 The soul of this chapter is **reproducibility**. Every design choice, parameter, and procedure is documented with the intention that another researcher can achieve 100% identical results. This commitment is upheld through the following strategies:
 
 1.  **Identical Data Splits**: All experiments, including baseline and proposed models, were conducted on the exact same training, validation, and test splits to ensure fair comparison.
@@ -345,7 +369,7 @@ The soul of this chapter is **reproducibility**. Every design choice, parameter,
 3.  **Controlled Variables**: When comparing CoFT to its baseline, the *only* variable changed was the `--enable_coft` feature flag. This toggleable design ensures that the baseline model's code and behavior remained completely untouched, isolating the impact of the CoFT module.
 4.  **Public Codebase and Open-Source Tools**: The entire project was built using publicly available libraries and will be released to ensure the community can inspect, validate, and build upon this work.
 
-## 3.2 Technology and Implementation
+## 3.3 Technology and Implementation
 
 The framework was implemented using a carefully selected stack of open-source tools, with each choice justified by its role in the research.
 
@@ -361,35 +385,35 @@ The framework was implemented using a carefully selected stack of open-source to
 -   **NumPy & Pandas**: These libraries formed the backbone of our data manipulation pipeline. Pandas was essential for reading and cleaning the datasets, while NumPy provided the high-performance numerical arrays used throughout the project.
 -   **Scikit-learn**: Used for its robust implementations of data splitting (stratified sampling) and for calculating evaluation metrics such as the F1-score.
 
-## 3.3 Benchmark Datasets
+## 3.4 Benchmark Datasets
 
 To ensure a **rigorous and scientifically fair comparison**, a critical methodological decision was made to conduct all experiments on the **exact same benchmark datasets** used in the original CA-TCC publication (Eldele et al., 2023) [7]. By inheriting this established set of benchmarks, we can directly isolate the performance impact of our proposed dual-domain co-training architecture. The chosen datasets—HAR, Sleep-EDF, and Epilepsy—provided a diverse and challenging testbed.
 
-### 3.3.1 Human Activity Recognition (HAR)
+### 3.4.1 Human Activity Recognition (HAR)
 -   **Source**: UCI Machine Learning Repository. This public dataset comprises recordings from 30 volunteers performing six activities (Walking, etc.) while wearing a waist-mounted smartphone.
 -   **Characteristics**: The data consists of 9-channel time series (tri-axial accelerometer and gyroscope) sampled at 50Hz and segmented into 2.56-second windows (128 data points).
 -   **Challenge**: High inter-class similarity between static activities (Sitting, Standing, Laying), demanding a model capable of capturing subtle dynamic differences.
 
-### 3.3.2 Sleep-EDF (Sleep Stage Classification)
+### 3.4.2 Sleep-EDF (Sleep Stage Classification)
 -   **Source**: PhysioNet Sleep-EDF Database Expanded (sleep-edfx). We use the EEG recordings from the Fpz-Cz channel, sampled at 100Hz.
 -   **Characteristics**: The recordings were segmented into 30-second windows (3000 data points) and labeled into one of five sleep stages (Wake, N1, N2, N3, REM).
 -   **Challenge**: Severe class imbalance (N2 stage is dominant), subtle low-amplitude differences between stages, and significantly longer sequences, testing the model's ability to handle long-range dependencies.
 
-### 3.3.3 Epilepsy (Seizure Detection)
+### 3.4.3 Epilepsy (Seizure Detection)
 -   **Source**: UCI Machine Learning Repository, originating from the work of Andrzejak et al. [1].
 -   **Characteristics**: The dataset consists of 1-second EEG segments (178 data points). The task is simplified to a binary classification problem: identifying seizure segments (Class 1) against all other non-seizure segments.
 -   **Challenge**: Highly imbalanced data and the need to distinguish seizure patterns from various other non-seizure brain activities.
 
-### 3.3.4 Semi-Supervised Data Splitting Methodology
+### 3.4.4 Semi-Supervised Data Splitting Methodology
 A cornerstone of this research is the simulation of label scarcity. For each dataset, the official training data, \(D_{train\_full}\), is subjected to a **stratified splitting process**. This ensures that even with a small percentage of labels, the class distribution of the original dataset is preserved.
 
 1.  **Full Labeled Set**: The entire training set, \(D_{train\_full}\), is used as the 100% labeled benchmark.
 2.  **Stratified Sampling**: To create subsets with a specific percentage \(p\) of labels, we perform stratified sampling from \(D_{train\_full}\). For example, to create the **1% Labeled Set (\(D_{L, 1\%}\))**, we randomly sample 1% of the instances from *each class* present in \(D_{train\_full}\).
 3.  **Creation of Subsets**: This procedure is repeated to create various labeled subsets, such as \(D_{L, 1\%}\) and \(D_{L, 5\%}\). The remaining data (\(D_{train\_full} \setminus D_{L, p\%}\)) serves as the large pool of unlabeled data, \(D_U\), for the self-supervised and semi-supervised stages of the training pipeline.
 
-## 3.4 The CoFT Framework: Architecture and Procedures
+## 3.5 The CoFT Framework: Architecture and Procedures
 
-### 3.4.1 Dual-Branch Architecture: Design and Implementation
+### 3.5.1 Dual-Branch Architecture: Design and Implementation
 
 CoFT employs a parallel dual-branch architecture. The initial design, detailed below, was carefully constructed to maintain architectural symmetry. This decision was a crucial part of our scientific methodology, allowing for a fair and controlled comparison between the temporal and frequency domains.
 
@@ -429,7 +453,7 @@ if self.freq_logits is None:
 ```
 This design enabled the same architecture to work seamlessly across datasets with different temporal lengths and channel counts without requiring manual configuration changes.
 
-### 3.4.2 The Hybrid Loss Function: A Detailed Anatomy
+### 3.5.2 The Hybrid Loss Function: A Detailed Anatomy
 
 The orchestration of the dual-branch learning is governed by a sophisticated hybrid loss function, which was moved from the introduction to its proper methodological place here.
 
@@ -456,7 +480,7 @@ The hyperparameters \(\lambda_{ct}\) and \(\lambda_{cs}\) are the knobs that tun
 #### Step 4: Summarize the Objective
 The overall objective of the hybrid loss function is to train two specialized-but-collaborating experts. It grounds both experts in reality with supervised loss, forces them to learn from each other's unique perspectives via co-training, and encourages them to develop a shared understanding of the data via consistency loss.
 
-### 3.4.3 Six-Stage Training Pipeline: A Step-by-Step Recipe
+### 3.5.3 Six-Stage Training Pipeline: A Step-by-Step Recipe
 
 The final training methodology uses a 6-stage pipeline, which was found to be critical for stability. Initial experiments with joint end-to-end training were prone to gradient conflicts, necessitating a staged approach to first build stable representations before introducing complex cross-domain interactions.
 
@@ -470,7 +494,7 @@ The final training methodology uses a 6-stage pipeline, which was found to be cr
 -   **Stage 5: `SupCon`**: The encoders are further refined using the Supervised Contrastive Loss (Equation 2.2) on the combined set of original labels and high-quality pseudo-labels. This step creates more discriminative and tightly-clustered representations.
 -   **Stage 6: `train_linear_SupCon_{p}`**: Finally, the encoders are frozen again, and a new linear classifier is trained from scratch on top of the refined representations. This model's performance on the test set is reported as the final result.
 
-### 3.4.4 Data Augmentation
+### 3.5.4 Data Augmentation
 
 CoFT employed a curated set of effective and computationally efficient augmentations for both domains, based on the finding that simple, deterministic augmentations provided a better performance-to-complexity ratio.
 
@@ -481,11 +505,11 @@ CoFT employed a curated set of effective and computationally efficient augmentat
 
 # 4 RESULTS AND ANALYSIS
 
-This chapter presents the empirical findings of the study, structured to directly answer the research questions posed in Chapter 1. We begin by presenting the final performance of the CoFT framework against the state-of-the-art baseline. We then deconstruct these results through a detailed ablation study to isolate the sources of performance gains. Finally, we delve into the extensive hyperparameter investigation to explain the underlying mechanisms of cross-domain knowledge transfer.
+This chapter presents the empirical findings of the study, structured to directly answer the research questions posed in Chapter 1. We chronicle the research journey from initial hypotheses, through failed experiments, to the final breakthrough results, providing a transparent account of the scientific process.
 
 ## 4.1 Answering Research Question 1: Can CoFT Outperform a State-of-the-Art Baseline?
 
-The first research question sought to determine if the CoFT framework could significantly and consistently outperform a state-of-the-art, single-domain model (CA-TCC) on benchmark time series datasets. The results, summarized in Table 4.1 and 4.2, provide a clear and affirmative answer.
+The first research question sought to determine if the CoFT framework could significantly and consistently outperform a state-of-the-art, single-domain model (CA-TCC). The final results, summarized in Table 4.1 and 4.2 after an extensive optimization process, provide a clear and affirmative answer.
 
 **Table 4.1: Final Performance of CoFT vs. CA-TCC Baseline (5-seed average)**
 
@@ -543,13 +567,22 @@ The second research question aimed to deconstruct CoFT's performance, determinin
     2.  **The Pitfall of Naive Fusion**: Simply adding a second branch can act as a confusing regularizer if its outputs are not properly integrated, proving that more complexity is not always better.
     3.  **The Crucial Role of Ensembling**: The architectural contribution of CoFT is only unlocked when the two specialized domain experts (temporal and frequency) are created via co-training and then their "wisdom" is aggregated through an ensemble. The frequency branch is not just a regularizer; it is a vital contributor to the final decision.
 
-## 4.3 Answering Research Question 3: Uncovering Optimal Knowledge Transfer Mechanisms
+## 4.3 Answering Research Question 3: The Research Journey to Optimal Knowledge Transfer
 
-The third research question explored the optimal parameters and principles governing knowledge transfer between the two domains. This was the focus of an intensive, multi-month hyperparameter investigation.
+The third research question explored the optimal parameters and principles governing knowledge transfer between the two domains. This was not a simple parameter search but an intensive, multi-month investigation that began with a failed hypothesis and ended with a key scientific discovery.
 
-### 4.3.1 The "Less is More" Phenomenon: Deep Analysis
+### 4.3.1 Initial Hypothesis and Early Failures: The Peril of Strong Coupling
+**Initial Hypothesis:** Based on a survey of data fusion literature [11, 12], which often emphasizes strong integration, our initial hypothesis was that a tight coupling between the temporal and frequency domains would be optimal. We posited that a high co-training weight (e.g., \(\lambda_{ct} \ge 0.1\)) would force robust knowledge transfer.
 
-The most critical discovery was the counter-intuitive effectiveness of an ultra-low co-training weight (\(\lambda_{ct}\)). Initial hypotheses favored a strong coupling (\(\lambda_{ct} \approx 0.5\)), but this led to catastrophic training divergence. A systematic search revealed a clear trend: lower values yielded better, more stable results.
+**Catastrophic Results:** Early experiments built on this hypothesis were a resounding failure.
+*   **Performance:** With \(\lambda_{ct} = 0.5\), accuracy on the HAR dataset plummeted to around 45-50%, which is worse than random guessing for a 6-class problem.
+*   **Training Instability:** Over 40% of training runs diverged, with loss values exploding to `NaN` (Not a Number). Gradient analysis revealed that the co-training loss term completely dominated all other terms, effectively hijacking the learning process.
+
+This critical failure demonstrated that our initial, intuitive assumption was fundamentally flawed. It invalidated the "stronger is better" approach and forced a complete re-evaluation, triggering a systematic investigation into the true nature of cross-domain learning in this context.
+
+### 4.3.2 The "Less is More" Discovery: A Systematic Investigation
+
+The failure of strong coupling prompted a new hypothesis: perhaps the domains required a much gentler, more regularizing interaction. This led to a systematic, multi-stage parameter search, moving from a high-coupling regime to an ultra-low one.
 
 **Table 4.4: Effect of Co-training Weight (\(\lambda_{ct}\)) on HAR 1% Accuracy**
 
@@ -561,12 +594,12 @@ The most critical discovery was the counter-intuitive effectiveness of an ultra-
 | **0.0001**       | **85.47%**| **+1.88% (best)**              | Very stable        |
 
 **Interpretation of Findings:**
--   **Observation**: As shown in Table 4.4, high values of \(\lambda_{ct}\) severely degrade performance. The optimal value was found to be `0.0001`, four orders of magnitude smaller than initially hypothesized.
--   **Analysis**: This "Less is More" phenomenon is explained by what we term **"label confusion."** In supervised fine-tuning, the effective loss is a combination of the supervised loss (from ground-truth labels) and the co-training loss (from pseudo-labels). Since pseudo-labels are inherently noisy, a high \(\lambda_{ct}\) amplifies these incorrect learning signals, confusing the model and corrupting the gradient. An ultra-low value provides a gentle regularization signal that guides representation learning without overwhelming the ground-truth signal.
+-   **Observation**: As shown in Table 4.4, there is a clear and dramatic trend. High values of \(\lambda_{ct}\) severely degrade performance. As the weight is reduced by orders of magnitude, performance steadily improves, with the optimal value found to be an exceptionally small `0.0001`.
+-   **Analysis**: This "Less is More" phenomenon is explained by what we term **"label confusion."** In supervised fine-tuning, the effective loss is a combination of the supervised loss (from ground-truth labels) and the co-training loss (from pseudo-labels). Since pseudo-labels are inherently noisy, a high \(\lambda_{ct}\) amplifies these incorrect learning signals, confusing the model and corrupting the gradient. An ultra-low value, however, provides a gentle regularization signal that guides representation learning without overwhelming the ground-truth signal. It encourages the two branches to agree without forcing them to, which proved to be the key to unlocking their synergistic potential.
 
-### 4.3.2 Ensemble Method Dynamics: The Flip Phenomenon
+### 4.3.3 Ensemble Method Dynamics: The Flip Phenomenon
 
-Further investigation revealed that the effectiveness of ensembling was highly dependent on the co-training weight.
+This journey also revealed that the optimal way to combine the two branches was itself dependent on the co-training weight, leading to the discovery of an "ensemble flip".
 
 **Table 4.5: Interaction Between Ensemble Method and Co-training Weight (\(\lambda_{ct}\))**
 
@@ -578,8 +611,8 @@ Further investigation revealed that the effectiveness of ensembling was highly d
 | 0.01             | 74.22%         | **79.49%**    | 68.95%         | **Temporal Only**  |
 
 **Interpretation of Findings:**
--   **Observation**: A distinct "flip" occurs. At ultra-low \(\lambda_{ct}\) values (≤ 0.001), a simple average of both branches is the best strategy. However, as \(\lambda_{ct}\) increases, the frequency branch becomes a source of noise, and it is better to rely only on the temporal branch's predictions.
--   **Analysis**: This confirms the "label confusion" theory. At high \(\lambda_{ct}\), the frequency branch learns corrupted representations. Including its noisy predictions in the ensemble hurts performance. At the optimal low \(\lambda_{ct}\), both branches learn well-separated, complementary representations, and their combined prediction is stronger than either one alone. This shows that the synergy between the two branches is only unlocked at the correct, gentle coupling strength.
+-   **Observation**: A distinct "flip" occurs, as shown in Table 4.5. At the optimal, ultra-low \(\lambda_{ct}\) values (≤ 0.001), a simple average of both branches is the best strategy. However, as \(\lambda_{ct}\) increases, the frequency branch becomes a source of noise, and it is better to rely only on the temporal branch's predictions.
+-   **Analysis**: This confirms the "label confusion" theory. At high \(\lambda_{ct}\), the frequency branch learns corrupted representations. Including its noisy predictions in the ensemble hurts performance. At the optimal low \(\lambda_{ct}\), both branches learn well-separated, complementary representations, and their combined prediction is stronger than either one alone. This shows that the architectural synergy between the two branches is only unlocked at the correct, gentle coupling strength.
 
 ## 4.4 Answering Research Question 4: Can Principles be Transferred to New Datasets?
 
