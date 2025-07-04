@@ -1,10 +1,13 @@
-# [ACTION REQUIRED: User to provide details]
-
-**[University Name]**
-
-**[Faculty/Department Name]**
-
-<br>
+---
+title: "CoFT: A Dual-Branch, Semi-Supervised Learning Framework for Time Series Analysis via Cross-Domain Co-Training"
+author: "Nguyen Quoc Huy (e21010198)"
+supervisor: "[Supervisor's Name]"
+date: "July 2024"
+degree: "Bachelor of Engineering"
+programme: "[Name of Degree Programme]"
+school: "[Name of School, e.g., School of Technology]"
+university: "VAASAN AMMATTIKORKEAKOULU"
+---
 
 # **CoFT: A Dual-Branch, Semi-Supervised Learning Framework for Time Series Analysis via Cross-Domain Co-Training**
 
@@ -12,21 +15,21 @@
 **e21010198**
 
 **Thesis**
-**[Month Year]**
+**July 2024**
 **Degree Programme in [Name of Degree Programme]**
 **[Name of School, e.g., School of Technology]**
 
+**VAASAN AMMATTIKORKEAKOULU**
+**UNIVERSITY OF APPLIED SCIENCES**
+
 **[ACTION REQUIRED: User to provide details for Supervisor, Degree Programme, etc.]**
 
-<br>
-
 ---
-
 # ABSTRACT
 
 Author: Nguyen Quoc Huy
 Title of the thesis: CoFT: A Dual-Branch, Semi-Supervised Learning Framework for Time Series Analysis via Cross-Domain Co-Training
-Year: 2025
+Year: 2024
 Language: English
 Number of pages: [Will be updated]
 Supervisor: [To be filled]
@@ -38,65 +41,97 @@ The research primarily utilizes a sophisticated six-stage training pipeline buil
 The experimental results indicate that the CoFT framework significantly outperforms the strong baseline, achieving accuracy improvements of up to **+8.17%**. A key finding is the "Less is More" phenomenon, a counter-intuitive discovery that an ultra-low co-training weight (λ_ct = 0.0001) is optimal for preventing "label confusion" and maximizing performance. This work provides not only a practical, high-performing model but also fundamental insights into the dynamics of cross-domain co-training and a principled methodology for transferring learned parameters to new datasets.
 
 Keywords: Time Series Analysis, Semi-Supervised Learning, Self-Supervised Learning, Co-Training, Deep Learning, Frequency Domain, Contrastive Learning, Label Scarcity.
-
 ---
-## **TABLE OF CONTENTS**
+# TABLE OF CONTENTS
 
 ABSTRACT ................................................................................ 2
-LIST OF FIGURES .................................................................... [X]
-LIST OF TABLES ..................................................................... [X]
-ABBREVIATIONS .................................................................... [X]
-NOTATION TABLE ................................................................... [X]
+LIST OF FIGURES .................................................................... 5
+LIST OF TABLES ..................................................................... 6
+ABBREVIATIONS .................................................................... 7
+NOTATION TABLE ................................................................... 8
 
-- **Chapter 1: Introduction**
-  - 1.1 Background and perspectives of the thesis topic
-  - 1.2 Thesis objectives, research questions
-    - 1.2.1 Thesis objectives
-    - 1.2.2 Research questions
-  - 1.3 Thesis Structure
-- **Chapter 2: KNOWLEDGE BASE AND THEORY**
-  - 2.1 Self-Supervised and Semi-Supervised Learning for Time Series
-  - 2.2 Contrastive Learning for Time Series Representation
-    - 2.2.1 Data Augmentation Strategies
-    - 2.2.2 The NT-Xent Loss Function: A Mathematical Deep Dive
-    - 2.2.3 The CA-TCC Baseline: A Rigorous Multi-Stage Semi-Supervised Pipeline
-  - 2.3 Co-Training and Frequency-Temporal Domain Fusion
-    - 2.3.1 Traditional Fusion Approaches
-    - 2.3.2 CoFT: A True Co-Training Framework
-  - 2.4 Conclusion
-- **Chapter 3: IMPLEMENTATION AND METHODOLOGY**
-  - 3.1 Guiding Principles for Reproducibility
-  - 3.2 Technology and Implementation
-  - 3.3 Benchmark Datasets
-    - 3.3.1 Human Activity Recognition (HAR)
-    - 3.3.2 Sleep-EDF (Sleep Stage Classification)  
-    - 3.3.3 Epilepsy (Seizure Detection)
-    - 3.3.4 Semi-Supervised Data Splitting Methodology
-  - 3.4 The CoFT Framework: Architecture and Procedures
-    - 3.4.1 Dual-Branch Architecture: Design and Implementation
-    - 3.4.2 Semi-Supervised Training Strategy: A Multi-Stage Pipeline
-    - 3.4.3 Co-Training Module: The Heart of Cross-Domain Learning
-    - 3.4.4 Hybrid Loss Function: Balancing Competing Objectives
-    - 3.4.5 Data Augmentation
-- **Chapter 4: RESULTS AND ANALYSIS**
-  - 4.1 Answering Research Question 1: Can CoFT Outperform a State-of-the-Art Baseline?
-  - 4.2 Answering Research Question 2: What is the True Source of Performance Gains?
-  - 4.3 Answering Research Question 3: Uncovering Optimal Knowledge Transfer Mechanisms
-    - 4.3.1 The "Less is More" Phenomenon: Deep Analysis
-    - 4.3.2 Ensemble Method Dynamics: The Flip Phenomenon
-  - 4.4 Answering Research Question 4: Can Principles be Transferred to New Datasets?
-- **Chapter 5: CONCLUSION**
-  - 5.1 Summary of the Research Journey
-  - 5.2 Limitations of the Study
-  - 5.3 Future Research Directions
-  - 5.4 Final Reflections
-- **REFERENCES**
-- **APPENDICES**
+# 1 INTRODUCTION .................................................................... 9
+1.1 The Challenge of Label Scarcity in Modern Time Series Analysis .. 9
+1.2 Thesis Objectives and Research Questions ............................. 11
+1.2.1 Thesis Objectives .................................................... 11
+1.2.2 Research Questions ................................................. 11
+1.3 Thesis Structure ................................................................. 12
+1.4 Use of AI in this thesis ...................................................... 12
+
+# 2 KNOWLEDGE BASE AND THEORY ........................................... 14
+2.1 Paradigms in Learning from Limited Labeled Data ................. 14
+2.2 Self-Supervised Learning: The Art of Learning from the Data Itself 15
+2.2.1 Predictive vs. Contrastive Approaches ...................... 16
+2.2.2 Why Contrastive Learning for this Thesis? ................... 17
+2.3 The Anatomy of Contrastive Learning for Time Series .............. 18
+2.3.1 The Cornerstone: Data Augmentation ........................ 18
+2.3.2 The Engine: NT-Xent Loss Function .......................... 19
+2.3.3 The Baseline: CA-TCC Multi-Stage Pipeline ................ 21
+2.4 Multi-Domain Fusion: From Simple Fusion to Co-Training ........ 28
+2.4.1 A Spectrum of Fusion Strategies .............................. 28
+2.4.2 Why Co-Training? A More Principled Approach ............ 29
+2.5 Conclusion: Building on a Strong Foundation ...................... 31
+
+# 3 IMPLEMENTATION AND METHODOLOGY .................................... 32
+3.1 The Methodological Journey: Justification and Challenges ........ 32
+3.1.1 Choosing the Battlefield: Baseline and Benchmark Selection 32
+3.1.2 The Gauntlet of Reproducibility: Technical and Data-Centric Hurdles ............................................................................ 33
+3.2 Guiding Principles for Reproducibility .................................. 34
+3.3 Technology and Implementation .......................................... 35
+3.4 Benchmark Datasets .......................................................... 36
+3.4.1 Human Activity Recognition (HAR) ............................. 37
+3.4.2 Sleep-EDF (Sleep Stage Classification) ........................ 37
+3.4.3 Epilepsy (Seizure Detection) .................................... 38
+3.4.4 Semi-Supervised Data Splitting Methodology .............. 38
+3.5 The CoFT Framework: Architecture and Procedures ................ 39
+3.5.1 Dual-Branch Architecture: Design and Implementation .. 39
+3.5.2 The Hybrid Loss Function: A Detailed Anatomy ............. 43
+3.5.3 Six-Stage Training Pipeline: A Step-by-Step Recipe ...... 44
+3.5.4 Data Augmentation ................................................. 46
+
+# 4 RESULTS AND ANALYSIS ...................................................... 47
+4.1 Answering Research Question 1: Can CoFT Outperform a State-of-the-Art Baseline? .................................................................... 47
+4.2 Answering Research Question 2: What is the True Source of Performance Gains? .................................................................... 49
+4.3 Answering Research Question 3: The Research Journey to Optimal Knowledge Transfer .................................................................... 51
+4.3.1 Initial Hypothesis and Early Failures: The Peril of Strong Coupling ............................................................................ 51
+4.3.2 The "Less is More" Discovery: A Systematic Investigation 52
+4.3.3 Ensemble Method Dynamics: The Flip Phenomenon ....... 53
+4.4 Answering Research Question 4: Can Principles be Transferred to New Datasets? ............................................................................ 54
+
+# 5 CONCLUSION ..................................................................... 56
+5.1 Summary of the Research Journey ...................................... 56
+5.2 Limitations of the Study .................................................... 57
+5.3 Future Research Directions ................................................. 58
+5.4 Final Reflections ............................................................... 59
+
+REFERENCES ........................................................................... 60
+APPENDICES ........................................................................... 63
 
 ---
+# LIST OF FIGURES
 
-## **List of Abbreviations**
+Figure 1. The dual-objective contrastive learning in CA-TCC. The model learns to be invariant to augmentations via Temporal Contrasting and sensitive to temporal structure via Contextual Contrasting.
+Figure 2. High-level overview of the CoFT framework.
+Figure 3. Architecture of the Transformer block used within both encoders.
+Figure 4. The Frequency Contrasting mechanism.
+Figure 5. The multi-phase training strategy, adapted from CA-TCC.
 
+---
+# LIST OF TABLES
+
+Table 1. Ablation Study of Components in TS-TCC and CA-TCC.
+Table 2. Final Performance of CoFT vs. CA-TCC Baseline.
+Table 3. Statistical Analysis of Performance Gains.
+Table 4. Ablation Study - Deconstructing CoFT's Performance Gains.
+Table 5. Effect of Co-training Weight (λ_ct) on HAR 1% Accuracy.
+Table 6. Interaction Between Ensemble Method and Co-training Weight.
+Table 7. Transferred Parameters and Rationale.
+Table 8. General Training and Model Parameters.
+Table 9. CoFT-Specific Hyperparameters.
+Table 10. Contrastive Learning and Augmentation Parameters.
+
+---
+# ABBREVIATIONS
 | Abbreviation | Full Term                                                |
 | :----------- | :------------------------------------------------------- |
 | **CoFT**     | Co-training with Frequency and Temporal domains          |
@@ -115,7 +150,7 @@ NOTATION TABLE .................................................................
 
 ---
 
-## **Notation Table**
+# NOTATION TABLE
 
 | Notation          | Description                                                                 |
 | :---------------- | :-------------------------------------------------------------------------- |
@@ -176,13 +211,13 @@ The development and execution of the research in this thesis were significantly 
 
 This chapter provides a comprehensive review of the literature relevant to the CoFT framework. It situates the work at the intersection of semi-supervised learning, contrastive representation learning, and multi-domain time series analysis. We first survey the landscape of contrastive learning, establishing the state-of-the-art CA-TCC pipeline as our direct baseline. We then analyze existing approaches for combining temporal and frequency domain information, thereby highlighting the theoretical underpinnings and unique contributions of CoFT's co-training paradigm.
 
-## 2.1 Self-Supervised and Semi-Supervised Learning for Time Series
+## 2.1 Paradigms in Learning from Limited Labeled Data
 
 Deep learning models have demonstrated remarkable success in time series classification but often rely on large, meticulously labeled datasets. In many real-world domains, particularly in healthcare (e.g., EEG, ECG analysis), data acquisition is abundant, but expert annotation is scarce, time-consuming, and expensive. This label scarcity has motivated a surge in research on self-supervised and semi-supervised learning methods.
 
 Self-supervised learning (SSL) aims to learn meaningful representations from unlabeled data by creating pretext tasks. The learned representations can then be transferred to downstream tasks (like classification) where only a small amount of labeled data is required for fine-tuning. This two-stage paradigm (unsupervised pre-training followed by supervised fine-tuning) has become a dominant approach. Among SSL paradigms, contrastive learning has emerged as a particularly effective method for learning discriminative representations.
 
-## 2.2 Contrastive Learning for Time Series Representation
+## 2.2 Self-Supervised Learning: The Art of Learning from the Data Itself
 
 Contrastive learning is a self-supervised learning paradigm that aims to learn an embedding space where similar samples are positioned closely together, while dissimilar samples are pushed far apart. This is achieved not through explicit labels, but by creating a "pretext task" based on data augmentations. For a given input sample, two or more correlated "views" are generated through augmentations. The model is then trained to identify the different views of the same sample as a "positive pair" and treat all other samples in a given batch as "negative pairs."
 
@@ -234,8 +269,8 @@ The overall objective of the NT-Xent loss function is to learn an embedding spac
 
 The CoFT framework is a direct and principled extension of **CA-TCC (Contrastive Augmentation - Temporal Contrastive Clustering)** [7], a state-of-the-art framework for semi-supervised time series classification. It is not merely a single loss function but a complete, multi-stage pipeline designed to leverage both unlabeled and labeled data to their fullest extent. Understanding this intricate pipeline is critical to contextualizing the innovations presented in this thesis, as it forms the foundational "playground" upon which CoFT was built and evaluated.
 
-![Figure 2.1: The dual-objective contrastive learning in CA-TCC. The model learns to be invariant to augmentations via Temporal Contrasting and sensitive to temporal structure via Contextual Contrasting.](Images/Fig. 1. Overall architecture of the proposed TS-TCC. The Temporal Contrastingmodule.png)
-*Figure 2.1: The dual-objective contrastive learning in CA-TCC. The model learns to be invariant to augmentations via Temporal Contrasting and sensitive to temporal structure via Contextual Contrasting.*
+![Figure 1: The dual-objective contrastive learning in CA-TCC. The model learns to be invariant to augmentations via Temporal Contrasting and sensitive to temporal structure via Contextual Contrasting.](Images/Fig. 1. Overall architecture of the proposed TS-TCC. The Temporal Contrastingmodule.png)
+*Figure 1: The dual-objective contrastive learning in CA-TCC. The model learns to be invariant to augmentations via Temporal Contrasting and sensitive to temporal structure via Contextual Contrasting.*
 
 The CA-TCC workflow consists of the following interconnected stages:
 
@@ -297,7 +332,7 @@ After the encoder's representations have been refined using \(L_{SupCon}\), the 
 
 This complete, five-stage process represents the sophisticated baseline that CoFT builds upon. By preserving this pipeline for its temporal branch, this thesis can isolate and rigorously evaluate the gains achieved by introducing the parallel frequency domain and the cross-domain co-training mechanism.
 
-**Table 2.1: Ablation Study of Components in TS-TCC and CA-TCC.** This table, adapted from the original CA-TCC paper [7], demonstrates the incremental value of each component on performance. It clearly shows that the addition of Supervised Contrastive Learning (SCC) in CA-TCC provides a significant boost over TS-TCC, and that a combination of weak and strong augmentations is superior. Results are based on the linear evaluation experiment with 5% labeled data.
+**Table 1: Ablation Study of Components in TS-TCC and CA-TCC.** This table, adapted from the original CA-TCC paper [7], demonstrates the incremental value of each component on performance. It clearly shows that the addition of Supervised Contrastive Learning (SCC) in CA-TCC provides a significant boost over TS-TCC, and that a combination of weak and strong augmentations is superior. Results are based on the linear evaluation experiment with 5% labeled data.
 
 | Component                    | HAR (Acc / MF1)            | Sleep-EDF (Acc / MF1)      | Epilepsy (Acc / MF1)       |
 | :--------------------------- | :------------------------- | :------------------------- | :------------------------- |
@@ -333,7 +368,7 @@ This approach is fundamentally different from prior work:
 *   **Knowledge Transfer via Pseudo-Labeling:** CoFT facilitated knowledge transfer through a sophisticated co-training module. One branch generated high-confidence pseudo-labels, which were then used to train the other branch. This created a feedback loop where each domain helps to regularize and improve the other, which is especially powerful in low-label settings.
 *   **The "Less is More" Discovery:** The most counter-intuitive and impactful finding of the CoFT research is the "Less is More" phenomenon regarding the co-training hyperparameter `lambda_ct`. Conventional wisdom might suggest that a strong coupling (high `lambda_ct`) is needed for effective knowledge transfer. However, this thesis empirically demonstrated (Chapter 4) that an ultra-low value (`lambda_ct` = 0.0001) is optimal. High values lead to "label confusion," where noisy pseudo-labels from one domain corrupted the learning process of the other. A gentle, low-weighted coupling provided just enough regularization to guide representation learning without overwhelming the ground-truth signal. This discovery is a significant scientific contribution to the understanding of co-training dynamics in deep learning.
 
-## 2.4 Conclusion
+## 2.4 Conclusion: Building on a Strong Foundation
 
 The CoFT framework is firmly grounded in the principles of self-supervised contrastive learning, adopting best practices such as simple and efficient data augmentations and a stable, staged training pipeline. However, its primary novelty lies in its sophisticated adaptation of the co-training paradigm to the multi-domain setting of time series analysis. By treating the temporal and frequency domains as equal partners and enabling gentle knowledge transfer through a carefully calibrated hybrid loss, CoFT significantly advances the state-of-the-art. The discovery of the "label confusion" theory and the optimality of ultra-low coupling weights provided not only a high-performing model but also valuable scientific insights that can guide future research in semi-supervised and multi-domain learning. 
 
@@ -425,16 +460,16 @@ A cornerstone of this research is the simulation of label scarcity. For each dat
 
 CoFT employs a parallel dual-branch architecture. The initial design, detailed below, was carefully constructed to maintain architectural symmetry. This decision was a crucial part of our scientific methodology, allowing for a fair and controlled comparison between the temporal and frequency domains.
 
-![Figure 3.1: High-level overview of the CoFT framework. It shows the parallel Temporal and Frequency branches, the dynamic adapter, and the central co-training module that orchestrates knowledge transfer before a final ensemble prediction.](Images/Fig. 5. dual branch temporal-frequency CoFT structure.png)
-*Figure 3.1: High-level overview of the CoFT framework. It shows the parallel Temporal and Frequency branches, the dynamic adapter, and the central co-training module that orchestrates knowledge transfer before a final ensemble prediction.*
+![Figure 2: High-level overview of the CoFT framework.](Images/Fig. 5. dual branch temporal-frequency CoFT structure.png)
+*Figure 2: High-level overview of the CoFT framework. It shows the parallel Temporal and Frequency branches, the dynamic adapter, and the central co-training module that orchestrates knowledge transfer before a final ensemble prediction.*
 
 The **temporal branch** preserved the exact CA-TCC architecture to ensure fair comparison. For the **frequency branch**, the decision to mirror the temporal architecture was a deliberate methodological choice to establish a controlled baseline. By keeping the model capacity identical, we could ensure that any observed performance differences were attributable purely to the inherent characteristics of the frequency-domain data itself, not to architectural advantages.
 
-![Figure 3.2: Architecture of the Transformer block used within both the temporal and frequency encoders. Encoder features are projected and combined with a classification token, processed through multi-head attention and MLP layers, and finally used for downstream tasks.](Images/Fig. 2. Architecture of the Transformer model used in the Temporal Contrasting.png)
-*Figure 3.2: Architecture of the Transformer block used within both the temporal and frequency encoders. Encoder features are projected and combined with a classification token, processed through multi-head attention and MLP layers, and finally used for downstream tasks.*
+![Figure 3: Architecture of the Transformer block used within both encoders.](Images/Fig. 2. Architecture of the Transformer model used in the Temporal Contrasting.png)
+*Figure 3: Architecture of the Transformer block used within both the temporal and frequency encoders. Encoder features are projected and combined with a classification token, processed through multi-head attention and MLP layers, and finally used for downstream tasks.*
 
-![Figure 3.3: The Frequency Contrasting mechanism. Similar to the temporal branch, the frequency branch uses augmentations (Spectral Noise, Frequency Masking) and a Transformer-based encoder to learn robust representations via a contrastive loss.](Images/Fig. 4. frequency-domain branch.png)
-*Figure 3.3: The Frequency Contrasting mechanism. Similar to the temporal branch, the frequency branch uses augmentations (Spectral Noise, Frequency Masking) and a Transformer-based encoder to learn robust representations via a contrastive loss.*
+![Figure 4: The Frequency Contrasting mechanism.](Images/Fig. 4. frequency-domain branch.png)
+*Figure 4: The Frequency Contrasting mechanism. Similar to the temporal branch, the frequency branch uses augmentations (Spectral Noise, Frequency Masking) and a Transformer-based encoder to learn robust representations via a contrastive loss.*
 
 #### Frequency Domain Transformation: Beyond Simple FFT
 The frequency transformation addressed a fundamental challenge: how to convert complex-valued FFT output into a format suitable for standard CNN architectures. The chosen pipeline was as follows:
@@ -463,7 +498,7 @@ This design enabled the same architecture to work seamlessly across datasets wit
 
 ### 3.5.2 The Hybrid Loss Function: A Detailed Anatomy
 
-The orchestration of the dual-branch learning is governed by a sophisticated hybrid loss function, which was moved from the introduction to its proper methodological place here.
+The orchestration of the dual-branch learning is governed by a sophisticated hybrid loss function.
 
 #### Step 1: Present the Formula
 The total loss, \( L_{total} \), is formulated as a weighted sum of four distinct components:
@@ -474,16 +509,14 @@ The total loss, \( L_{total} \), is formulated as a weighted sum of four distinc
 -   **\( L_{sup\_t} \)** & **\( L_{sup\_f} \)**: The standard supervised classification loss (Categorical Cross-Entropy) for the temporal and frequency branches, respectively, calculated using ground-truth labels.
 -   **\( L_{cotraining} \)**: The co-training loss. This is the core of the reciprocal teaching mechanism, where one branch is trained on high-confidence *pseudo-labels* generated by the other.
 -   **\( L_{consistency} \)**: A feature consistency loss (e.g., Mean Squared Error) that encourages the high-level embeddings from both branches to be similar for the same input sample.
--   **\( \lambda_{ct} \)** (Co-training weight): A hyperparameter that scales the influence of the co-training loss. A key discovery of this work is that an ultra-low value is optimal.
+-   **\( \lambda_{ct} \)** (Co-training weight): A hyperparameter that scales the influence of the co-training loss.
 -   **\( \lambda_{cs} \)** (Consistency weight): A hyperparameter that controls the strength of the feature consistency regularization.
 
 #### Step 3: Explain in Plain English
 This equation acts as a control system for the entire model. It balances four distinct learning objectives:
-1.  **`Ground Truth Learning` (\(L_{sup\_t} + L_{sup\_f}\))**: This is the primary objective. Both the temporal and frequency experts must learn to correctly classify the data based on the real, verified labels.
-2.  **`Reciprocal Teaching` (\(L_{cotraining}\))**: This is the "student-teacher" component. The temporal branch must learn from the confident predictions of the frequency branch, and vice-versa. This compels one domain expert to learn from the "insights" of the other, effectively regularizing its training based on a complementary perspective.
-3.  **`Representational Agreement` (\(L_{consistency}\))**: This term forces the two branches to find common ground. It ensures that their high-level interpretations (feature embeddings) of the same input sample are mapped to a similar location in the latent space, encouraging them to learn a shared, synergistic representation.
-
-The hyperparameters \(\lambda_{ct}\) and \(\lambda_{cs}\) are the knobs that tune this control system, determining how much emphasis is placed on "reciprocal teaching" and "representational agreement" relative to learning the ground truth.
+1.  **`Ground Truth Learning` (\(L_{sup\_t} + L_{sup\_f}\))**: The primary objective. Both experts must learn to correctly classify the data based on the real, verified labels.
+2.  **`Reciprocal Teaching` (\(L_{cotraining}\))**: The "student-teacher" component. Each branch learns from the confident predictions of the other, regularizing its training with a complementary perspective.
+3.  **`Representational Agreement` (\(L_{consistency}\))**: This forces the two branches to find common ground, ensuring their high-level interpretations (feature embeddings) are mapped to a similar location in latent space.
 
 #### Step 4: Summarize the Objective
 The overall objective of the hybrid loss function is to train two specialized-but-collaborating experts. It grounds both experts in reality with supervised loss, forces them to learn from each other's unique perspectives via co-training, and encourages them to develop a shared understanding of the data via consistency loss.
@@ -492,22 +525,22 @@ The overall objective of the hybrid loss function is to train two specialized-bu
 
 The final training methodology uses a 6-stage pipeline, which was found to be critical for stability. Initial experiments with joint end-to-end training were prone to gradient conflicts, necessitating a staged approach to first build stable representations before introducing complex cross-domain interactions.
 
-![Figure 3.4: The multi-phase training strategy, adapted from CA-TCC [7]. CoFT extends this concept into a six-stage pipeline, beginning with self-supervised pre-training on unlabeled data (Phase 1), followed by fine-tuning on labels (Phase 2), generating pseudo-labels (Phase 3), and finally refining representations with semi-supervised methods (Phase 4).](Images/Fig. 3. Four phases for CA-TCC semi-supervised training. In Phase 1, TS-TCC is trained with fully unlabeled data. Next, we use the available few labeled.png)
-*Figure 3.4: The multi-phase training strategy, adapted from CA-TCC [7]. CoFT extends this concept into a six-stage pipeline, beginning with self-supervised pre-training on unlabeled data (Phase 1), followed by fine-tuning on labels (Phase 2), generating pseudo-labels (Phase 3), and finally refining representations with semi-supervised methods (Phase 4).*
+![Figure 5: The multi-phase training strategy, adapted from CA-TCC [7]. CoFT extends this concept into a six-stage pipeline.](Images/Fig. 3. Four phases for CA-TCC semi-supervised training. In Phase 1, TS-TCC is trained with fully unlabeled data. Next, we use the available few labeled.png)
+*Figure 5: The multi-phase training strategy, adapted from CA-TCC [7]. CoFT extends this concept into a six-stage pipeline.*
 
--   **Stage 1: `self_supervised`**: Both branches are pre-trained for 40 epochs on unlabeled data using their respective contrastive losses (Temporal and Frequency). There is no interaction between the branches; they learn independently.
--   **Stage 2: `train_linear_{p}`**: A linear classifier is trained on top of each frozen encoder to assess the quality of the learned representations using a percentage `p` of labels. This provides a baseline measure of each expert's individual capability.
+-   **Stage 1: `self_supervised`**: Both branches are pre-trained for 40 epochs on unlabeled data using their respective contrastive losses. There is no interaction between the branches.
+-   **Stage 2: `train_linear_{p}`**: A linear classifier is trained on top of each frozen encoder to assess the quality of the learned representations using a percentage `p` of labels.
 -   **Stage 3: `ft_{p}`**: The full model is fine-tuned using the complete hybrid loss function (Equation 3.1) on the labeled data. This is the first stage where co-training occurs.
--   **Stage 4: `gen_pseudo_labels`**: The fine-tuned model from Stage 3 is used to generate high-confidence pseudo-labels for the unlabeled data pool. A prediction is accepted only if its softmax probability exceeds 0.95 and both branches agree on the predicted class.
--   **Stage 5: `SupCon`**: The encoders are further refined using the Supervised Contrastive Loss (Equation 2.2) on the combined set of original labels and high-quality pseudo-labels. This step creates more discriminative and tightly-clustered representations.
--   **Stage 6: `train_linear_SupCon_{p}`**: Finally, the encoders are frozen again, and a new linear classifier is trained from scratch on top of the refined representations. This model's performance on the test set is reported as the final result.
+-   **Stage 4: `gen_pseudo_labels`**: The fine-tuned model from Stage 3 is used to generate high-confidence pseudo-labels (softmax probability > 0.95) for the unlabeled data.
+-   **Stage 5: `SupCon`**: The encoders are further refined using the Supervised Contrastive Loss on the combined set of original labels and pseudo-labels.
+-   **Stage 6: `train_linear_SupCon_{p}`**: Finally, the encoders are frozen again, and a new linear classifier is trained from scratch on top of the refined representations to produce the final result.
 
 ### 3.5.4 Data Augmentation
 
-CoFT employed a curated set of effective and computationally efficient augmentations for both domains, based on the finding that simple, deterministic augmentations provided a better performance-to-complexity ratio.
+CoFT employed a curated set of effective and computationally efficient augmentations for both domains.
 
--   **Temporal Domain**: Adopted the effective augmentations from the CA-TCC baseline: **Jittering** (adding Gaussian noise), **Scaling** (multiplying the signal by a random scalar), and **Cropping** (selecting a random sub-sequence).
--   **Frequency Domain**: A conservative approach was used to avoid corrupting diagnostic patterns. Augmentations were designed to mimic realistic signal artifacts: **FFT-Domain Noise Injection** (simulating electrical interference and sensor noise) and **Selective Frequency Masking** (mimicking motion artifacts or hardware filtering effects). This strategy creates diverse views for contrastive learning while maintaining the integrity of the underlying signal characteristics. 
+-   **Temporal Domain**: Adopted the effective augmentations from the CA-TCC baseline: **Jittering**, **Scaling**, and **Cropping**.
+-   **Frequency Domain**: A conservative approach was used to avoid corrupting diagnostic patterns, designed to mimic realistic signal artifacts: **FFT-Domain Noise Injection** and **Selective Frequency Masking**.
 
 ---
 
@@ -517,9 +550,9 @@ This chapter presents the empirical findings of the study, structured to directl
 
 ## 4.1 Answering Research Question 1: Can CoFT Outperform a State-of-the-Art Baseline?
 
-The first research question sought to determine if the CoFT framework could significantly and consistently outperform a state-of-the-art, single-domain model (CA-TCC). The final results, summarized in Table 4.1 and 4.2 after an extensive optimization process, provide a clear and affirmative answer.
+The first research question sought to determine if the CoFT framework could significantly and consistently outperform a state-of-the-art, single-domain model (CA-TCC). The final results, summarized in Table 2 and 3 after an extensive optimization process, provide a clear and affirmative answer.
 
-**Table 4.1: Final Performance of CoFT vs. CA-TCC Baseline (5-seed average)**
+**Table 2: Final Performance of CoFT vs. CA-TCC Baseline (5-seed average)**
 
 | Dataset   | Label % | Model       | Accuracy                | MF1-Score               |
 |:----------|:--------|:------------|:------------------------|:------------------------|
@@ -536,7 +569,7 @@ The first research question sought to determine if the CoFT framework could sign
 | **Epilepsy**  | **5%**      | CA-TCC (Baseline) | 94.5% ± 0.1%            | 94.0% ± 0.1%            |
 |           |         | **CoFT (Ours)**     | **94.91% ± 0.1%**       | **91.55% ± 0.1%**       |
 
-**Table 4.2: Statistical Analysis of Performance Gains**
+**Table 3: Statistical Analysis of Performance Gains**
 
 | Dataset   | Label % | Accuracy Gain | p-value (Accuracy) |
 |:----------|:--------|:--------------|:-------------------|
@@ -548,15 +581,15 @@ The first research question sought to determine if the CoFT framework could sign
 | Epilepsy  | 5%      | **+0.41%**    | <0.05              |
 
 **Interpretation of Findings:**
--   **Description**: Table 4.1 presents a head-to-head comparison of the final accuracy and MF1-scores for the CoFT model versus the CA-TCC baseline across three datasets and two low-label scenarios (1% and 5%). Table 4.2 quantifies the absolute accuracy gains and provides p-values from a paired t-test to assess statistical significance.
+-   **Description**: Table 2 presents a head-to-head comparison of the final accuracy and MF1-scores for the CoFT model versus the CA-TCC baseline across three datasets and two low-label scenarios (1% and 5%). Table 3 quantifies the absolute accuracy gains and provides p-values from a paired t-test to assess statistical significance.
 -   **Observation**: CoFT demonstrates a consistent and statistically significant performance improvement over the baseline in all tested scenarios. The most substantial gains are observed in the 1% label setting for HAR (+8.17%) and Sleep-EDF (+9.32%), indicating that the framework is particularly effective in extreme label scarcity. As the percentage of available labels increases to 5%, the performance gap narrows, but CoFT maintains a significant advantage.
 -   **Analysis**: The results strongly support the hypothesis that leveraging the frequency domain via co-training provides substantial benefits. The framework's ability to use one domain's confident predictions to teach the other acts as a powerful regularizer, which is most valuable when ground-truth labels are scarce. The diminishing (but still positive) gains at 5% labels suggest that as more supervised data becomes available, the baseline model's performance improves, but the complementary information provided by CoFT's second branch still offers a distinct advantage.
 
 ## 4.2 Answering Research Question 2: What is the True Source of Performance Gains?
 
-The second research question aimed to deconstruct CoFT's performance, determining how much is attributable to the novel architecture versus rigorous hyperparameter optimization. A detailed ablation study, presented in Table 4.3, was designed to answer this.
+The second research question aimed to deconstruct CoFT's performance, determining how much is attributable to the novel architecture versus rigorous hyperparameter optimization. A detailed ablation study, presented in Table 4, was designed to answer this.
 
-**Table 4.3: Ablation Study - Deconstructing CoFT's Performance Gains on HAR (1% Labels)**
+**Table 4: Ablation Study - Deconstructing CoFT's Performance Gains on HAR (1% Labels)**
 
 | # | Configuration                                       | Accuracy (Mean ± Std) | Gain vs. Prev. Step | Source of Gain / Key Insight                                                                          |
 |:-:|:----------------------------------------------------|:----------------------|:--------------------|:------------------------------------------------------------------------------------------------------|
@@ -568,7 +601,7 @@ The second research question aimed to deconstruct CoFT's performance, determinin
 *Note: Results for configurations 2 and 3 are the average of 3 seeds. Results for 1 and 4 are from single, representative runs.*
 
 **Interpretation of Findings:**
--   **Description**: Table 4.3 breaks down the performance progression from the original baseline to the final CoFT model into four distinct steps. Each step introduces a single new component, allowing for the isolation of its specific contribution.
+-   **Description**: Table 4 breaks down the performance progression from the original baseline to the final CoFT model into four distinct steps. Each step introduces a single new component, allowing for the isolation of its specific contribution.
 -   **Observation**: The largest single performance increase (**+6.29%**) comes from simply applying the optimized hyperparameters to the original CA-TCC baseline (Step 2). Counter-intuitively, introducing the CoFT architecture but only using the temporal branch for prediction *decreases* performance by -0.69% (Step 3). The final jump to 85.47% is achieved only when the predictions from both branches are ensembled (Step 4), contributing a **+2.57%** gain.
 -   **Analysis**: This ablation study reveals a nuanced narrative. The source of CoFT's success is not monolithic but is a synergy of three factors:
     1.  **The Primacy of Hyperparameter Tuning**: A significant portion of the total gain comes from establishing a powerful, well-tuned baseline. This underscores the critical importance of rigorous optimization in evaluating new architectures.
@@ -592,7 +625,7 @@ This critical failure demonstrated that our initial, intuitive assumption was fu
 
 The failure of strong coupling prompted a new hypothesis: perhaps the domains required a much gentler, more regularizing interaction. This led to a systematic, multi-stage parameter search, moving from a high-coupling regime to an ultra-low one.
 
-**Table 4.4: Effect of Co-training Weight (\(\lambda_{ct}\)) on HAR 1% Accuracy**
+**Table 5: Effect of Co-training Weight (\(\lambda_{ct}\)) on HAR 1% Accuracy**
 
 | \(\lambda_{ct}\) | Accuracy | Performance vs. Tuned Baseline | Training Stability |
 |:-----------------|:---------|:-------------------------------|:-------------------|
@@ -602,14 +635,14 @@ The failure of strong coupling prompted a new hypothesis: perhaps the domains re
 | **0.0001**       | **85.47%**| **+1.88% (best)**              | Very stable        |
 
 **Interpretation of Findings:**
--   **Observation**: As shown in Table 4.4, there is a clear and dramatic trend. High values of \(\lambda_{ct}\) severely degrade performance. As the weight is reduced by orders of magnitude, performance steadily improves, with the optimal value found to be an exceptionally small `0.0001`.
+-   **Observation**: As shown in Table 5, there is a clear and dramatic trend. High values of \(\lambda_{ct}\) severely degrade performance. As the weight is reduced by orders of magnitude, performance steadily improves, with the optimal value found to be an exceptionally small `0.0001`.
 -   **Analysis**: This "Less is More" phenomenon is explained by what we term **"label confusion."** In supervised fine-tuning, the effective loss is a combination of the supervised loss (from ground-truth labels) and the co-training loss (from pseudo-labels). Since pseudo-labels are inherently noisy, a high \(\lambda_{ct}\) amplifies these incorrect learning signals, confusing the model and corrupting the gradient. An ultra-low value, however, provides a gentle regularization signal that guides representation learning without overwhelming the ground-truth signal. It encourages the two branches to agree without forcing them to, which proved to be the key to unlocking their synergistic potential.
 
 ### 4.3.3 Ensemble Method Dynamics: The Flip Phenomenon
 
 This journey also revealed that the optimal way to combine the two branches was itself dependent on the co-training weight, leading to the discovery of an "ensemble flip".
 
-**Table 4.5: Interaction Between Ensemble Method and Co-training Weight (\(\lambda_{ct}\))**
+**Table 6: Interaction Between Ensemble Method and Co-training Weight (\(\lambda_{ct}\))**
 
 | \(\lambda_{ct}\) | Simple Average | Temporal Only | Frequency Only | Best Method      |
 |:-----------------|:---------------|:--------------|:---------------|:-----------------|
@@ -619,7 +652,7 @@ This journey also revealed that the optimal way to combine the two branches was 
 | 0.01             | 74.22%         | **79.49%**    | 68.95%         | **Temporal Only**  |
 
 **Interpretation of Findings:**
--   **Observation**: A distinct "flip" occurs, as shown in Table 4.5. At the optimal, ultra-low \(\lambda_{ct}\) values (≤ 0.001), a simple average of both branches is the best strategy. However, as \(\lambda_{ct}\) increases, the frequency branch becomes a source of noise, and it is better to rely only on the temporal branch's predictions.
+-   **Observation**: A distinct "flip" occurs, as shown in Table 6. At the optimal, ultra-low \(\lambda_{ct}\) values (≤ 0.001), a simple average of both branches is the best strategy. However, as \(\lambda_{ct}\) increases, the frequency branch becomes a source of noise, and it is better to rely only on the temporal branch's predictions.
 -   **Analysis**: This confirms the "label confusion" theory. At high \(\lambda_{ct}\), the frequency branch learns corrupted representations. Including its noisy predictions in the ensemble hurts performance. At the optimal low \(\lambda_{ct}\), both branches learn well-separated, complementary representations, and their combined prediction is stronger than either one alone. This shows that the architectural synergy between the two branches is only unlocked at the correct, gentle coupling strength.
 
 ## 4.4 Answering Research Question 4: Can Principles be Transferred to New Datasets?
@@ -629,17 +662,18 @@ The final research question asked if the principles learned from the intensive H
 **Methodology:**
 1.  **Sequence Length → \(\lambda_{ct}\)**: Longer sequences can tolerate slightly higher co-training weights.
 2.  **Signal Type & Noise → \(\lambda_{cs}\)**: Noisier signals (like EEG) benefit from stronger consistency regularization.
-3.  **Ensemble Universality**: The `temporal_only` or `simple_average` ensemble (depending on the final tuned \(\lambda_{ct}\)) was hypothesized to be a robust default.
+3.  **Ensemble Universality**: The `simple_average` ensemble (with optimal \(\lambda_{ct}\)) was hypothesized to be a robust default.
 
 **Transferred Parameters and Rationale:**
 
+**Table 7: Transferred Parameters and Rationale**
 | Dataset    | \(\lambda_{ct}\) (Final) | \(\lambda_{cs}\) (Final) | Rationale                                                              |
 |:-----------|:-------------------------|:-------------------------|:-----------------------------------------------------------------------|
 | **Sleep-EDF**| **0.0002** (2x HAR)      | **0.015** (1.5x HAR)     | 23x longer sequence allowed 2x \(\lambda_{ct}\); 1.5x \(\lambda_{cs}\) for EEG noise. |
 | **Epilepsy** | **0.00005** (0.5x HAR)   | **0.025** (2.5x HAR)     | EEG sensitivity required 0.5x \(\lambda_{ct}\); 2.5x \(\lambda_{cs}\) for seizure complexity. |
 
 **Interpretation of Findings:**
--   **Observation**: As shown in Table 4.1, applying these transferred parameters to the Sleep-EDF and Epilepsy datasets resulted in significant performance gains (+9.32% and +2.71% respectively) over the baseline.
+-   **Observation**: As shown in Table 2, applying these transferred parameters to the Sleep-EDF and Epilepsy datasets resulted in significant performance gains (+9.32% and +2.71% respectively) over the baseline.
 -   **Analysis**: This result validates that the core principles governing the CoFT framework are not dataset-specific. The ability to achieve substantial improvements on new, diverse medical datasets using only a principled, zero-shot transfer of hyperparameters is a key contribution of this work. It demonstrates the robustness of the framework and provides a practical methodology for applying CoFT to new problems efficiently.
 
 ---
@@ -706,6 +740,8 @@ The research journey documented in this thesis was rarely linear. The most valua
 
 [12] Wang, Y. (2018). Survey on Deep Multi-modal Data Analytics: Collaboration, Rivalry and Fusion. *J. ACM*, 37(4), 111.
 
+[13] Baltrusaitis, T., Ahuja, C., & Morency, L. P. (2019). Multimodal machine learning: A survey and taxonomy. *IEEE transactions on pattern analysis and machine intelligence*, 41(2), 423-443.
+
 ---
 
 # APPENDICES
@@ -715,7 +751,7 @@ This section can include supplementary materials such as detailed hyperparameter
 
 This appendix provides a comprehensive summary of the final hyperparameters used for the CoFT framework across all benchmark datasets. The parameters for the HAR dataset were determined through an exhaustive optimization process, while the parameters for Sleep-EDF and Epilepsy were derived using the principled transfer methodology detailed in Chapter 4.
 
-### Table A.1: General Training and Model Parameters
+### **Table 8: General Training and Model Parameters**
 
 | Parameter | HAR | Sleep-EDF | Epilepsy | Description |
 | :--- | :---: | :---: | :---: | :--- |
@@ -728,7 +764,7 @@ This appendix provides a comprehensive summary of the final hyperparameters used
 | **Input Channels**| 9 | 1 | 1 | Number of input channels in the raw time series. |
 | **Num Classes** | 6 | 5 | 2 | Number of target classes for classification. |
 
-### Table A.2: CoFT-Specific Hyperparameters
+### **Table 9: CoFT-Specific Hyperparameters**
 
 These parameters control the core mechanisms of the dual-branch co-training framework. The values reflect the "Less is More" discovery and the parameter transfer strategy.
 
@@ -740,7 +776,7 @@ These parameters control the core mechanisms of the dual-branch co-training fram
 | **Confidence Threshold**| 0.95 | 0.95 | 0.95 | Minimum softmax probability to accept a pseudo-label. |
 | **Warmup Ratio** | 0.25 | 0.25 | 0.25 | Fraction of epochs to warm up the co-training mechanism. |
 
-### Table A.3: Contrastive Learning and Augmentation Parameters
+### **Table 10: Contrastive Learning and Augmentation Parameters**
 
 These parameters govern the self-supervised representation learning stage (TS-TCC) and the data augmentation pipeline.
 
@@ -750,4 +786,4 @@ These parameters govern the self-supervised representation learning stage (TS-TC
 | **Jitter Ratio** | 0.8 | 0.8 | 0.8 | Strength of the random noise added for jitter augmentation. |
 | **Jitter Scale Ratio**| 2.0 | 2.0 | 2.0 | Strength of the random scaling augmentation. |
 | **Max Segments** | 8 | 20 | 12 | Maximum number of segments for permutation augmentation. |
-| **Use InfoTS Augs**| `False` | `False` | `False` | Switch to disable complex InfoTS augmentations, favoring simplicity. | 
+| **Use InfoTS Augs**| `False` | `False` | `False` | Switch to disable complex InfoTS augmentations, favoring simplicity. |
