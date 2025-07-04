@@ -8,25 +8,15 @@
 
 # **CoFT: A Dual-Branch, Semi-Supervised Learning Framework for Time Series Analysis via Cross-Domain Co-Training**
 
-<br>
+**Nguyen Quoc Huy**
+**e21010198**
 
-A Thesis Submitted to the Faculty of [Faculty Name]
+**Thesis**
+**[Month Year]**
+**Degree Programme in [Name of Degree Programme]**
+**[Name of School, e.g., School of Technology]**
 
-in Partial Fulfillment of the Requirements
-
-for the Degree of [Degree Name, e.g., Master of Science in Engineering]
-
-<br>
-
-by
-
-**[Your Name]**
-
-<br>
-
-Supervisor: [Supervisor's Name]
-
-[Date, e.g., July 2024]
+**[ACTION REQUIRED: User to provide details for Supervisor, Degree Programme, etc.]**
 
 <br>
 
@@ -34,12 +24,29 @@ Supervisor: [Supervisor's Name]
 
 # ABSTRACT
 
-The proliferation of time series data across numerous domains has been met with a critical bottleneck: the scarcity of labeled data required for training robust deep learning models. This label-scarcity exigency is particularly pronounced in high-stakes fields like healthcare and industrial monitoring, where data annotation is expensive, time-consuming, and requires deep domain expertise. This thesis addresses this challenge by proposing **CoFT (Co-training with Frequency and Temporal domains)**, a novel dual-branch, semi-supervised learning framework. CoFT uniquely leverages the complementary nature of the temporal and frequency domains, operationalizing them not as features to be fused, but as two conditionally independent views for a true co-training methodology. The framework's core innovation is a gentle, ultra-low coupling weight that enables reciprocal teaching between the two domains via a pseudo-labeling mechanism. Through a rigorous, multi-stage evaluation, this work demonstrates that the CoFT architecture achieves a total accuracy improvement of up to **+8.17%** over a state-of-the-art baseline on benchmark datasets. This performance gain is methodically deconstructed to disambiguate the architectural contribution from the often-conflated impact of hyperparameter optimization. A key finding is the "Less is More" phenomenon, a counter-intuitive discovery that an ultra-low co-training weight (λ_ct = 0.0001) is optimal for preventing "label confusion" and maximizing performance. This work provides not only a practical, high-performing model but also fundamental insights into the dynamics of cross-domain co-training for time series analysis and a principled methodology for transferring learned parameters to new datasets.
+Author: Nguyen Quoc Huy
+Title of the thesis: CoFT: A Dual-Branch, Semi-Supervised Learning Framework for Time Series Analysis via Cross-Domain Co-Training
+Year: 2025
+Language: English
+Number of pages: [Will be updated]
+Supervisor: [To be filled]
 
-**Keywords**: Time Series Analysis, Semi-Supervised Learning, Self-Supervised Learning, Co-Training, Deep Learning, Frequency Domain, Contrastive Learning, Label Scarcity.
+The proliferation of time series data across numerous domains has been met with a critical bottleneck: the scarcity of labeled data required for training robust deep learning models. This label-scarcity exigency is particularly pronounced in high-stakes fields like healthcare and industrial monitoring, where data annotation is expensive, time-consuming, and requires deep domain expertise. This thesis addresses this challenge by proposing **CoFT (Co-training with Frequency and Temporal domains)**, a novel dual-branch, semi-supervised learning framework. CoFT uniquely leverages the complementary nature of the temporal and frequency domains, operationalizing them not as features to be fused, but as two conditionally independent views for a true co-training methodology.
+
+The research primarily utilizes a sophisticated six-stage training pipeline built upon the state-of-the-art CA-TCC framework, extending it with a parallel frequency-domain branch. The core innovation is a cross-domain co-training module orchestrated by a hybrid loss function. Experiments were conducted using three public benchmark datasets—HAR, Sleep-EDF, and Epilepsy—after a rigorous and challenging process of replicating the original paper's data preprocessing and splitting methodology to ensure academic fairness.
+
+The experimental results indicate that the CoFT framework significantly outperforms the strong baseline, achieving accuracy improvements of up to **+8.17%**. A key finding is the "Less is More" phenomenon, a counter-intuitive discovery that an ultra-low co-training weight (λ_ct = 0.0001) is optimal for preventing "label confusion" and maximizing performance. This work provides not only a practical, high-performing model but also fundamental insights into the dynamics of cross-domain co-training and a principled methodology for transferring learned parameters to new datasets.
+
+Keywords: Time Series Analysis, Semi-Supervised Learning, Self-Supervised Learning, Co-Training, Deep Learning, Frequency Domain, Contrastive Learning, Label Scarcity.
 
 ---
-## **Table of Contents**
+## **TABLE OF CONTENTS**
+
+ABSTRACT ................................................................................ 2
+LIST OF FIGURES .................................................................... [X]
+LIST OF TABLES ..................................................................... [X]
+ABBREVIATIONS .................................................................... [X]
+NOTATION TABLE ................................................................... [X]
 
 - **Chapter 1: Introduction**
   - 1.1 Background and perspectives of the thesis topic
@@ -221,11 +228,11 @@ This formula works like a multiclass classification problem. For a given sample 
 The temperature \(\tau\) is a crucial tuning knob. A lower temperature amplifies the differences between similarities, forcing the model to work harder to distinguish between difficult negative samples. A higher temperature smooths the distribution, making the task easier.
 
 #### Step 4: Summarize the Objective
-The overall objective of the NT-Xent loss function is to learn an embedding space where the representations of different augmented "views" of the same sample (the positive pair) are pulled closer together, while the representations of all other samples (the negative pairs) are pushed farther apart.
+The overall objective of the NT-Xent loss function is to learn an embedding space where the representations of different augmented "views" of the same sample (the positive pair) are pulled closer together, while the representations of all other samples (the negative pairs) are pushed farther apart. This learned representation should be robust to augmentations while being sensitive to the essential characteristics of the data.
 
 ### 2.2.3 The CA-TCC Baseline: A Rigorous Multi-Stage Semi-Supervised Pipeline
 
-The CoFT framework is a direct and principled extension of **CA-TCC (Contrastive Augmentation - Temporal Contrastive Clustering)** [7], a state-of-the-art framework for semi-supervised time series classification. It is not merely a single loss function but a complete, multi-stage pipeline designed to leverage both unlabeled and labeled data to their fullest extent. Understanding this intricate pipeline is critical to contextualizing the innovations presented in this thesis.
+The CoFT framework is a direct and principled extension of **CA-TCC (Contrastive Augmentation - Temporal Contrastive Clustering)** [7], a state-of-the-art framework for semi-supervised time series classification. It is not merely a single loss function but a complete, multi-stage pipeline designed to leverage both unlabeled and labeled data to their fullest extent. Understanding this intricate pipeline is critical to contextualizing the innovations presented in this thesis, as it forms the foundational "playground" upon which CoFT was built and evaluated.
 
 ![Figure 2.1: The dual-objective contrastive learning in CA-TCC. The model learns to be invariant to augmentations via Temporal Contrasting and sensitive to temporal structure via Contextual Contrasting.](Images/Fig. 1. Overall architecture of the proposed TS-TCC. The Temporal Contrastingmodule.png)
 *Figure 2.1: The dual-objective contrastive learning in CA-TCC. The model learns to be invariant to augmentations via Temporal Contrasting and sensitive to temporal structure via Contextual Contrasting.*
@@ -362,6 +369,7 @@ Merely choosing the same datasets was not enough to guarantee a fair comparison.
 These efforts culminated in a stable, reproducible "sandbox" where the only variable being tested was the method itself.
 
 ## 3.2 Guiding Principles for Reproducibility
+
 The soul of this chapter is **reproducibility**. Every design choice, parameter, and procedure is documented with the intention that another researcher can achieve 100% identical results. This commitment is upheld through the following strategies:
 
 1.  **Identical Data Splits**: All experiments, including baseline and proposed models, were conducted on the exact same training, validation, and test splits to ensure fair comparison.
@@ -374,16 +382,16 @@ The soul of this chapter is **reproducibility**. Every design choice, parameter,
 The framework was implemented using a carefully selected stack of open-source tools, with each choice justified by its role in the research.
 
 **Hardware Configuration:**
--   **Development**: An NVIDIA RTX 4060 (8GB) was used for initial development and memory-constrained optimization, ensuring the model is viable in resource-limited environments.
--   **Validation**: An NVIDIA A100 (40GB) was used for large-scale hyperparameter searches and final performance validation, allowing for experimentation without memory constraints.
--   **CPU**: An AMD Ryzen 5800X (8 cores) provided sufficient processing power for all data preparation and preprocessing tasks.
+-   **Development**: An NVIDIA RTX 4060 (8GB) was used for initial development and memory-constrained optimization, ensuring the model is viable in resource-limited environments. This was crucial for rapid prototyping and debugging cycles.
+-   **Validation**: An NVIDIA A100 (40GB) was used for large-scale hyperparameter searches and final performance validation, allowing for experimentation without memory constraints. This powerful hardware was essential for running the extensive grid searches detailed in Chapter 4.
+-   **CPU**: An AMD Ryzen 5800X (8 cores) provided sufficient processing power for all data preparation and preprocessing tasks, which were often CPU-bound.
 
 **Software Stack:**
--   **Python 3.8**: Chosen for its broad compatibility with scientific computing libraries.
--   **PyTorch (v2.4.1+cu121)**: Selected as the primary deep learning framework for its flexibility, strong community support, and dynamic computation graph, which is ideal for research and debugging. The code includes compatibility checks to gracefully handle older PyTorch versions.
+-   **Python 3.8**: Chosen for its broad compatibility with the scientific computing ecosystem and its stability compared to newer versions at the time of the project's inception.
+-   **PyTorch (v2.4.1+cu121)**: Selected as the primary deep learning framework for its flexibility, strong community support, and dynamic computation graph ("eager execution"), which is ideal for research and debugging complex models like CoFT. The code includes compatibility checks to gracefully handle older PyTorch versions.
 -   **CUDA (v12.1)**: Utilized to leverage NVIDIA GPU acceleration. The implementation includes smart enablement of TensorFloat-32 (TF32) on modern RTX 30/40 series GPUs for significant performance speedups with no loss in accuracy.
 -   **NumPy & Pandas**: These libraries formed the backbone of our data manipulation pipeline. Pandas was essential for reading and cleaning the datasets, while NumPy provided the high-performance numerical arrays used throughout the project.
--   **Scikit-learn**: Used for its robust implementations of data splitting (stratified sampling) and for calculating evaluation metrics such as the F1-score.
+-   **Scikit-learn**: Used for its robust implementations of data splitting (stratified sampling) and for calculating standard evaluation metrics such as the F1-score, ensuring our results could be compared fairly to other published work.
 
 ## 3.4 Benchmark Datasets
 
