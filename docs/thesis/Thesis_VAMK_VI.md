@@ -1,41 +1,43 @@
 ---
-title: "CoFT: A Dual-Branch, Semi-Supervised Learning Framework for Time Series Analysis via Cross-Domain Co-Training"
+title: "CoFT: Một Khuôn khổ Học Bán giám sát Hai nhánh cho Phân tích Chuỗi thời gian thông qua Đồng huấn luyện Chéo miền"
 author: "Nguyen Quoc Huy (e21010198)"
 supervisor: "Tommi Rintala"
-date: "July 2024"
-degree: "Bachelor of Engineering"
-programme: "Information Technology"
-school: "Vaasa University of Applied Sciences VAMK"
+date: "Tháng 7, 2024"
+degree: "Cử nhân Kỹ thuật"
+programme: "Công nghệ Thông tin"
+school: "Đại học Khoa học Ứng dụng Vaasa VAMK"
 university: "VAASAN AMMATTIKORKEAKOULU"
 ---
 
-# **CoFT: A Dual-Branch, Semi-Supervised Learning Framework for Time Series Analysis via Cross-Domain Co-Training**
+# **CoFT: Một Khuôn khổ Học Bán giám sát Hai nhánh cho Phân tích Chuỗi thời gian thông qua Đồng huấn luyện Chéo miền**
 
-**Nguyen Quoc Huy**
+**Nguyễn Quốc Huy**
 **e21010198**
 
-**Thesis**
-**July 2024**
-**Degree Programme in Information Technology**
+**Luận văn**
+**Tháng 7, 2024**
+**Chương trình cấp bằng Công nghệ Thông tin**
 
 **VAASAN AMMATTIKORKEAKOULU**
-**UNIVERSITY OF APPLIED SCIENCES**
+**ĐẠI HỌC KHOA HỌC ỨNG DỤNG**
 
 ---
 # TÓM TẮT
 
 Tác giả: Nguyễn Quốc Huy
-Tiêu đề luận văn: CoFT: Một Framework Học Bán Giám Sát Hai Nhánh cho Phân Tích Chuỗi Thời Gian thông qua Co-Training Đa Miền
+Tên luận văn: CoFT: Một Khuôn khổ Học Bán giám sát Hai nhánh cho Phân tích Chuỗi thời gian thông qua Đồng huấn luyện Chéo miền
 Năm: 2024
 Ngôn ngữ: Tiếng Anh
-Số trang: [Sẽ được cập nhật]
-Người hướng dẫn: [Sẽ điền sau]
+Số trang: [Sẽ cập nhật]
+Người hướng dẫn: Tommi Rintala
 
-Sự bùng nổ của dữ liệu chuỗi thời gian trên nhiều lĩnh vực đã gặp phải một trở ngại lớn: sự khan hiếm dữ liệu có nhãn cần thiết để huấn luyện các mô hình học sâu mạnh mẽ. Tình trạng "dữ liệu nhiều, nhãn ít" này đặc biệt nghiêm trọng trong các lĩnh vực có yêu cầu cao như y tế và giám sát công nghiệp, nơi việc chú thích dữ liệu rất tốn kém, mất thời gian và đòi hỏi chuyên môn sâu. Luận văn này giải quyết thách thức đó bằng cách đề xuất **CoFT (Co-training với miền Tần số và Thời gian)**, một framework học bán giám sát hai nhánh mới lạ. CoFT khai thác một cách độc đáo tính chất bổ sung của miền thời gian và tần số, vận hành chúng không phải như các đặc trưng để hợp nhất, mà là hai "khung nhìn" (views) độc lập có điều kiện cho một phương pháp co-training thực thụ.
+Sự bùng nổ của dữ liệu chuỗi thời gian trên nhiều lĩnh vực, từ IoT công nghiệp đến chăm sóc sức khỏe, đã gặp phải một nút thắt cổ chai nghiêm trọng: sự khan hiếm dữ liệu có nhãn cần thiết để huấn luyện các mô hình học sâu mạnh mẽ. Tình trạng "dữ liệu giàu, nhãn nghèo" này đặc biệt rõ rệt trong các lĩnh vực có yêu cầu cao như y học, nơi việc gán nhãn cho các tín hiệu như điện não đồ (EEG) hay điện tâm đồ (ECG) rất tốn kém, mất thời gian và đòi hỏi chuyên môn sâu. Luận văn này đối mặt trực tiếp với thách thức khan hiếm nhãn, nhằm mục đích khai phá tiềm năng của các kho dữ liệu khổng lồ chưa được gán nhãn.
 
-Nghiên cứu chủ yếu sử dụng một quy trình huấn luyện sáu giai đoạn phức tạp được xây dựng dựa trên framework tiên tiến CA-TCC, mở rộng nó với một nhánh miền tần số song song. Sự đổi mới cốt lõi là một mô-đun co-training đa miền được điều phối bởi một hàm mất mát hỗn hợp (hybrid loss). Các thí nghiệm được thực hiện trên ba bộ dữ liệu benchmark công khai—HAR, Sleep-EDF, và Epilepsy—sau một quá trình tái tạo phương pháp tiền xử lý và phân chia dữ liệu của bài báo gốc một cách nghiêm ngặt và đầy thách thức để đảm bảo tính công bằng học thuật.
+Chúng tôi đề xuất **CoFT (Đồng huấn luyện với miền Tần số và Thời gian)**, một khuôn khổ học bán giám sát hai nhánh mới. CoFT độc đáo ở chỗ vận hành miền thời gian và tần số không phải như các đặc trưng để hợp nhất, mà như hai "khung nhìn" độc lập có điều kiện cho một phương pháp đồng huấn luyện thực sự. Nghiên cứu sử dụng một quy trình huấn luyện sáu giai đoạn phức tạp được xây dựng dựa trên khuôn khổ CA-TCC tiên tiến, mở rộng nó với một nhánh miền tần số song song và một mô-đun đồng huấn luyện chéo miền được điều phối bởi một hàm mất mát hỗn hợp. Để đảm bảo tính chặt chẽ khoa học, các thí nghiệm đã được tiến hành trên ba bộ dữ liệu benchmark công khai—HAR, Sleep-EDF, và Epilepsy—với việc tái tạo một cách cẩn thận phương pháp tiền xử lý và phân chia dữ liệu ban đầu để đảm bảo tính công bằng học thuật.
 
-Kết quả thực nghiệm cho thấy framework CoFT vượt trội đáng kể để với mô hình cơ sở mạnh, đạt được cải thiện độ chính xác lên tới **+8.17%**. Một phát hiện quan trọng là hiện tượng "Càng ít càng tốt" (Less is More), một khám phá phản trực giác rằng trọng số co-training siêu nhỏ (λ_ct = 0.0001) là tối ưu để ngăn chặn "sự nhầm lẫn nhãn" (label confusion) và tối đa hóa hiệu suất. Công trình này không chỉ cung cấp một mô hình thực tiễn, hiệu suất cao mà còn mang lại những hiểu biết cơ bản về động lực của co-training đa miền và một phương pháp luận có nguyên tắc để chuyển giao các tham số đã học sang các bộ dữ liệu mới.
+Nghiên cứu chủ yếu sử dụng một quy trình huấn luyện sáu giai đoạn phức tạp được xây dựng dựa trên khuôn khổ CA-TCC tiên tiến, mở rộng nó với một nhánh miền tần số song song. Sự đổi mới cốt lõi là một mô-đun đồng huấn luyện chéo miền được điều phối bởi một hàm mất mát hỗn hợp. Các thí nghiệm đã được tiến hành trên ba bộ dữ liệu benchmark công khai—HAR, Sleep-EDF, và Epilepsy—sau một quá trình nghiêm ngặt và đầy thách thức để tái tạo phương pháp tiền xử lý và phân chia dữ liệu của bài báo gốc nhằm đảm bảo tính công bằng học thuật.
+
+Kết quả thực nghiệm cho thấy khuôn khổ CoFT vượt trội đáng kể so với mô hình cơ sở mạnh, đạt được cải thiện độ chính xác lên đến **+8.17%**. Một phát hiện quan trọng là hiện tượng "Ít hơn là Nhiều hơn", một khám phá phản trực giác rằng trọng số co-training siêu nhỏ (λ_ct = 0.0001) là tối ưu để ngăn chặn "sự nhầm lẫn nhãn" (label confusion) và tối đa hóa hiệu suất. Công trình này không chỉ cung cấp một mô hình thực tiễn, hiệu suất cao mà còn mang lại những hiểu biết cơ bản về động lực của co-training đa miền và một phương pháp luận có nguyên tắc để chuyển giao các tham số đã học sang các bộ dữ liệu mới.
 
 Từ khóa: Phân tích chuỗi thời gian, Học bán giám sát, Học tự giám sát, Co-Training, Học sâu, Miền tần số, Học tương phản, Khan hiếm nhãn.
 ---
@@ -43,50 +45,50 @@ Từ khóa: Phân tích chuỗi thời gian, Học bán giám sát, Học tự g
 
 - [TÓM TẮT](#tóm-tắt)
 - [DANH MỤC HÌNH ẢNH](#danh-mục-hình-ảnh)
-- [DANH MỤC BẢNG](#danh-mục-bảng)
+- [DANH MỤC BẢNG BIỂU](#danh-mục-bảng-biểu)
 - [CÁC TỪ VIẾT TẮT](#các-từ-viết-tắt)
 - [BẢNG KÝ HIỆU](#bảng-ký-hiệu)
 - [1 GIỚI THIỆU](#1-giới-thiệu)
   - [1.1 Thách thức về sự khan hiếm nhãn trong phân tích chuỗi thời gian hiện đại](#11-thách-thức-về-sự-khan-hiếm-nhãn-trong-phân-tích-chuỗi-thời-gian-hiện-đại)
-  - [1.2 Mục tiêu và Câu hỏi nghiên cứu](#12-mục-tiêu-và-câu-hỏi-nghiên-cứu)
+  - [1.2 Mục tiêu và Câu hỏi nghiên cứu của luận văn](#12-mục-tiêu-và-câu-hỏi-nghiên-cứu-của-luận-văn)
     - [1.2.1 Mục tiêu của luận văn](#121-mục-tiêu-của-luận-văn)
     - [1.2.2 Câu hỏi nghiên cứu](#122-câu-hỏi-nghiên-cứu)
   - [1.3 Cấu trúc luận văn](#13-cấu-trúc-luận-văn)
-  - [1.4 Việc sử dụng AI trong luận văn này](#14-việc-sử-dụng-ai-trong-luận-văn-này)
-- [2 CƠ SỞ LÝ THUYẾT VÀ LÝ LUẬN](#2-cơ-sở-lý-thuyết-và-lý-luận)
-  - [2.1 Các mô hình học từ dữ liệu có nhãn giới hạn](#21-các-mô-hình-học-từ-dữ-liệu-có-nhãn-giới-hạn)
+  - [1.4 Việc sử dụng trí tuệ nhân tạo trong luận văn này](#14-việc-sử-dụng-trí-tuệ-nhân-tạo-trong-luận-văn-này)
+- [2 NỀN TẢNG KIẾN THỨC VÀ LÝ THUYẾT](#2-nền-tảng-kiến-thức-và-lý-thuyết)
+  - [2.1 Các mô hình học từ dữ liệu có nhãn hạn chế](#21-các-mô-hình-học-từ-dữ-liệu-có-nhãn-hạn-chế)
   - [2.2 Học tự giám sát: Nghệ thuật học từ chính dữ liệu](#22-học-tự-giám-sát-nghệ-thuật-học-từ-chính-dữ-liệu)
-    - [2.2.1 Các chiến lược Tăng cường Dữ liệu](#221-các-chiến-lược-tăng-cường-dữ-liệu)
-    - [2.2.2 Hàm mất mát NT-Xent: Phân tích Toán học Chuyên sâu](#222-hàm-mất-mát-nt-xent-phân-tích-toán-học-chuyên-sâu)
-    - [2.2.3 Baseline CA-TCC: Một Quy trình Bán giám sát Đa giai đoạn Nghiêm ngặt](#223-baseline-ca-tcc-một-quy-trình-bán-giám-sát-đa-giai-đoạn-nghiêm-ngặt)
-  - [2.3 Đồng huấn luyện và Hợp nhất Miền Tần số-Thời gian](#23-đồng-huấn-luyện-và-hợp-nhất-miền-tần-số-thời-gian)
-    - [2.3.1 Các phương pháp Hợp nhất Truyền thống](#231-các-phương-pháp-hợp-nhất-truyền-thống)
-    - [2.3.2 CoFT: Một Framework Co-Training thực thụ](#232-coft-một-framework-co-training-thực-thụ)
+    - [2.2.1 Các chiến lược tăng cường dữ liệu](#221-các-chiến-lược-tăng-cường-dữ-liệu)
+    - [2.2.2 Hàm mất mát NT-Xent: Phân tích sâu về mặt toán học](#222-hàm-mất-mát-nt-xent-phân-tích-sâu-về-mặt-toán-học)
+    - [2.2.3 Mô hình cơ sở CA-TCC: Một quy trình bán giám sát đa giai đoạn nghiêm ngặt](#223-mô-hình-cơ-sở-ca-tcc-một-quy-trình-bán-giám-sát-đa-giai-đoạn-nghiêm-ngặt)
+  - [2.3 Đồng huấn luyện và hợp nhất miền tần số-thời gian](#23-đồng-huấn-luyện-và-hợp-nhất-miền-tần-số-thời-gian)
+    - [2.3.1 Các phương pháp hợp nhất truyền thống](#231-các-phương-pháp-hợp-nhất-truyền-thống)
+    - [2.3.2 CoFT: Một khuôn khổ đồng huấn luyện thực sự](#232-coft-một-khuôn-khổ-đồng-huấn-luyện-thực-sự)
   - [2.4 Kết luận: Xây dựng trên một nền tảng vững chắc](#24-kết-luận-xây-dựng-trên-một-nền-tảng-vững-chắc)
 - [3 TRIỂN KHAI VÀ PHƯƠNG PHÁP LUẬN](#3-triển-khai-và-phương-pháp-luận)
-  - [3.1 Hành trình phương pháp luận: Lý giải và Thách thức](#31-hành-trình-phương-pháp-luận-lý-giải-và-thách-thức)
+  - [3.1 Hành trình phương pháp luận: Lý giải và thách thức](#31-hành-trình-phương-pháp-luận-lý-giải-và-thách-thức)
     - [3.1.1 Lựa chọn chiến trường: Lựa chọn mô hình cơ sở và benchmark](#311-lựa-chọn-chiến-trường-lựa-chọn-mô-hình-cơ-sở-và-benchmark)
     - [3.1.2 Thử thách về khả năng tái lập: Các rào cản kỹ thuật và dữ liệu](#312-thử-thách-về-khả-năng-tái-lập-các-rào-cản-kỹ-thuật-và-dữ-liệu)
   - [3.2 Các nguyên tắc chỉ đạo cho khả năng tái lập](#32-các-nguyên-tắc-chỉ-đạo-cho-khả-năng-tái-lập)
-  - [3.3 Công nghệ và Triển khai](#33-công-nghệ-và-triển-khai)
+  - [3.3 Công nghệ và triển khai](#33-công-nghệ-và-triển-khai)
   - [3.4 Các bộ dữ liệu benchmark](#34-các-bộ-dữ-liệu-benchmark)
     - [3.4.1 Nhận dạng hoạt động của con người (HAR)](#341-nhận-dạng-hoạt-động-của-con-người-har)
     - [3.4.2 Sleep-EDF (Phân loại giai đoạn giấc ngủ)](#342-sleep-edf-phân-loại-giai-đoạn-giấc-ngủ)
     - [3.4.3 Epilepsy (Phát hiện co giật)](#343-epilepsy-phát-hiện-co-giật)
     - [3.4.4 Phương pháp phân chia dữ liệu bán giám sát](#344-phương-pháp-phân-chia-dữ-liệu-bán-giám-sát)
-  - [3.5 Framework CoFT: Kiến trúc và Quy trình](#35-framework-coft-kiến-trúc-và-quy-trình)
-    - [3.5.1 Kiến trúc hai nhánh: Thiết kế và Triển khai](#351-kiến-trúc-hai-nhánh-thiết-kế-và-triển-khai)
-    - [3.5.2 Hàm mất mát hỗn hợp: Một giải phẫu chi tiết](#352-hàm-mất-mát-hỗn-hợp-một-giải-phẫu-chi-tiết)
+  - [3.5 Khuôn khổ CoFT: Kiến trúc và quy trình](#35-khuôn-khổ-coft-kiến-trúc-và-quy-trình)
+    - [3.5.1 Kiến trúc hai nhánh: Thiết kế và triển khai](#351-kiến-trúc-hai-nhánh-thiết-kế-và-triển-khai)
+    - [3.5.2 Hàm mất mát hỗn hợp: Phân tích chi tiết](#352-hàm-mất-mát-hỗn-hợp-phân-tích-chi-tiết)
     - [3.5.3 Quy trình huấn luyện sáu giai đoạn: Công thức từng bước](#353-quy-trình-huấn-luyện-sáu-giai-đoạn-công-thức-từng-bước)
     - [3.5.4 Tăng cường dữ liệu](#354-tăng-cường-dữ-liệu)
 - [4 KẾT QUẢ VÀ PHÂN TÍCH](#4-kết-quả-và-phân-tích)
-  - [4.1 Trả lời Câu hỏi nghiên cứu 1: CoFT có thể vượt trội hơn một mô hình cơ sở tiên tiến không?](#41-trả-lời-câu-hỏi-nghiên-cứu-1-coft-có-thể-vượt-trội-hơn-một-mô-hình-cơ-sở-tiên-tiến-không)
-  - [4.2 Trả lời Câu hỏi nghiên cứu 2: Nguồn gốc thực sự của việc tăng hiệu suất là gì?](#42-trả-lời-câu-hỏi-nghiên-cứu-2-nguồn-gốc-thực-sự-của-việc-tăng-hiệu-suất-là-gì)
-  - [4.3 Trả lời Câu hỏi nghiên cứu 3: Hành trình nghiên cứu để tối ưu hóa việc chuyển giao kiến thức](#43-trả-lời-câu-hỏi-nghiên-cứu-3-hành-trình-nghiên-cứu-để-tối-ưu-hóa-việc-chuyển-giao-kiến-thức)
+  - [4.1 Trả lời câu hỏi nghiên cứu 1: CoFT có thể vượt trội hơn một mô hình cơ sở tiên tiến không?](#41-trả-lời-câu-hỏi-nghiên-cứu-1-coft-có-thể-vượt-trội-hơn-một-mô-hình-cơ-sở-tiên-tiến-không)
+  - [4.2 Trả lời câu hỏi nghiên cứu 2: Nguồn gốc thực sự của sự cải thiện hiệu suất là gì?](#42-trả-lời-câu-hỏi-nghiên-cứu-2-nguồn-gốc-thực-sự-của-sự-cải-thiện-hiệu-suất-là-gì)
+  - [4.3 Trả lời câu hỏi nghiên cứu 3: Hành trình nghiên cứu để chuyển giao kiến thức tối ưu](#43-trả-lời-câu-hỏi-nghiên-cứu-3-hành-trình-nghiên-cứu-để-chuyển-giao-kiến-thức-tối-ưu)
     - [4.3.1 Giả thuyết ban đầu và những thất bại đầu tiên: Nguy cơ của sự liên kết mạnh](#431-giả-thuyết-ban-đầu-và-những-thất-bại-đầu-tiên-nguy-cơ-của-sự-liên-kết-mạnh)
-    - [4.3.2 Khám phá "Càng ít càng tốt": Một cuộc điều tra có hệ thống](#432-khám-phá-càng-ít-càng-tốt-một-cuộc-điều-tra-có-hệ-thống)
-    - [4.3.3 Động lực của phương pháp Ensemble: Hiện tượng đảo ngược](#433-động-lực-của-phương-pháp-ensemble-hiện-tượng-đảo-ngược)
-  - [4.4 Trả lời Câu hỏi nghiên cứu 4: Các nguyên tắc có thể được chuyển giao sang các bộ dữ liệu mới không?](#44-trả-lời-câu-hỏi-nghiên-cứu-4-các-nguyên-tắc-có-thể-được-chuyển-giao-sang-các-bộ-dữ-liệu-mới-không)
+    - [4.3.2 Khám phá "Ít hơn là Nhiều hơn": Một cuộc điều tra có hệ thống](#432-khám-phá-ít-hơn-là-nhiều-hơn-một-cuộc-điều-tra-có-hệ-thống)
+    - [4.3.3 Động lực của phương pháp tổ hợp: Hiện tượng "Lật ngược"](#433-động-lực-của-phương-pháp-tổ-hợp-hiện-tượng-lật-ngược)
+  - [4.4 Trả lời câu hỏi nghiên cứu 4: Các nguyên tắc có thể được chuyển giao sang các bộ dữ liệu mới không?](#44-trả-lời-câu-hỏi-nghiên-cứu-4-các-nguyên-tắc-có-thể-được-chuyển-giao-sang-các-bộ-dữ-liệu-mới-không)
 - [5 KẾT LUẬN](#5-kết-luận)
   - [5.1 Tóm tắt hành trình nghiên cứu](#51-tóm-tắt-hành-trình-nghiên-cứu)
   - [5.2 Hạn chế của nghiên cứu](#52-hạn-chế-của-nghiên-cứu)
@@ -94,48 +96,48 @@ Từ khóa: Phân tích chuỗi thời gian, Học bán giám sát, Học tự g
   - [5.4 Suy ngẫm cuối cùng](#54-suy-ngẫm-cuối-cùng)
 - [TÀI LIỆU THAM KHẢO](#tài-liệu-tham-khảo)
 - [PHỤ LỤC](#phụ-lục)
-  - [Appendix A: Hyperparameter Configuration Tables](#appendix-a-hyperparameter-configuration-tables)
+  - [Phụ lục A: Bảng cấu hình siêu tham số](#phụ-lục-a-bảng-cấu-hình-siêu-tham-số)
 
 ---
 # DANH MỤC HÌNH ẢNH
 
 Hình 1. Học tương phản hai mục tiêu trong CA-TCC. Mô hình học cách bất biến với các phép tăng cường thông qua Tương phản Thời gian và nhạy cảm với cấu trúc thời gian thông qua Tương phản Ngữ cảnh.
-Hình 2. Tổng quan cấp cao về framework CoFT.
+Hình 2. Tổng quan cấp cao về khuôn khổ CoFT.
 Hình 3. Kiến trúc của khối Transformer được sử dụng trong cả hai bộ mã hóa.
 Hình 4. Cơ chế Tương phản Tần số.
-Hình 5. Chiến lược huấn luyện đa giai đoạn, được điều chỉnh từ CA-TCC.
+Hình 5. Chiến lược huấn luyện đa pha, được điều chỉnh từ CA-TCC.
 
 ---
-# DANH MỤC BẢNG
+# DANH MỤC BẢNG BIỂU
 
-Bảng 1. Nghiên cứu cắt bỏ (Ablation Study) các thành phần trong TS-TCC và CA-TCC.
+Bảng 1. Nghiên cứu cắt lớp các thành phần trong TS-TCC và CA-TCC.
 Bảng 2. Hiệu suất cuối cùng của CoFT so với mô hình cơ sở CA-TCC.
-Bảng 3. Phân tích thống kê về mức tăng hiệu suất.
-Bảng 4. Nghiên cứu cắt bỏ - Phân tích các yếu tố tăng hiệu suất của CoFT.
-Bảng 5. Ảnh hưởng của trọng số Co-training (λ_ct) đến độ chính xác HAR 1%.
-Bảng 6. Tương tác giữa phương pháp Ensemble và trọng số Co-training.
+Bảng 3. Phân tích thống kê về sự cải thiện hiệu suất.
+Bảng 4. Nghiên cứu cắt lớp - Phân tích sự cải thiện hiệu suất của CoFT.
+Bảng 5. Ảnh hưởng của trọng số đồng huấn luyện (λ_ct) đến độ chính xác trên HAR 1%.
+Bảng 6. Tương tác giữa phương pháp tổ hợp và trọng số đồng huấn luyện.
 Bảng 7. Các tham số được chuyển giao và lý do.
 Bảng 8. Các tham số huấn luyện và mô hình chung.
-Bảng 9. Các siêu tham số cụ thể của CoFT.
-Bảng 10. Các tham số học tương phản và tăng cường.
+Bảng 9. Các siêu tham số dành riêng cho CoFT.
+Bảng 10. Các tham số học tương phản và tăng cường dữ liệu.
 
 ---
 # CÁC TỪ VIẾT TẮT
 | Viết tắt | Tên đầy đủ                                                |
 | :----------- | :------------------------------------------------------- |
-| **CoFT**     | Co-training với miền Tần số và Thời gian          |
-| **SSL**      | Học Tự Giám Sát                                 |
-| **CA-TCC**   | Tăng cường Tương phản - Phân cụm Tương phản Thời gian |
-| **TS-TCC**   | Tương phản Thời gian và Ngữ cảnh (cho Chuỗi Thời gian)    |
-| **FFT**      | Biến đổi Fourier Nhanh                                   |
-| **HAR**      | Nhận dạng Hoạt động của Con người                               |
-| **EEG**      | Điện não đồ                                     |
-| **ECG**      | Điện tâm đồ                                        |
-| **PSG**      | Đa ký giấc ngủ                                          |
-| **REM**      | Chuyển động mắt nhanh                                       |
-| **InfoTS**   | Tăng cường Chuỗi Thời gian dựa trên Lý thuyết Thông tin           |
-| **NT-Xent**  | Cross-Entropy chuẩn hóa theo nhiệt độ              |
-| **SupCon**   | Học Tương phản có Giám sát                          |
+| **CoFT**     | Đồng huấn luyện với miền Tần số và Thời gian (Co-training with Frequency and Temporal domains) |
+| **SSL**      | Học Tự giám sát (Self-Supervised Learning)                     |
+| **CA-TCC**   | Tăng cường Tương phản - Phân cụm Tương phản Thời gian (Contrastive Augmentation - Temporal Contrastive Clustering) |
+| **TS-TCC**   | Tương phản Thời gian và Ngữ cảnh (cho Chuỗi thời gian) (Temporal and Contextual Contrasting) |
+| **FFT**      | Biến đổi Fourier nhanh (Fast Fourier Transform)                |
+| **HAR**      | Nhận dạng hoạt động của con người (Human Activity Recognition)  |
+| **EEG**      | Điện não đồ (Electroencephalogram)                           |
+| **ECG**      | Điện tâm đồ (Electrocardiogram)                             |
+| **PSG**      | Đa ký giấc ngủ (Polysomnography)                              |
+| **REM**      | Chuyển động mắt nhanh (Rapid Eye Movement)                     |
+| **InfoTS**   | Tăng cường Chuỗi Thời gian dựa trên Lý thuyết Thông tin (Information-Theoretic Time Series Augmentation) |
+| **NT-Xent**  | Cross-Entropy chuẩn hóa theo nhiệt độ (Normalized Temperature-scaled Cross-Entropy) |
+| **SupCon**   | Học Tương phản có giám sát (Supervised Contrastive Learning)   |
 
 ---
 
@@ -143,15 +145,15 @@ Bảng 10. Các tham số học tương phản và tăng cường.
 
 | Ký hiệu          | Mô tả                                                                 |
 | :---------------- | :-------------------------------------------------------------------------- |
-| \( \lambda_{ct} \)    | **Trọng số co-training:** Siêu tham số kiểm soát ảnh hưởng của mất mát co-training. Khám phá "Càng ít càng tốt" cho thấy giá trị siêu nhỏ (0.0001) là tối ưu. |
+| \( \lambda_{ct} \)    | **Trọng số đồng huấn luyện:** Siêu tham số kiểm soát ảnh hưởng của mất mát đồng huấn luyện. Khám phá "Ít hơn là Nhiều hơn" cho thấy giá trị cực thấp (0.0001) là tối ưu. |
 | \( \lambda_{cs} \)    | **Trọng số nhất quán:** Siêu tham số kiểm soát mất mát nhất quán đặc trưng giữa nhánh thời gian và tần số. |
-| \( L_{total} \)      | Hàm mất mát hỗn hợp tổng thể được sử dụng để huấn luyện mô hình CoFT.                |
-| \( L_{cotraining} \) | Thành phần mất mát bắt nguồn từ các nhãn giả do nhánh đối diện tạo ra. |
+| \( L_{total} \)      | Tổng hàm mất mát hỗn hợp được sử dụng để huấn luyện mô hình CoFT.            |
+| \( L_{cotraining} \) | Thành phần mất mát bắt nguồn từ các nhãn giả được tạo ra bởi nhánh đối diện. |
 | \( L_{supervised} \)| Mất mát phân loại có giám sát tiêu chuẩn (ví dụ: Cross-Entropy).          |
 | \( \tau \)          | **Nhiệt độ:** Một tham số tỷ lệ được sử dụng trong hàm mất mát tương phản (NT-Xent) và softmax để kiểm soát độ sắc nét của phân phối xác suất. |
-| \( y_{true} \)       | Các nhãn thực tế (ground-truth) được cung cấp trong bộ dữ liệu.                            |
-| \( y_{pseudo} \)    | Các nhãn được tạo ra bởi một nhánh của mô hình để huấn luyện nhánh còn lại.      |
-| \( \theta \)         | Đại diện cho các tham số có thể học được của mô hình mạng nơ-ron.            |
+| \( y_{true} \)       | Các nhãn thực tế được cung cấp trong bộ dữ liệu.                        |
+| \( y_{pseudo} \)    | Các nhãn được tạo ra bởi một nhánh của mô hình để huấn luyện nhánh còn lại. |
+| \( \theta \)         | Đại diện cho các tham số có thể học được của mô hình mạng nơ-ron.        |
 
 ---
 
@@ -159,238 +161,238 @@ Bảng 10. Các tham số học tương phản và tăng cường.
 
 ## 1.1 Thách thức về sự khan hiếm nhãn trong phân tích chuỗi thời gian hiện đại
 
-In recent years, deep learning has emerged as a transformative force in time series analysis, achieving state-of-the-art performance on tasks ranging from human activity recognition to financial forecasting. The power of these models, however, is built upon a critical and often prohibitively expensive foundation: large-scale, accurately labeled datasets. While the proliferation of sensors, IoT devices, and digital records has led to an explosion in the volume of raw time series data, the process of assigning meaningful labels remains a significant bottleneck. This "data rich, label poor" paradigm necessitates a shift away from purely supervised methods towards learning paradigms that can effectively harness the vast, untapped potential of unlabeled data.
+Trong những năm gần đây, học sâu đã nổi lên như một lực lượng biến đổi trong phân tích chuỗi thời gian, đạt được hiệu suất tiên tiến trong các nhiệm vụ từ nhận dạng hoạt động của con người đến dự báo tài chính. Tuy nhiên, sức mạnh của các mô hình này được xây dựng trên một nền tảng quan trọng và thường rất tốn kém: các bộ dữ liệu lớn, được gán nhãn chính xác. Mặc dù sự gia tăng của các cảm biến, thiết bị IoT và hồ sơ kỹ thuật số đã dẫn đến một sự bùng nổ về khối lượng dữ liệu chuỗi thời gian thô, quá trình gán nhãn có ý nghĩa vẫn là một nút thắt cổ chai đáng kể. Mô hình "dữ liệu giàu, nhãn nghèo" này đòi hỏi một sự chuyển dịch khỏi các phương pháp hoàn toàn có giám sát sang các mô hình học tập có thể khai thác hiệu quả tiềm năng to lớn, chưa được khai thác của dữ liệu không có nhãn.
 
-The problem of label scarcity becomes particularly acute in domains where the data is not only complex but also sensitive and requires deep expertise to interpret. In **healthcare**, for instance, annotating electroencephalogram (EEG) signals for sleep stage classification or seizure detection requires trained neurologists to spend hours meticulously reviewing recordings. Likewise, labeling electrocardiogram (ECG) data for arrhythmia classification demands the keen eye of a cardiologist. This process is not only slow and costly but can also be subjective, leading to inter-rater variability. In **industrial manufacturing**, labeling sensor data to predict machine failure often requires waiting for an actual fault to occur, which are by definition rare and costly events. In these high-stakes environments, the inability to effectively leverage vast quantities of unlabeled data represents a missed opportunity for scientific discovery and practical innovation.
+Vấn đề khan hiếm nhãn trở nên đặc biệt nghiêm trọng trong các lĩnh vực mà dữ liệu không chỉ phức tạp mà còn nhạy cảm và đòi hỏi chuyên môn sâu để diễn giải. Ví dụ, trong **chăm sóc sức khỏe**, việc chú thích các tín hiệu điện não đồ (EEG) để phân loại giai đoạn giấc ngủ hoặc phát hiện co giật đòi hỏi các nhà thần kinh học được đào tạo phải dành hàng giờ để xem xét tỉ mỉ các bản ghi. Tương tự, việc gán nhãn dữ liệu điện tâm đồ (ECG) để phân loại rối loạn nhịp tim đòi hỏi con mắt tinh tường của một bác sĩ tim mạch. Quá trình này không chỉ chậm và tốn kém mà còn có thể mang tính chủ quan, dẫn đến sự thay đổi giữa những người đánh giá. Trong **sản xuất công nghiệp**, việc gán nhãn dữ liệu cảm biến để dự đoán hỏng hóc máy móc thường đòi hỏi phải đợi một sự cố thực tế xảy ra, vốn là những sự kiện hiếm và tốn kém. Trong những môi trường có yêu cầu cao này, việc không thể tận dụng hiệu quả lượng lớn dữ liệu không có nhãn thể hiện một cơ hội bị bỏ lỡ cho khám phá khoa học và đổi mới thực tế.
 
-To address this fundamental research gap, this thesis turns to the paradigm of semi-supervised learning, which aims to learn from datasets containing a small amount of labeled data and a large amount of unlabeled data. Specifically, we focus on a self-supervised pre-training approach where a model first learns robust and generalizable representations from the unlabeled data pool via pretext tasks. This work introduces **CoFT (Co-training with Frequency and Temporal domains)**, a novel dual-branch framework designed to maximize information extraction from time series data in these label-scarce environments. The core hypothesis of CoFT is that the temporal domain (how a signal evolves over time) and the frequency domain (the periodic components that constitute the signal) provide complementary and synergistic views of the data. Rather than simply fusing these domains as features, CoFT implements a true **co-training** methodology, where two specialized branches—one for each domain—learn in parallel and actively "teach" each other through a carefully controlled pseudo-labeling mechanism. By creating a symbiotic learning relationship between these two domains, CoFT aims to construct a more comprehensive and robust data representation than either domain could achieve in isolation.
+Để giải quyết khoảng trống nghiên cứu cơ bản này, luận văn này hướng đến mô hình học bán giám sát, nhằm mục đích học từ các bộ dữ liệu chứa một lượng nhỏ dữ liệu có nhãn và một lượng lớn dữ liệu không có nhãn. Cụ thể, chúng tôi tập trung vào phương pháp tiền huấn luyện tự giám sát, nơi một mô hình trước tiên học các biểu diễn mạnh mẽ và có thể tổng quát hóa từ kho dữ liệu không có nhãn thông qua các nhiệm vụ ban đầu (pretext tasks). Công trình này giới thiệu **CoFT (Đồng huấn luyện với miền Tần số và Thời gian)**, một khuôn khổ hai nhánh mới được thiết kế để tối đa hóa việc trích xuất thông tin từ dữ liệu chuỗi thời gian trong môi trường khan hiếm nhãn này. Giả thuyết cốt lõi của CoFT là miền thời gian (cách một tín hiệu phát triển theo thời gian) và miền tần số (các thành phần tuần hoàn tạo nên tín hiệu) cung cấp các góc nhìn bổ sung và hiệp đồng về dữ liệu. Thay vì chỉ đơn thuần hợp nhất các miền này thành các đặc trưng, CoFT thực hiện một phương pháp **đồng huấn luyện** thực sự, trong đó hai nhánh chuyên biệt—mỗi nhánh cho một miền—học song song và tích cực "dạy" lẫn nhau thông qua một cơ chế gán nhãn giả được kiểm soát cẩn thận. Bằng cách tạo ra một mối quan hệ học tập cộng sinh giữa hai miền này, CoFT nhằm mục đích xây dựng một biểu diễn dữ liệu toàn diện và mạnh mẽ hơn so với việc mỗi miền hoạt động riêng lẻ.
 
-## 1.2 Mục tiêu và Câu hỏi nghiên cứu
+## 1.2 Mục tiêu và Câu hỏi nghiên cứu của luận văn
 
 ### 1.2.1 Mục tiêu của luận văn
 
-This thesis primarily aims to design, validate, and comprehensively analyze the **CoFT (Co-training with Frequency and Temporal domains)** framework. The central objective is to evaluate how this novel dual-domain, semi-supervised architecture performs against a strong, state-of-the-art baseline (CA-TCC), particularly in label-scarce scenarios.
+Luận văn này chủ yếu nhằm mục đích thiết kế, xác thực và phân tích toàn diện khuôn khổ **CoFT (Đồng huấn luyện với miền Tần số và Thời gian)**. Mục tiêu trung tâm là đánh giá cách kiến trúc hai miền, bán giám sát mới này hoạt động so với một mô hình cơ sở mạnh, tiên tiến (CA-TCC), đặc biệt là trong các kịch bản khan hiếm nhãn.
 
-To achieve this, the study will conduct a series of controlled experiments to systematically deconstruct the sources of performance gains. This involves a dual approach:
-1.  **Performance Evaluation:** A comparative analysis between CoFT and a rigorously tuned CA-TCC baseline to quantify the net performance improvement.
-2.  **Factor Analysis:** A deep dive through ablation studies to identify and examine the key factors—both architectural (e.g., the dual-branch structure, the ensemble method) and parametric (e.g., co-training hyperparameters)—that influence the model's effectiveness.
+Để đạt được điều này, nghiên cứu sẽ tiến hành một loạt các thí nghiệm có kiểm soát để phân tích một cách có hệ thống các nguồn gốc của sự cải thiện hiệu suất. Điều này bao gồm một cách tiếp cận kép:
+1.  **Đánh giá Hiệu suất:** Một phân tích so sánh giữa CoFT và một mô hình cơ sở CA-TCC được tinh chỉnh nghiêm ngặt để định lượng sự cải thiện hiệu suất ròng.
+2.  **Phân tích Yếu tố:** Một phân tích sâu thông qua các nghiên cứu cắt lớp để xác định và kiểm tra các yếu tố chính—cả về kiến trúc (ví dụ: cấu trúc hai nhánh, phương pháp tổ hợp) và tham số (ví dụ: siêu tham số đồng huấn luyện)—ảnh hưởng đến hiệu quả của mô hình.
 
-Through this approach, the thesis seeks to provide a deeper, more transparent understanding of deploying a dual-domain co-training model, moving beyond simply reporting a final accuracy number to explaining *why* it works. It should be noted that a key goal is not just to achieve state-of-the-art performance, but to establish a rigorous methodology for evaluating complex models and to understand the underlying principles of cross-domain learning in time series.
+Thông qua cách tiếp cận này, luận văn tìm cách cung cấp một sự hiểu biết sâu sắc hơn, minh bạch hơn về việc triển khai một mô hình đồng huấn luyện hai miền, vượt ra ngoài việc chỉ báo cáo một con số độ chính xác cuối cùng để giải thích *tại sao* nó hoạt động. Cần lưu ý rằng một mục tiêu quan trọng không chỉ là đạt được hiệu suất tiên tiến, mà còn là thiết lập một phương pháp luận nghiêm ngặt để đánh giá các mô hình phức tạp và hiểu các nguyên tắc cơ bản của học tập chéo miền trong chuỗi thời gian.
 
 ### 1.2.2 Câu hỏi nghiên cứu
 
-This thesis aims to answer four main research questions, which are directly informed by the objectives outlined previously and are structured to be answered by the analysis in Chapter 4:
+Luận văn này nhằm trả lời bốn câu hỏi nghiên cứu chính, được thông báo trực tiếp bởi các mục tiêu đã nêu trước đó và được cấu trúc để được trả lời bằng phân tích trong Chương 4:
 
--   **Question 1:** Can a dual-branch co-training framework (CoFT) that leverages both temporal and frequency domains significantly and consistently outperform a state-of-the-art, single-domain model (CA-TCC) on benchmark time series datasets?
--   **Question 2:** What is the true source of CoFT's performance improvement? How much is attributable to the novel architecture versus rigorous hyperparameter optimization?
--   **Question 3:** What are the optimal parameters and mechanisms for knowledge transfer between the two domains, and what underlying principles govern their effectiveness (e.g., the "Less is More" phenomenon)?
--   **Question 4:** Can the principles learned from one dataset be effectively transferred to guide optimization on new, diverse datasets, particularly in the medical domain, without requiring exhaustive re-tuning?
+-   **Câu hỏi 1:** Liệu một khuôn khổ đồng huấn luyện hai nhánh (CoFT) tận dụng cả miền thời gian và tần số có thể vượt trội đáng kể và nhất quán so với một mô hình đơn miền, tiên tiến (CA-TCC) trên các bộ dữ liệu chuỗi thời gian benchmark không?
+-   **Câu hỏi 2:** Nguồn gốc thực sự của sự cải thiện hiệu suất của CoFT là gì? Bao nhiêu phần trăm là do kiến trúc mới so với việc tối ưu hóa siêu tham số nghiêm ngặt?
+-   **Câu hỏi 3:** Các tham số và cơ chế tối ưu để chuyển giao kiến thức giữa hai miền là gì, và những nguyên tắc cơ bản nào chi phối hiệu quả của chúng (ví dụ: hiện tượng "Ít hơn là Nhiều hơn")?
+-   **Câu hỏi 4:** Liệu các nguyên tắc học được từ một bộ dữ liệu có thể được chuyển giao hiệu quả để hướng dẫn tối ưu hóa trên các bộ dữ liệu mới, đa dạng, đặc biệt là trong lĩnh vực y tế, mà không cần tinh chỉnh lại toàn bộ?
 
 ## 1.3 Cấu trúc luận văn
 
-The remainder of this thesis is structured as follows. **Chapter 2** provides a review of related work in semi-supervised learning, contrastive methods for time series, and multi-domain fusion, establishing the theoretical foundation for our work. **Chapter 3** details the CoFT architecture, including its dual-branch design, the training pipeline, and the innovative hybrid loss function that orchestrates cross-domain learning. **Chapter 4** presents the complete experimental journey, systematically answering each research question with empirical data and analysis. Finally, **Chapter 5** concludes by summarizing the key contributions, discussing the limitations and broader implications of the findings, and proposing concrete directions for future research.
+Phần còn lại của luận văn này được cấu trúc như sau. **Chương 2** cung cấp một tổng quan về các công trình liên quan trong học bán giám sát, các phương pháp tương phản cho chuỗi thời gian, và hợp nhất đa miền, thiết lập nền tảng lý thuyết cho công trình của chúng tôi. **Chương 3** trình bày chi tiết kiến trúc CoFT, bao gồm thiết kế hai nhánh, quy trình huấn luyện, và hàm mất mát hỗn hợp đổi mới điều phối việc học chéo miền. **Chương 4** trình bày toàn bộ hành trình thực nghiệm, trả lời một cách có hệ thống từng câu hỏi nghiên cứu với dữ liệu thực nghiệm và phân tích. Cuối cùng, **Chương 5** kết luận bằng cách tóm tắt các đóng góp chính, thảo luận về những hạn chế và ý nghĩa rộng hơn của các phát hiện, và đề xuất các hướng nghiên cứu cụ thể trong tương lai.
 
-## 1.4 Việc sử dụng AI trong luận văn này
+## 1.4 Việc sử dụng trí tuệ nhân tạo trong luận văn này
 
-The development and execution of the research in this thesis were significantly augmented by the use of Artificial Intelligence tools. Specifically, a conversational AI coding assistant, powered by large language models, was used as a pair programming partner. Its roles included code generation for specific modules, debugging, creating and running shell scripts for experiments, refactoring code for clarity and efficiency, and assisting in the drafting and formatting of documentation and this thesis document. The AI's contribution was primarily in accelerating the implementation and experimentation cycles, allowing the author to focus on the core research questions, experimental design, and analysis of results. All final scientific conclusions, architectural decisions, and interpretations of data were made by the author.
+Việc phát triển và thực hiện nghiên cứu trong luận văn này đã được tăng cường đáng kể bởi việc sử dụng các công cụ Trí tuệ Nhân tạo. Cụ thể, một trợ lý lập trình AI đàm thoại, được cung cấp bởi các mô hình ngôn ngữ lớn, đã được sử dụng như một đối tác lập trình đôi. Vai trò của nó bao gồm tạo mã cho các mô-đun cụ thể, gỡ lỗi, tạo và chạy các kịch bản shell cho các thí nghiệm, tái cấu trúc mã để rõ ràng và hiệu quả, và hỗ trợ trong việc soạn thảo và định dạng tài liệu và tài liệu luận văn này. Sự đóng góp của AI chủ yếu là trong việc tăng tốc các chu trình triển khai và thử nghiệm, cho phép tác giả tập trung vào các câu hỏi nghiên cứu cốt lõi, thiết kế thực nghiệm và phân tích kết quả. Tất cả các kết luận khoa học cuối cùng, các quyết định về kiến trúc và diễn giải dữ liệu đều do tác giả thực hiện.
 
 ---
 
-# 2 CƠ SỞ LÝ THUYẾT VÀ LÝ LUẬN
+# 2 NỀN TẢNG KIẾN THỨC VÀ LÝ THUYẾT
 
-This chapter provides a comprehensive review of the literature relevant to the CoFT framework. It situates the work at the intersection of semi-supervised learning, contrastive representation learning, and multi-domain time series analysis. We first survey the landscape of contrastive learning, establishing the state-of-the-art CA-TCC pipeline as our direct baseline. We then analyze existing approaches for combining temporal and frequency domain information, thereby highlighting the theoretical underpinnings and unique contributions of CoFT's co-training paradigm.
+Chương này cung cấp một cái nhìn tổng quan toàn diện về các tài liệu liên quan đến khuôn khổ CoFT. Nó đặt công trình này ở giao điểm của học bán giám sát, học biểu diễn tương phản và phân tích chuỗi thời gian đa miền. Đầu tiên, chúng tôi khảo sát bối cảnh của học tương phản, thiết lập quy trình CA-TCC tiên tiến làm cơ sở so sánh trực tiếp. Sau đó, chúng tôi phân tích các phương pháp hiện có để kết hợp thông tin miền thời gian và tần số, qua đó làm nổi bật nền tảng lý thuyết và những đóng góp độc đáo của mô hình đồng huấn luyện của CoFT.
 
-## 2.1 Các mô hình học từ dữ liệu có nhãn giới hạn
+## 2.1 Các mô hình học từ dữ liệu có nhãn hạn chế
 
-Deep learning models have demonstrated remarkable success in time series classification but often rely on large, meticulously labeled datasets. In many real-world domains, particularly in healthcare (e.g., EEG, ECG analysis), data acquisition is abundant, but expert annotation is scarce, time-consuming, and expensive. This label scarcity has motivated a surge in research on self-supervised and semi-supervised learning methods.
+Các mô hình học sâu đã chứng tỏ thành công đáng kể trong phân loại chuỗi thời gian nhưng thường phụ thuộc vào các bộ dữ liệu lớn, được gán nhãn tỉ mỉ. Trong nhiều lĩnh vực thực tế, đặc biệt là trong chăm sóc sức khỏe (ví dụ: phân tích EEG, ECG), việc thu thập dữ liệu rất phong phú, nhưng việc chú thích của chuyên gia lại khan hiếm, tốn thời gian và tốn kém. Sự khan hiếm nhãn này đã thúc đẩy một làn sóng nghiên cứu về các phương pháp học tự giám sát và bán giám sát.
 
-Self-supervised learning (SSL) aims to learn meaningful representations from unlabeled data by creating pretext tasks. The learned representations can then be transferred to downstream tasks (like classification) where only a small amount of labeled data is required for fine-tuning. This two-stage paradigm (unsupervised pre-training followed by supervised fine-tuning) has become a dominant approach. Among SSL paradigms, contrastive learning has emerged as a particularly effective method for learning discriminative representations.
+Học tự giám sát (SSL) nhằm mục đích học các biểu diễn có ý nghĩa từ dữ liệu không có nhãn bằng cách tạo ra các nhiệm vụ ban đầu (pretext tasks). Các biểu diễn đã học sau đó có thể được chuyển giao cho các nhiệm vụ xuôi dòng (như phân loại) nơi chỉ cần một lượng nhỏ dữ liệu có nhãn để tinh chỉnh. Mô hình hai giai đoạn này (tiền huấn luyện không giám sát sau đó là tinh chỉnh có giám sát) đã trở thành một phương pháp chủ đạo. Trong số các mô hình SSL, học tương phản đã nổi lên như một phương pháp đặc biệt hiệu quả để học các biểu diễn phân biệt.
 
 ## 2.2 Học tự giám sát: Nghệ thuật học từ chính dữ liệu
 
-Contrastive learning is a self-supervised learning paradigm that aims to learn an embedding space where similar samples are positioned closely together, while dissimilar samples are pushed far apart. This is achieved not through explicit labels, but by creating a "pretext task" based on data augmentations. For a given input sample, two or more correlated "views" are generated through augmentations. The model is then trained to identify the different views of the same sample as a "positive pair" and treat all other samples in a given batch as "negative pairs."
+Học tương phản là một mô hình học tự giám sát nhằm mục đích học một không gian nhúng nơi các mẫu tương tự được đặt gần nhau, trong khi các mẫu không tương tự bị đẩy ra xa. Điều này đạt được không phải thông qua các nhãn rõ ràng, mà bằng cách tạo ra một "nhiệm vụ ban đầu" dựa trên việc tăng cường dữ liệu. Đối với một mẫu đầu vào nhất định, hai hoặc nhiều "khung nhìn" tương quan được tạo ra thông qua các phép tăng cường. Mô hình sau đó được huấn luyện để xác định các khung nhìn khác nhau của cùng một mẫu là một "cặp dương" và coi tất cả các mẫu khác trong một lô nhất định là "cặp âm".
 
-This approach, popularized in computer vision by frameworks like SimCLR [5], has been successfully adapted to the time series domain. Foundational works like **TS-TCC** [6] and **TS2Vec** [10] established the viability of contrastive pre-training for time series, demonstrating that robust representations can be learned and transferred effectively to downstream tasks with limited labels.
+Cách tiếp cận này, được phổ biến trong thị giác máy tính bởi các khuôn khổ như SimCLR [5], đã được điều chỉnh thành công cho miền chuỗi thời gian. Các công trình nền tảng như **TS-TCC** [6] và **TS2Vec** [10] đã thiết lập tính khả thi của tiền huấn luyện tương phản cho chuỗi thời gian, chứng minh rằng các biểu diễn mạnh mẽ có thể được học và chuyển giao hiệu quả cho các nhiệm vụ xuôi dòng với số lượng nhãn hạn chế.
 
-A typical contrastive learning framework for time series consists of three key components: data augmentation, a neural network encoder, and a contrastive loss function. CoFT builds upon this foundation, and its design choices can be understood by examining the state-of-the-art in each component.
+Một khuôn khổ học tương phản điển hình cho chuỗi thời gian bao gồm ba thành phần chính: tăng cường dữ liệu, một bộ mã hóa mạng nơ-ron và một hàm mất mát tương phản. CoFT được xây dựng dựa trên nền tảng này, và các lựa chọn thiết kế của nó có thể được hiểu bằng cách xem xét các công nghệ tiên tiến trong từng thành phần.
 
-### 2.2.1 Các chiến lược Tăng cường Dữ liệu
+### 2.2.1 Các chiến lược tăng cường dữ liệu
 
-The creation of positive pairs via data augmentation is the cornerstone of contrastive learning. The choice of augmentation is critical, as it implicitly defines the invariances the model should learn. A recent systematic review by Wen et al. (2021) [9] categorized common time series augmentations into three groups:
+Việc tạo ra các cặp dương thông qua tăng cường dữ liệu là nền tảng của học tương phản. Lựa chọn phép tăng cường là rất quan trọng, vì nó ngầm xác định các tính bất biến mà mô hình nên học. Một bài đánh giá có hệ thống gần đây của Wen và cộng sự (2021) [9] đã phân loại các phép tăng cường chuỗi thời gian phổ biến thành ba nhóm:
 
-1.  **Transforming Augmentations:** These modify the signal's properties, including **jittering** (adding noise), **scaling** (changing magnitude), **time-warping**, and **permutation** (shuffling segments).
-2.  **Masking Augmentations:** These occlude parts of the data, such as **time masking** (setting segments to zero) or **frequency masking** (filtering frequency bands).
-3.  **Neighboring Augmentations:** These define positive pairs based on temporal proximity, assuming that adjacent windows in a time series are semantically similar.
+1.  **Tăng cường biến đổi:** Thay đổi các thuộc tính của tín hiệu, bao gồm **jittering** (thêm nhiễu), **scaling** (thay đổi biên độ), **time-warping** (làm cong vênh thời gian) và **permutation** (hoán vị các đoạn).
+2.  **Tăng cường che giấu:** Che khuất các phần của dữ liệu, chẳng hạn như **time masking** (đặt các đoạn thành không) hoặc **frequency masking** (lọc các dải tần số).
+3.  **Tăng cường lân cận:** Xác định các cặp dương dựa trên sự gần gũi về thời gian, giả định rằng các cửa sổ liền kề trong một chuỗi thời gian là tương tự về mặt ngữ nghĩa.
 
-While a rich ecosystem of augmentations exists, the CoFT thesis made a crucial discovery through its **InfoTS experiment (detailed in Chapter 4)**. It systematically demonstrated that a suite of complex, probabilistic augmentations (InfoTS) provided a negligible performance gain (+0.03%) over a simple, deterministic set of augmentations (jitter, scaling, cropping), but at the cost of a 50% increase in variance and a 25% increase in training time. This finding provided strong empirical backing for CoFT's design philosophy: **simplicity over sophistication**. The chosen augmentations are effective enough to drive learning without introducing unnecessary complexity, which aligns with the principle of maximizing the performance-to-complexity ratio.
+Mặc dù có một hệ sinh thái phong phú các phép tăng cường, luận văn CoFT đã có một khám phá quan trọng thông qua **thí nghiệm InfoTS (chi tiết trong Chương 4)**. Nó đã chứng minh một cách có hệ thống rằng một bộ các phép tăng cường phức tạp, xác suất (InfoTS) chỉ mang lại một sự cải thiện hiệu suất không đáng kể (+0.03%) so với một bộ các phép tăng cường đơn giản, tất định (jitter, scaling, cropping), nhưng với cái giá là tăng 50% phương sai và tăng 25% thời gian huấn luyện. Phát hiện này đã cung cấp sự ủng hộ thực nghiệm mạnh mẽ cho triết lý thiết kế của CoFT: **sự đơn giản hơn là sự phức tạp**. Các phép tăng cường được chọn đủ hiệu quả để thúc đẩy việc học mà không cần thêm sự phức tạp không cần thiết, điều này phù hợp với nguyên tắc tối đa hóa tỷ lệ hiệu suất trên độ phức tạp.
 
-### 2.2.2 Hàm mất mát NT-Xent: Phân tích Toán học Chuyên sâu
+### 2.2.2 Hàm mất mát NT-Xent: Phân tích sâu về mặt toán học
 
-The engine driving the contrastive learning process is the loss function. This work, like its baseline, employs the **Normalized Temperature-scaled Cross-Entropy (NT-Xent)** loss. We will now deconstruct this function following the "Anatomy of a Formula" principle.
+Động cơ thúc đẩy quá trình học tương phản là hàm mất mát. Công trình này, giống như mô hình cơ sở của nó, sử dụng hàm mất mát **Cross-Entropy chuẩn hóa theo nhiệt độ (NT-Xent)**. Bây giờ chúng ta sẽ phân tích hàm này theo nguyên tắc "Phân tích công thức".
 
-#### Step 1: Present the Formula
-Given a positive pair of augmented samples, \(x_i\) and \(x_j\), the encoder network \(f(\cdot)\) produces embedding vectors \(z_i = f(x_i)\) and \(z_j = f(x_j)\). The loss for this positive pair is formally defined as:
+#### Bước 1: Trình bày Công thức
+Cho một cặp mẫu dương được tăng cường, \(x_i\) và \(x_j\), mạng mã hóa \(f(\cdot)\) tạo ra các vector nhúng \(z_i = f(x_i)\) và \(z_j = f(x_j)\). Mất mát cho cặp dương này được định nghĩa chính thức là:
 
-\[ \mathcal{L}_{i,j} = -\log \frac{\exp(\text{sim}(z_i, z_j)/\tau)}{\sum_{k=1}^{2N} \mathbb{1}_{[k \neq i]} \exp(\text{sim}(z_i, z_k)/\tau)} \quad \text{(Equation 2.1)} \]
+\[ \mathcal{L}_{i,j} = -\log \frac{\exp(\text{sim}(z_i, z_j)/\tau)}{\sum_{k=1}^{2N} \mathbb{1}_{[k \neq i]} \exp(\text{sim}(z_i, z_k)/\tau)} \quad \text{(Phương trình 2.1)} \]
 
-#### Step 2: Define Every Symbol
--   **\( \mathcal{L}_{i,j} \)**: The final loss value for the positive pair \((i, j)\).
--   **\( z_i, z_j, z_k \)**: The embedding vectors (feature representations) produced by the encoder network for samples \(i, j, \text{and } k\), respectively.
--   **\( \text{sim}(u, v) \)**: The cosine similarity function, \(\frac{u \cdot v}{\|u\|\|v\|}\), which measures the angle between two embedding vectors. A value of 1 means they are identical in orientation, -1 means they are opposite, and 0 means they are orthogonal.
--   **\( \tau \)**: The **temperature** hyperparameter, a positive scalar that controls the "sharpness" of the distribution of similarities.
--   **\( N \)**: The number of original (pre-augmentation) samples in a batch. The total number of augmented samples is \(2N\).
--   **\( \mathbb{1}_{[k \neq i]} \)**: An indicator function that equals 1 if \(k \neq i\) and 0 otherwise. This ensures that the comparison of an embedding with itself is excluded from the sum.
+#### Bước 2: Định nghĩa từng ký hiệu
+-   **\( \mathcal{L}_{i,j} \)**: Giá trị mất mát cuối cùng cho cặp dương \((i, j)\).
+-   **\( z_i, z_j, z_k \)**: Các vector nhúng (biểu diễn đặc trưng) được tạo ra bởi mạng mã hóa cho các mẫu \(i, j, \text{và } k\), respectively.
+-   **\( \text{sim}(u, v) \)**: Hàm tương đồng cosine, \(\frac{u \cdot v}{\|u\|\|v\|}\), đo góc giữa hai vector nhúng. Giá trị 1 có nghĩa là chúng giống hệt nhau về hướng, -1 có nghĩa là chúng đối diện, và 0 có nghĩa là chúng trực giao.
+-   **\( \tau \)**: Siêu tham số **nhiệt độ**, một vô hướng dương kiểm soát độ "sắc nét" của phân phối tương đồng.
+-   **\( N \)**: Số lượng mẫu gốc (trước khi tăng cường) trong một lô. Tổng số mẫu được tăng cường là \(2N\).
+-   **\( \mathbb{1}_{[k \neq i]} \)**: Một hàm chỉ thị bằng 1 nếu \(k \neq i\) và 0 nếu ngược lại. Điều này đảm bảo rằng việc so sánh một vector nhúng với chính nó được loại trừ khỏi tổng.
 
-#### Step 3: Explain in Plain English
-This formula works like a multiclass classification problem. For a given sample \(z_i\), the goal is to "classify" its correct positive partner \(z_j\) from a set of all other possible samples (\(z_k\)) in the batch, which are treated as "negatives".
+#### Bước 3: Giải thích bằng ngôn ngữ đơn giản
+Công thức này hoạt động giống như một bài toán phân loại đa lớp. Đối với một mẫu nhất định \(z_i\), mục tiêu là "phân loại" đối tác dương chính xác của nó \(z_j\) từ một tập hợp tất cả các mẫu khác có thể có (\(z_k\)) trong lô, được coi là "âm".
 
--   **The Numerator**: \(\exp(\text{sim}(z_i, z_j)/\tau)\) measures the similarity between the two correct partners (\(z_i\) and \(z_j\)). The model wants to make this value as high as possible.
--   **The Denominator**: This term sums up the similarities between \(z_i\) and *all* other samples in the batch (excluding itself). This represents the "evidence" for all possible pairs.
--   **The Fraction**: The fraction is a softmax function. It computes the probability that \(z_j\) is the true positive partner for \(z_i\).
--   **The `-log`**: The negative logarithm is a standard way to turn a probability into a loss value. Minimizing the loss is equivalent to maximizing the probability that the model correctly identifies the positive pair.
+-   **Tử số**: \(\exp(\text{sim}(z_i, z_j)/\tau)\) đo lường sự tương đồng giữa hai đối tác chính xác (\(z_i\) và \(z_j\)). Mô hình muốn làm cho giá trị này càng cao càng tốt.
+-   **Mẫu số**: Thuật ngữ này tính tổng sự tương đồng giữa \(z_i\) và *tất cả* các mẫu khác trong lô (trừ chính nó). Điều này đại diện cho "bằng chứng" cho tất cả các cặp có thể có.
+-   **Phân số**: Phân số là một hàm softmax. Nó tính toán xác suất rằng \(z_j\) là đối tác dương thực sự cho \(z_i\).
+-   **`-log`**: Logarit âm là một cách tiêu chuẩn để biến một xác suất thành một giá trị mất mát. Việc giảm thiểu mất mát tương đương với việc tối đa hóa xác suất mô hình xác định chính xác cặp dương.
 
-The temperature \(\tau\) is a crucial tuning knob. A lower temperature amplifies the differences between similarities, forcing the model to work harder to distinguish between difficult negative samples. A higher temperature smooths the distribution, making the task easier.
+Nhiệt độ \(\tau\) là một nút điều chỉnh quan trọng. Một nhiệt độ thấp hơn sẽ khuếch đại sự khác biệt giữa các tương đồng, buộc mô hình phải làm việc chăm chỉ hơn để phân biệt giữa các mẫu âm khó. Một nhiệt độ cao hơn sẽ làm mịn phân phối, làm cho nhiệm vụ dễ dàng hơn.
 
-#### Step 4: Summarize the Objective
-The overall objective of the NT-Xent loss function is to learn an embedding space where the representations of different augmented "views" of the same sample (the positive pair) are pulled closer together, while the representations of all other samples (the negative pairs) are pushed farther apart. This learned representation should be robust to augmentations while being sensitive to the essential characteristics of the data.
+#### Bước 4: Tóm tắt mục tiêu
+Mục tiêu tổng thể của hàm mất mát NT-Xent là học một không gian nhúng nơi các biểu diễn của các "khung nhìn" được tăng cường khác nhau của cùng một mẫu (cặp dương) được kéo lại gần nhau, trong khi các biểu diễn của tất cả các mẫu khác (các cặp âm) bị đẩy ra xa hơn. Biểu diễn đã học này phải mạnh mẽ trước các phép tăng cường trong khi vẫn nhạy cảm với các đặc điểm thiết yếu của dữ liệu.
 
-### 2.2.3 Baseline CA-TCC: Một Quy trình Bán giám sát Đa giai đoạn Nghiêm ngặt
+### 2.2.3 Mô hình cơ sở CA-TCC: Một quy trình bán giám sát đa giai đoạn nghiêm ngặt
 
-The CoFT framework is a direct and principled extension of **CA-TCC (Contrastive Augmentation - Temporal Contrastive Clustering)** [7], a state-of-the-art framework for semi-supervised time series classification. It is not merely a single loss function but a complete, multi-stage pipeline designed to leverage both unlabeled and labeled data to their fullest extent. Understanding this intricate pipeline is critical to contextualizing the innovations presented in this thesis, as it forms the foundational "playground" upon which CoFT was built and evaluated.
+Khuôn khổ CoFT là một sự mở rộng trực tiếp và có nguyên tắc của **CA-TCC (Tăng cường Tương phản - Phân cụm Tương phản Thời gian)** [7], một khuôn khổ tiên tiến cho phân loại chuỗi thời gian bán giám sát. Nó không chỉ đơn thuần là một hàm mất mát duy nhất mà là một quy trình hoàn chỉnh, đa giai đoạn được thiết kế để tận dụng tối đa cả dữ liệu không có nhãn và có nhãn. Việc hiểu rõ quy trình phức tạp này là rất quan trọng để đặt bối cảnh cho những đổi mới được trình bày trong luận văn này, vì nó tạo thành "sân chơi" nền tảng mà CoFT được xây dựng và đánh giá.
 
-![Figure 1: The dual-objective contrastive learning in CA-TCC. The model learns to be invariant to augmentations via Temporal Contrasting and sensitive to temporal structure via Contextual Contrasting.](Images/Fig. 1. Overall architecture of the proposed TS-TCC. The Temporal Contrastingmodule.png)
-*Figure 1: The dual-objective contrastive learning in CA-TCC. The model learns to be invariant to augmentations via Temporal Contrasting and sensitive to temporal structure via Contextual Contrasting.*
+![Hình 1: Học tương phản hai mục tiêu trong CA-TCC. Mô hình học cách bất biến với các phép tăng cường thông qua Tương phản Thời gian và nhạy cảm với cấu trúc thời gian thông qua Tương phản Ngữ cảnh.](Images/Fig. 1. Overall architecture of the proposed TS-TCC. The Temporal Contrastingmodule.png)
+*Hình 1: Học tương phản hai mục tiêu trong CA-TCC. Mô hình học cách bất biến với các phép tăng cường thông qua Tương phản Thời gian và nhạy cảm với cấu trúc thời gian thông qua Tương phản Ngữ cảnh.*
 
-The CA-TCC workflow consists of the following interconnected stages:
+Quy trình làm việc của CA-TCC bao gồm các giai đoạn được kết nối với nhau sau đây:
 
-#### Stage 1: Self-Supervised Contrastive Pre-training
-The first stage aims to learn a robust, general-purpose time series encoder, \(f(\cdot)\), from a large corpus of unlabeled data. This is achieved by training the encoder with a dual-objective contrastive loss.
+#### Giai đoạn 1: Tiền huấn luyện Tương phản Tự giám sát
+Giai đoạn đầu tiên nhằm mục đích học một bộ mã hóa chuỗi thời gian mạnh mẽ, có mục đích chung, \(f(\cdot)\), từ một kho dữ liệu lớn không có nhãn. Điều này đạt được bằng cách huấn luyện bộ mã hóa với một hàm mất mát tương phản hai mục tiêu.
 
-**1. Temporal Contrasting (\(L_{Temp}\)):** The primary objective is to make the model's representations invariant to augmentations. For each sample \(x_i\) in a batch, two correlated views are generated using a strong augmentation (\(aug_s\)) and a weak augmentation (\(aug_w\)). These views, \(x_i^s = aug_s(x_i)\) and \(x_i^w = aug_w(x_i)\), are passed through the encoder \(f(\cdot)\) to produce embeddings \(z_i^s\) and \(z_i^w\). The Temporal Contrastive Loss is the NT-Xent loss that pulls this positive pair together.
+**1. Tương phản Thời gian (\(L_{Temp}\)):** Mục tiêu chính là làm cho các biểu diễn của mô hình bất biến với các phép tăng cường. Đối với mỗi mẫu \(x_i\) trong một lô, hai khung nhìn tương quan được tạo ra bằng cách sử dụng một phép tăng cường mạnh (\(aug_s\)) và một phép tăng cường yếu (\(aug_w\)). Các khung nhìn này, \(x_i^s = aug_s(x_i)\) và \(x_i^w = aug_w(x_i)\), được đưa qua bộ mã hóa \(f(\cdot)\) để tạo ra các vector nhúng \(z_i^s\) và \(z_i^w\). Mất mát Tương phản Thời gian là mất mát NT-Xent kéo cặp dương này lại với nhau.
 
-**2. Contextual Contrasting (\(L_{Cont}\)):** This objective ensures that the model captures the inherent temporal structure of the signals. For a given time series representation \(z_i\), its positive pair is defined as its immediate neighbor in time, \(z_{i+1}\). The Contextual Contrastive Loss uses the NT-Xent formulation to pull these adjacent representations together, encouraging a smooth and temporally coherent embedding space.
+**2. Tương phản Ngữ cảnh (\(L_{Cont}\)):** Mục tiêu này đảm bảo rằng mô hình nắm bắt được cấu trúc thời gian vốn có của các tín hiệu. Đối với một biểu diễn chuỗi thời gian nhất định \(z_i\), cặp dương của nó được định nghĩa là hàng xóm ngay lập tức của nó trong thời gian, \(z_{i+1}\). Mất mát Tương phản Ngữ cảnh sử dụng công thức NT-Xent để kéo các biểu diễn liền kề này lại với nhau, khuyến khích một không gian nhúng mượt mà và mạch lạc về mặt thời gian.
 
-The total loss for the self-supervised pre-training stage is a weighted sum of these two components:
+Tổng mất mát cho giai đoạn tiền huấn luyện tự giám sát là tổng có trọng số của hai thành phần này:
 
 \[ L_{CA-TCC} = L_{Temp} + \alpha \cdot L_{Cont} \]
 
-where \(\alpha\) is a hyperparameter balancing augmentation invariance and temporal coherence.
+trong đó \(\alpha\) là một siêu tham số cân bằng giữa tính bất biến của phép tăng cường và tính mạch lạc về thời gian.
 
-#### Stage 2: Supervised Fine-tuning
-After pre-training, the learned encoder \(f(\cdot)\) is fine-tuned on a small, labeled dataset (\(D_L\)). A linear classifier, \(g(\cdot)\), is added on top of the encoder, and the entire model (\(g \circ f\)) is trained using the standard **Categorical Cross-Entropy Loss (\(L_{CE}\))**:
+#### Giai đoạn 2: Tinh chỉnh có giám sát
+Sau khi tiền huấn luyện, bộ mã hóa đã học \(f(\cdot)\) được tinh chỉnh trên một bộ dữ liệu nhỏ, có nhãn (\(D_L\)). Một bộ phân loại tuyến tính, \(g(\cdot)\), được thêm vào trên cùng của bộ mã hóa, và toàn bộ mô hình (\(g \circ f\)) được huấn luyện bằng cách sử dụng **Mất mát Cross-Entropy Phân loại (\(L_{CE}\))** tiêu chuẩn:
 
 \[ L_{CE} = -\sum_{c=1}^{M} y_{o,c} \log(p_{o,c}) \]
 
-Where \(M\) is the number of classes, \(y_{o,c}\) is a binary indicator of the true class for observation \(o\), and \(p_{o,c}\) is the model's predicted probability.
+Trong đó \(M\) là số lớp, \(y_{o,c}\) là một chỉ báo nhị phân của lớp thực cho quan sát \(o\), và \(p_{o,c}\) là xác suất dự đoán của mô hình.
 
-#### Stage 3: Pseudo-Label Generation
-This is the first step in leveraging the large unlabeled dataset (\(D_U\)) to improve the model. The fine-tuned model from Stage 2 is used to make predictions on all samples in \(D_U\). Predictions that exceed a high confidence threshold (e.g., probability > 0.95) are selected as high-quality **pseudo-labels**. This creates a new, larger training set, \(D_{PL}\), consisting of both original labeled data and confidently pseudo-labeled data.
+#### Giai đoạn 3: Tạo nhãn giả
+Đây là bước đầu tiên trong việc tận dụng bộ dữ liệu lớn không có nhãn (\(D_U\)) để cải thiện mô hình. Mô hình được tinh chỉnh từ Giai đoạn 2 được sử dụng để đưa ra dự đoán trên tất cả các mẫu trong \(D_U\). Các dự đoán vượt qua một ngưỡng tin cậy cao (ví dụ: xác suất > 0.95) được chọn làm **nhãn giả** chất lượng cao. Điều này tạo ra một tập huấn luyện mới, lớn hơn, \(D_{PL}\), bao gồm cả dữ liệu có nhãn ban đầu và dữ liệu được gán nhãn giả một cách tự tin.
 
-#### Stage 4: Supervised Contrastive Learning for Representation Refinement
-The most advanced step in the CA-TCC pipeline is to refine the encoder's feature space using the combined labeled and pseudo-labeled dataset (\(D_L \cup D_{PL}\)). This is achieved using the **Supervised Contrastive Loss (\(L_{SupCon}\))**. Unlike the self-supervised NT-Xent loss which only considers one positive pair per sample, \(L_{SupCon}\) leverages label information to treat all samples within the same class as positive pairs.
+#### Giai đoạn 4: Học Tương phản có giám sát để Tinh chỉnh Biểu diễn
+Bước nâng cao nhất trong quy trình CA-TCC là tinh chỉnh không gian đặc trưng của bộ mã hóa bằng cách sử dụng bộ dữ liệu kết hợp có nhãn và nhãn giả (\(D_L \cup D_{PL}\)). Điều này đạt được bằng cách sử dụng **Mất mát Tương phản có giám sát (\(L_{SupCon}\))**. Không giống như mất mát NT-Xent tự giám sát chỉ xem xét một cặp dương cho mỗi mẫu, \(L_{SupCon}\) tận dụng thông tin nhãn để coi tất cả các mẫu trong cùng một lớp là các cặp dương.
 
-##### Anatomy of the SupCon Loss
+##### Phân tích Mất mát SupCon
 
-**Step 1: Present the Formula**
+**Bước 1: Trình bày Công thức**
 
-For a batch of N samples, the SupCon loss for a given sample (anchor) \(i\) is defined as:
+Đối với một lô N mẫu, mất mát SupCon cho một mẫu nhất định (neo) \(i\) được định nghĩa là:
 
-\[ L_{SupCon}^{(i)} = \frac{-1}{|P(i)|} \sum_{p \in P(i)} \log \frac{\exp(\text{sim}(z_i, z_p)/\tau)}{\sum_{k \in A(i)} \exp(\text{sim}(z_i, z_k)/\tau)} \quad \text{(Equation 2.2)} \]
+\[ L_{SupCon}^{(i)} = \frac{-1}{|P(i)|} \sum_{p \in P(i)} \log \frac{\exp(\text{sim}(z_i, z_p)/\tau)}{\sum_{k \in A(i)} \exp(\text{sim}(z_i, z_k)/\tau)} \quad \text{(Phương trình 2.2)} \]
 
-**Step 2: Define Every Symbol**
+**Bước 2: Định nghĩa từng ký hiệu**
 
--   **\( L_{SupCon}^{(i)} \)**: The supervised contrastive loss for a single anchor sample \(i\).
--   **\( A(i) \)**: The set of all other samples in the batch (anchor \(i\) excluded).
--   **\( P(i) \)**: The set of all "positives" for anchor \(i\) in the batch, defined as all other samples \(p \in A(i)\) that share the same class label (\(y_p = y_i\)).
--   **\( |P(i)| \)**: The number of positives for anchor \(i\) in the batch.
--   All other symbols (\(z_i, z_p, z_k, \text{sim}, \tau\)) are defined as in the NT-Xent loss.
+-   **\( L_{SupCon}^{(i)} \)**: Mất mát tương phản có giám sát cho một mẫu neo duy nhất \(i\).
+-   **\( A(i) \)**: Tập hợp tất cả các mẫu khác trong lô (mẫu neo \(i\) bị loại trừ).
+-   **\( P(i) \)**: Tập hợp tất cả các "dương" cho mẫu neo \(i\) trong lô, được định nghĩa là tất cả các mẫu khác \(p \in A(i)\) có cùng nhãn lớp (\(y_p = y_i\)).
+-   **\( |P(i)| \)**: Số lượng các dương cho mẫu neo \(i\) trong lô.
+-   Tất cả các ký hiệu khác (\(z_i, z_p, z_k, \text{sim}, \tau\)) được định nghĩa như trong mất mát NT-Xent.
 
-**Step 3: Explain in Plain English**
+**Bước 3: Giải thích bằng ngôn ngữ đơn giản**
 
-This formula extends the idea of the NT-Xent loss. Instead of having only *one* positive partner (the other augmentation), it has *multiple* positive partners: every other sample in the batch that belongs to the same class.
+Công thức này mở rộng ý tưởng của mất mát NT-Xent. Thay vì chỉ có *một* đối tác dương (phép tăng cường khác), nó có *nhiều* đối tác dương: mọi mẫu khác trong lô thuộc cùng một lớp.
 
--   The inner part of the formula is still a softmax function that tries to make the anchor \(z_i\) more similar to a positive partner \(z_p\) than to any other sample \(z_k\) in the batch.
--   The key difference is the outer sum (\(\sum_{p \in P(i)}\)) and the normalization (\(\frac{-1}{|P(i)|}\)). This structure calculates the loss for *every positive partner* in the batch and averages the results. It's like asking the model to solve multiple "which one is my partner?" problems simultaneously, one for each sample of the same class.
+-   Phần bên trong của công thức vẫn là một hàm softmax cố gắng làm cho mẫu neo \(z_i\) giống với một đối tác dương \(z_p\) hơn bất kỳ mẫu nào khác \(z_k\) trong lô.
+-   Sự khác biệt chính là tổng bên ngoài (\(\sum_{p \in P(i)}\)) và phép chuẩn hóa (\(\frac{-1}{|P(i)|}\)). Cấu trúc này tính toán mất mát cho *mọi đối tác dương* trong lô và lấy trung bình kết quả. Nó giống như yêu cầu mô hình giải quyết nhiều bài toán "ai là đối tác của tôi?" đồng thời, một cho mỗi mẫu của cùng một lớp.
 
-**Step 4: Summarize the Objective**
+**Bước 4: Tóm tắt mục tiêu**
 
-The overall objective of the Supervised Contrastive Loss is to explicitly pull together the representations of all samples belonging to the same class, while simultaneously pushing them away from samples of all other classes. This creates tightly clustered and well-separated feature spaces, dramatically improving the discriminative power of the learned representations.
+Mục tiêu tổng thể của Mất mát Tương phản có giám sát là kéo các biểu diễn của tất cả các mẫu thuộc cùng một lớp lại gần nhau một cách rõ ràng, đồng thời đẩy chúng ra xa các mẫu của tất cả các lớp khác. Điều này tạo ra các không gian đặc trưng được phân cụm chặt chẽ và tách biệt rõ ràng, cải thiện đáng kể sức mạnh phân biệt của các biểu diễn đã học.
 
-#### Stage 5: Final Classifier Training
-After the encoder's representations have been refined using \(L_{SupCon}\), the classifier head \(g(\cdot)\) is discarded and a new linear classifier is trained from scratch on top of the frozen, refined encoder using the original labeled data \(D_L\). This final step ensures that the classifier is perfectly calibrated to the newly structured feature space, yielding the final classification performance.
+#### Giai đoạn 5: Huấn luyện bộ phân loại cuối cùng
+Sau khi các biểu diễn của bộ mã hóa đã được tinh chỉnh bằng cách sử dụng \(L_{SupCon}\), đầu bộ phân loại \(g(\cdot)\) bị loại bỏ và một bộ phân loại tuyến tính mới được huấn luyện từ đầu trên bộ mã hóa đã được tinh chỉnh và đóng băng bằng cách sử dụng dữ liệu có nhãn ban đầu \(D_L\). Bước cuối cùng này đảm bảo rằng bộ phân loại được hiệu chỉnh hoàn hảo với không gian đặc trưng mới được cấu trúc, mang lại hiệu suất phân loại cuối cùng.
 
-This complete, five-stage process represents the sophisticated baseline that CoFT builds upon. By preserving this pipeline for its temporal branch, this thesis can isolate and rigorously evaluate the gains achieved by introducing the parallel frequency domain and the cross-domain co-training mechanism.
+Quá trình năm giai đoạn hoàn chỉnh này đại diện cho mô hình cơ sở phức tạp mà CoFT xây dựng dựa trên đó. Bằng cách bảo tồn quy trình này cho nhánh thời gian của mình, luận văn này có thể cô lập và đánh giá nghiêm ngặt những lợi ích đạt được bằng cách giới thiệu miền tần số song song và cơ chế đồng huấn luyện chéo miền.
 
-**Table 1: Ablation Study of Components in TS-TCC and CA-TCC.** This table, adapted from the original CA-TCC paper [7], demonstrates the incremental value of each component on performance. It clearly shows that the addition of Supervised Contrastive Learning (SCC) in CA-TCC provides a significant boost over TS-TCC, and that a combination of weak and strong augmentations is superior. Results are based on the linear evaluation experiment with 5% labeled data.
+**Bảng 1: Nghiên cứu cắt lớp các thành phần trong TS-TCC và CA-TCC.** Bảng này, được điều chỉnh từ bài báo CA-TCC gốc [7], thể hiện giá trị gia tăng của từng thành phần đối với hiệu suất. Nó cho thấy rõ ràng rằng việc bổ sung Học Tương phản có giám sát (SCC) trong CA-TCC mang lại một sự thúc đẩy đáng kể so với TS-TCC, và sự kết hợp của các phép tăng cường yếu và mạnh là vượt trội. Kết quả dựa trên thí nghiệm đánh giá tuyến tính với 5% dữ liệu có nhãn.
 
-| Component                    | HAR (Acc / MF1)            | Sleep-EDF (Acc / MF1)      | Epilepsy (Acc / MF1)       |
+| Thành phần                 | HAR (Acc / MF1)            | Sleep-EDF (Acc / MF1)      | Epilepsy (Acc / MF1)       |
 | :--------------------------- | :------------------------- | :------------------------- | :------------------------- |
-| TC only                      | 68.16 / 66.89              | 75.55 / 60.19              | 88.29 / 88.00              |
+| Chỉ TC                       | 68.16 / 66.89              | 75.55 / 60.19              | 88.29 / 88.00              |
 | TC + X-Aug                   | 74.22 / 72.18              | 77.80 / 61.28              | 90.51 / 89.27              |
 | TS-TCC (TC + X-Aug + CC)     | 77.58 / 76.66              | 76.98 / 70.94              | 93.12 / 93.67              |
 | **CA-TCC (TC + X-Aug + SCC)**| **88.27 / 88.29**          | **82.14 / 74.75**          | **94.52 / 94.00**          |
 | --- | --- | --- | --- |
-| *TS-TCC (Weak only)*         | *67.39 / 65.54*            | *79.63 / 68.15*            | *93.22 / 91.97*            |
-| *CA-TCC (Weak only)*         | *85.68 / 84.77*            | *81.62 / 70.10*            | *93.84 / 92.19*            |
+| *TS-TCC (Chỉ Yếu)*          | *67.39 / 65.54*            | *79.63 / 68.15*            | *93.22 / 91.97*            |
+| *CA-TCC (Chỉ Yếu)*          | *85.68 / 84.77*            | *81.62 / 70.10*            | *93.84 / 92.19*            |
 | --- | --- | --- | --- |
-| *TS-TCC (Strong only)*       | *50.37 / 43.05*            | *74.84 / 64.53*            | *92.49 / 90.60*            |
-| *CA-TCC (Strong only)*       | *59.59 / 53.34*            | *79.24 / 69.39*            | *93.74 / 92.00*            |
+| *TS-TCC (Chỉ Mạnh)*        | *50.37 / 43.05*            | *74.84 / 64.53*            | *92.49 / 90.60*            |
+| *CA-TCC (Chỉ Mạnh)*        | *59.59 / 53.34*            | *79.24 / 69.39*            | *93.74 / 92.00*            |
 
-## 2.3 Đồng huấn luyện và Hợp nhất Miền Tần số-Thời gian
+## 2.3 Đồng huấn luyện và hợp nhất miền tần số-thời gian
 
-The most significant contribution of CoFT is its novel application of a co-training methodology to fuse information from the temporal and frequency domains. To appreciate this contribution, it is necessary to review how these two domains have been combined previously.
+Đóng góp quan trọng nhất của CoFT là ứng dụng mới của phương pháp đồng huấn luyện để hợp nhất thông tin từ miền thời gian và tần số. Để đánh giá cao đóng góp này, cần phải xem xét cách hai miền này đã được kết hợp trước đây.
 
-### 2.3.1 Các phương pháp Hợp nhất Truyền thống
+### 2.3.1 Các phương pháp hợp nhất truyền thống
 
-The idea that temporal and frequency domains contain complementary information is well-established in signal processing. Traditional machine learning and deep learning approaches have typically combined them in one of two ways, generally referred to as early and late fusion [11].
+Ý tưởng rằng miền thời gian và tần số chứa thông tin bổ sung đã được thiết lập rõ ràng trong xử lý tín hiệu. Các phương pháp học máy và học sâu truyền thống thường kết hợp chúng theo một trong hai cách, thường được gọi là hợp nhất sớm và hợp nhất muộn [11].
 
-1.  **Early Fusion (Feature-level):** In this approach, features from both domains are extracted and concatenated *before* being fed into a single model. For instance, one might compute the FFT of a time series, extract spectral features like power spectral density, and append them to the raw time-domain signal. While simple and direct, this approach can be suboptimal as it forces a single model to learn from potentially heterogeneous feature spaces with different statistical properties, and it can lead to a very high-dimensional input vector that is prone to the curse of dimensionality [12].
+1.  **Hợp nhất sớm (cấp đặc trưng):** Trong phương pháp này, các đặc trưng từ cả hai miền được trích xuất và nối lại *trước khi* được đưa vào một mô hình duy nhất. Ví dụ, người ta có thể tính toán FFT của một chuỗi thời gian, trích xuất các đặc trưng quang phổ như mật độ phổ công suất, và nối chúng vào tín hiệu miền thời gian thô. Mặc dù đơn giản và trực tiếp, phương pháp này có thể không tối ưu vì nó buộc một mô hình duy nhất phải học từ các không gian đặc trưng không đồng nhất với các thuộc tính thống kê khác nhau, và nó có thể dẫn đến một vector đầu vào có chiều rất cao dễ bị ảnh hưởng bởi lời nguyền chiều [12].
 
-2.  **Late Fusion (Decision-level):** This involves training two separate, specialized models, one for each domain, and then combining their output predictions (e.g., by averaging or a weighted vote). This allows each model to learn features optimally for its own domain, which is a significant advantage. However, it may miss out on discovering deeper, synergistic interactions between the domains during the representation learning phase, as the fusion happens only at the final decision step [11, 12].
+2.  **Hợp nhất muộn (cấp quyết định):** Điều này liên quan đến việc huấn luyện hai mô hình riêng biệt, chuyên biệt, một cho mỗi miền, và sau đó kết hợp các dự đoán đầu ra của chúng (ví dụ, bằng cách lấy trung bình hoặc một phiếu bầu có trọng số). Điều này cho phép mỗi mô hình học các đặc trưng một cách tối ưu cho miền riêng của nó, đây là một lợi thế đáng kể. Tuy nhiên, nó có thể bỏ lỡ việc khám phá các tương tác hiệp đồng sâu hơn giữa các miền trong giai đoạn học biểu diễn, vì sự hợp nhất chỉ xảy ra ở bước quyết định cuối cùng [11, 12].
 
-### 2.3.2 CoFT: Một Framework Co-Training thực thụ
+### 2.3.2 CoFT: Một khuôn khổ đồng huấn luyện thực sự
 
-CoFT moves beyond simple fusion and implements a **true co-training framework**, a concept pioneered by Blum and Mitchell (1998) [3] in semi-supervised learning. The original co-training algorithm required two conditionally independent "views" of the data. CoFT adapts this concept by treating the **temporal and frequency domains as two distinct but complementary views**.
+CoFT vượt ra ngoài sự hợp nhất đơn giản và thực hiện một **khuôn khổ đồng huấn luyện thực sự**, một khái niệm được tiên phong bởi Blum và Mitchell (1998) [3] trong học bán giám sát. Thuật toán đồng huấn luyện ban đầu yêu cầu hai "khung nhìn" độc lập có điều kiện về dữ liệu. CoFT điều chỉnh khái niệm này bằng cách coi **miền thời gian và tần số là hai khung nhìn riêng biệt nhưng bổ sung**.
 
-This approach is fundamentally different from prior work:
-*   **Equal Partnership:** Unlike methods that treat the frequency domain as a secondary source of pre-processed features, CoFT establishes two parallel, architecturally-symmetric encoder branches. This "architectural parity," as described in the thesis (Chapter 3), is a deliberate methodological choice to ensure that any performance gains come from the information itself, not from an architectural advantage of one branch over the other.
-*   **Knowledge Transfer via Pseudo-Labeling:** CoFT facilitated knowledge transfer through a sophisticated co-training module. One branch generated high-confidence pseudo-labels, which were then used to train the other branch. This created a feedback loop where each domain helps to regularize and improve the other, which is especially powerful in low-label settings.
-*   **The "Less is More" Discovery:** The most counter-intuitive and impactful finding of the CoFT research is the "Less is More" phenomenon regarding the co-training hyperparameter `lambda_ct`. Conventional wisdom might suggest that a strong coupling (high `lambda_ct`) is needed for effective knowledge transfer. However, this thesis empirically demonstrated (Chapter 4) that an ultra-low value (`lambda_ct` = 0.0001) is optimal. High values lead to "label confusion," where noisy pseudo-labels from one domain corrupted the learning process of the other. A gentle, low-weighted coupling provided just enough regularization to guide representation learning without overwhelming the ground-truth signal. This discovery is a significant scientific contribution to the understanding of co-training dynamics in deep learning.
+Cách tiếp cận này về cơ bản khác với các công trình trước đây:
+*   **Đối tác bình đẳng:** Không giống như các phương pháp coi miền tần số là một nguồn đặc trưng được tiền xử lý thứ cấp, CoFT thiết lập hai nhánh mã hóa song song, đối xứng về mặt kiến trúc. "Sự tương đương về kiến trúc" này, như được mô tả trong luận văn (Chương 3), là một lựa chọn phương pháp luận có chủ ý để đảm bảo rằng bất kỳ sự cải thiện hiệu suất nào cũng đến từ chính thông tin, chứ không phải từ lợi thế kiến trúc của một nhánh so với nhánh kia.
+*   **Chuyển giao kiến thức qua nhãn giả:** CoFT tạo điều kiện cho việc chuyển giao kiến thức thông qua một mô-đun đồng huấn luyện phức tạp. Một nhánh tạo ra các nhãn giả có độ tin cậy cao, sau đó được sử dụng để huấn luyện nhánh còn lại. Điều này tạo ra một vòng lặp phản hồi nơi mỗi miền giúp điều chuẩn và cải thiện miền kia, điều này đặc biệt mạnh mẽ trong các cài đặt có ít nhãn.
+*   **Khám phá "Ít hơn là Nhiều hơn":** Phát hiện phản trực giác và có tác động mạnh mẽ nhất của nghiên cứu CoFT là hiện tượng "Ít hơn là Nhiều hơn" liên quan đến siêu tham số đồng huấn luyện `lambda_ct`. Sự khôn ngoan thông thường có thể cho rằng một sự kết hợp mạnh ( `lambda_ct` cao) là cần thiết để chuyển giao kiến thức hiệu quả. Tuy nhiên, luận văn này đã chứng minh một cách thực nghiệm (Chương 4) rằng một giá trị cực thấp (`lambda_ct` = 0.0001) là tối ưu. Các giá trị cao dẫn đến "sự nhầm lẫn nhãn", trong đó các nhãn giả nhiễu từ một miền làm hỏng quá trình học của miền kia. Một sự kết hợp nhẹ nhàng, có trọng số thấp chỉ cung cấp đủ sự điều chuẩn để hướng dẫn việc học biểu diễn mà không lấn át tín hiệu thực tế. Khám phá này là một đóng góp khoa học quan trọng cho sự hiểu biết về động lực đồng huấn luyện trong học sâu.
 
 ## 2.4 Kết luận: Xây dựng trên một nền tảng vững chắc
 
-The CoFT framework is firmly grounded in the principles of self-supervised contrastive learning, adopting best practices such as simple and efficient data augmentations and a stable, staged training pipeline. However, its primary novelty lies in its sophisticated adaptation of the co-training paradigm to the multi-domain setting of time series analysis. By treating the temporal and frequency domains as equal partners and enabling gentle knowledge transfer through a carefully calibrated hybrid loss, CoFT significantly advances the state-of-the-art. The discovery of the "label confusion" theory and the optimality of ultra-low coupling weights provided not only a high-performing model but also valuable scientific insights that can guide future research in semi-supervised and multi-domain learning. 
+Khuôn khổ CoFT được xây dựng vững chắc trên các nguyên tắc của học tương phản tự giám sát, áp dụng các phương pháp tốt nhất như tăng cường dữ liệu đơn giản và hiệu quả và một quy trình huấn luyện theo giai đoạn ổn định. Tuy nhiên, sự mới lạ chính của nó nằm ở việc điều chỉnh tinh vi mô hình đồng huấn luyện cho bối cảnh đa miền của phân tích chuỗi thời gian. Bằng cách coi miền thời gian và tần số là các đối tác bình đẳng và cho phép chuyển giao kiến thức nhẹ nhàng thông qua một hàm mất mát hỗn hợp được hiệu chỉnh cẩn thận, CoFT đã cải thiện đáng kể công nghệ tiên tiến. Việc khám phá ra lý thuyết "nhầm lẫn nhãn" và tính tối ưu của các trọng số kết hợp cực thấp không chỉ cung cấp một mô hình hiệu suất cao mà còn là những hiểu biết khoa học quý giá có thể định hướng các nghiên cứu trong tương lai về học bán giám sát và đa miền.
 
 ---
 
 # 3 TRIỂN KHAI VÀ PHƯƠNG PHÁP LUẬN
 
-This chapter provides a detailed, step-by-step guide to the implementation of the CoFT framework. However, beyond a simple recipe, it also documents the **methodological journey**, including the critical decisions, technical challenges, and the rigorous process required to ensure that the experimental results are both valid and reproducible. It answers the question: "How, precisely, and with what considerations, was this research conducted?"
+Chương này cung cấp một hướng dẫn chi tiết, từng bước về việc triển khai khuôn khổ CoFT. Tuy nhiên, ngoài một công thức đơn giản, nó còn ghi lại **hành trình phương pháp luận**, bao gồm các quyết định quan trọng, những thách thức kỹ thuật và quy trình nghiêm ngặt cần thiết để đảm bảo rằng các kết quả thực nghiệm vừa hợp lệ vừa có thể tái lập được. Nó trả lời câu hỏi: "Nghiên cứu này đã được tiến hành như thế nào, một cách chính xác và với những cân nhắc nào?"
 
-## 3.1 Hành trình phương pháp luận: Lý giải và Thách thức
+## 3.1 Hành trình phương pháp luận: Lý giải và thách thức
 
-The path to a final, working model was not linear. It began with broad strategic decisions informed by literature, followed by meticulous execution that encountered and overcame significant practical hurdles.
+Con đường dẫn đến một mô hình hoạt động cuối cùng không phải là tuyến tính. Nó bắt đầu với các quyết định chiến lược rộng lớn được thông báo bởi tài liệu, tiếp theo là việc thực hiện tỉ mỉ đã gặp phải và vượt qua các rào cản thực tế đáng kể.
 
 ### 3.1.1 Lựa chọn chiến trường: Lựa chọn mô hình cơ sở và benchmark
-The first critical decision was to select a strong, state-of-the-art baseline against which CoFT could be fairly judged. **CA-TCC (Contrastive Augmentation - Temporal Contrastive Clustering)** [7] was chosen for three key reasons:
-1.  **State-of-the-Art Performance:** At the time of this research, CA-TCC represented one of the most powerful and well-regarded semi-supervised learning pipelines for time series classification. Outperforming it would represent a meaningful scientific contribution.
-2.  **Well-Defined Pipeline:** Its multi-stage process (contrastive pre-training, supervised fine-tuning, pseudo-labeling, and representation refinement) provided a complete and logical framework that could be systematically extended.
-3.  **Publicly Available Benchmarks:** The original authors evaluated their model on established public datasets (HAR, Sleep-EDF, Epilepsy). By using the exact same datasets, we could aim for a true "apples-to-apples" comparison, isolating the performance impact of our proposed architecture from confounding variables.
+Quyết định quan trọng đầu tiên là chọn một mô hình cơ sở mạnh, tiên tiến để CoFT có thể được đánh giá một cách công bằng. **CA-TCC (Tăng cường Tương phản - Phân cụm Tương phản Thời gian)** [7] đã được chọn vì ba lý do chính:
+1.  **Hiệu suất tiên tiến:** Tại thời điểm nghiên cứu này, CA-TCC đại diện cho một trong những quy trình học bán giám sát mạnh mẽ và được đánh giá cao nhất cho phân loại chuỗi thời gian. Việc vượt qua nó sẽ đại diện cho một đóng góp khoa học có ý nghĩa.
+2.  **Quy trình được xác định rõ ràng:** Quá trình đa giai đoạn của nó (tiền huấn luyện tương phản, tinh chỉnh có giám sát, gán nhãn giả và tinh chỉnh biểu diễn) cung cấp một khuôn khổ hoàn chỉnh và hợp lý có thể được mở rộng một cách có hệ thống.
+3.  **Benchmark công khai:** Các tác giả ban đầu đã đánh giá mô hình của họ trên các bộ dữ liệu công khai đã được thiết lập (HAR, Sleep-EDF, Epilepsy). Bằng cách sử dụng chính xác các bộ dữ liệu tương tự, chúng tôi có thể nhắm đến một sự so sánh "táo với táo" thực sự, cô lập tác động hiệu suất của kiến trúc được đề xuất của chúng tôi khỏi các biến gây nhiễu.
 
 ### 3.1.2 Thử thách về khả năng tái lập: Các rào cản kỹ thuật và dữ liệu
-Merely choosing the same datasets was not enough to guarantee a fair comparison. A significant portion of the research effort was dedicated to overcoming challenges related to reproducibility—an often-understated but critical aspect of computational science.
+Chỉ chọn cùng một bộ dữ liệu là không đủ để đảm bảo một sự so sánh công bằng. Một phần đáng kể của nỗ lực nghiên cứu đã được dành để vượt qua các thách thức liên quan đến khả năng tái lập—một khía cạnh thường bị đánh giá thấp nhưng rất quan trọng của khoa học tính toán.
 
-**1. The Data Preprocessing Challenge:** The original CA-TCC paper described its data splitting methodology (e.g., 1% and 5% stratified splits) but did not release the code for this process. To ensure academic fairness, it was imperative to replicate this procedure *exactly*. This involved a painstaking process of:
-    *   Carefully implementing our own stratified sampling scripts based on the paper's description.
-    *   Cross-validating the class distributions in our generated splits to ensure they matched the theoretical distributions.
-    *   Maintaining these exact splits across every single experiment, including all baseline runs and ablation studies.
-    This effort, while time-consuming, was non-negotiable for the integrity of our findings.
+**1. Thách thức tiền xử lý dữ liệu:** Bài báo CA-TCC gốc mô tả phương pháp phân chia dữ liệu của nó (ví dụ: phân chia phân tầng 1% và 5%) nhưng không công bố mã cho quá trình này. Để đảm bảo tính công bằng học thuật, việc tái tạo quy trình này *chính xác* là bắt buộc. Điều này liên quan đến một quá trình gian khổ:
+    *   Cẩn thận triển khai các kịch bản lấy mẫu phân tầng của riêng chúng tôi dựa trên mô tả của bài báo.
+    *   Kiểm tra chéo sự phân phối lớp trong các phân chia được tạo ra của chúng tôi để đảm bảo chúng khớp với sự phân phối lý thuyết.
+    *   Duy trì các phân chia chính xác này trong mọi thí nghiệm, bao gồm tất cả các lần chạy cơ sở và các nghiên cứu cắt lớp.
+    Nỗ lực này, mặc dù tốn thời gian, là không thể thương lượng đối với tính toàn vẹn của các phát hiện của chúng tôi.
 
-**2. The Environment Cages:** A significant challenge was establishing a stable and consistent software environment. Initial attempts were plagued by common but frustrating technical issues:
-    *   **Package Conflicts:** Different libraries required conflicting versions of dependencies. For instance, early versions of `numpy` were incompatible with the `scikit-learn` version needed for evaluation, leading to import errors. Resolving these required creating a carefully constrained environment with specific, co-compatible package versions.
-    *   **Cross-Platform Consistency:** Ensuring that experiments run on a local Windows machine produced identical results to those on a Linux-based server (like Google Colab or an A100 instance) required meticulous management of random seeds, PyTorch's CUDA determinism settings, and data loading procedures.
+**2. Các lồng môi trường:** Một thách thức đáng kể là thiết lập một môi trường phần mềm ổn định và nhất quán. Các nỗ lực ban đầu đã bị cản trở bởi các vấn đề kỹ thuật phổ biến nhưng khó chịu:
+    *   **Xung đột gói:** Các thư viện khác nhau yêu cầu các phiên bản xung đột của các phụ thuộc. Ví dụ, các phiên bản đầu của `numpy` không tương thích với phiên bản `scikit-learn` cần thiết để đánh giá, dẫn đến lỗi nhập. Việc giải quyết những vấn đề này đòi hỏi phải tạo ra một môi trường được giới hạn cẩn thận với các phiên bản gói cụ thể, tương thích với nhau.
+    *   **Tính nhất quán đa nền tảng:** Đảm bảo rằng các thí nghiệm chạy trên máy Windows cục bộ tạo ra kết quả giống hệt với các thí nghiệm trên máy chủ dựa trên Linux (như Google Colab hoặc một phiên bản A100) đòi hỏi phải quản lý tỉ mỉ các hạt giống ngẫu nhiên, cài đặt xác định CUDA của PyTorch và các quy trình tải dữ liệu.
 
-These efforts culminated in a stable, reproducible "sandbox" where the only variable being tested was the method itself.
+Những nỗ lực này đã lên đến đỉnh điểm trong một "hộp cát" ổn định, có thể tái lập, nơi biến số duy nhất được thử nghiệm là chính phương pháp đó.
 
 ## 3.2 Các nguyên tắc chỉ đạo cho khả năng tái lập
 
@@ -443,124 +445,124 @@ A cornerstone of this research is the simulation of label scarcity. For each dat
 2.  **Stratified Sampling**: To create subsets with a specific percentage \(p\) of labels, we perform stratified sampling from \(D_{train\_full}\). For example, to create the **1% Labeled Set (\(D_{L, 1\%}\))**, we randomly sample 1% of the instances from *each class* present in \(D_{train\_full}\).
 3.  **Creation of Subsets**: This procedure is repeated to create various labeled subsets, such as \(D_{L, 1\%}\) and \(D_{L, 5\%}\). The remaining data (\(D_{train\_full} \setminus D_{L, p\%}\)) serves as the large pool of unlabeled data, \(D_U\), for the self-supervised and semi-supervised stages of the training pipeline.
 
-## 3.5 Framework CoFT: Kiến trúc và Quy trình
+## 3.5 Khuôn khổ CoFT: Kiến trúc và Quy trình
 
 ### 3.5.1 Kiến trúc hai nhánh: Thiết kế và Triển khai
 
-CoFT employs a parallel dual-branch architecture. The initial design, detailed below, was carefully constructed to maintain architectural symmetry. This decision was a crucial part of our scientific methodology, allowing for a fair and controlled comparison between the temporal and frequency domains.
+CoFT sử dụng một kiến trúc hai nhánh song song. Thiết kế ban đầu, được trình bày chi tiết dưới đây, được xây dựng cẩn thận để duy trì sự đối xứng về kiến trúc. Quyết định này là một phần quan trọng trong phương pháp luận khoa học của chúng tôi, cho phép so sánh công bằng và có kiểm soát giữa miền thời gian và tần số.
 
-![Figure 2: High-level overview of the CoFT framework.](Images/Fig. 5. dual branch temporal-frequency CoFT structure.png)
-*Figure 2: High-level overview of the CoFT framework. It shows the parallel Temporal and Frequency branches, the dynamic adapter, and the central co-training module that orchestrates knowledge transfer before a final ensemble prediction.*
+![Hình 2: Tổng quan cấp cao về khuôn khổ CoFT.](Images/Fig. 5. dual branch temporal-frequency CoFT structure.png)
+*Hình 2: Tổng quan cấp cao về khuôn khổ CoFT. Nó cho thấy các nhánh Thời gian và Tần số song song, bộ điều hợp động, và mô-đun đồng huấn luyện trung tâm điều phối việc chuyển giao kiến thức trước một dự đoán tổ hợp cuối cùng.*
 
-The **temporal branch** preserved the exact CA-TCC architecture to ensure fair comparison. For the **frequency branch**, the decision to mirror the temporal architecture was a deliberate methodological choice to establish a controlled baseline. By keeping the model capacity identical, we could ensure that any observed performance differences were attributable purely to the inherent characteristics of the frequency-domain data itself, not to architectural advantages.
+**Nhánh thời gian** bảo tồn chính xác kiến trúc CA-TCC để đảm bảo so sánh công bằng. Đối với **nhánh tần số**, quyết định phản chiếu kiến trúc thời gian là một lựa chọn phương pháp luận có chủ ý để thiết lập một đường cơ sở có kiểm soát. Bằng cách giữ cho dung lượng mô hình giống hệt nhau, chúng tôi có thể đảm bảo rằng bất kỳ sự khác biệt hiệu suất nào quan sát được đều hoàn toàn do các đặc điểm vốn có của chính dữ liệu miền tần số, chứ không phải do lợi thế về kiến trúc.
 
-![Figure 3: Architecture of the Transformer block used within both encoders.](Images/Fig. 2. Architecture of the Transformer model used in the Temporal Contrasting.png)
-*Figure 3: Architecture of the Transformer block used within both the temporal and frequency encoders. Encoder features are projected and combined with a classification token, processed through multi-head attention and MLP layers, and finally used for downstream tasks.*
+![Hình 3: Kiến trúc của khối Transformer được sử dụng trong cả hai bộ mã hóa.](Images/Fig. 2. Architecture of the Transformer model used in the Temporal Contrasting.png)
+*Hình 3: Kiến trúc của khối Transformer được sử dụng trong cả bộ mã hóa thời gian và tần số. Các đặc trưng của bộ mã hóa được chiếu và kết hợp với một token phân loại, được xử lý thông qua các lớp chú ý đa đầu và MLP, và cuối cùng được sử dụng cho các nhiệm vụ xuôi dòng.*
 
-![Figure 4: The Frequency Contrasting mechanism.](Images/Fig. 4. frequency-domain branch.png)
-*Figure 4: The Frequency Contrasting mechanism. Similar to the temporal branch, the frequency branch uses augmentations (Spectral Noise, Frequency Masking) and a Transformer-based encoder to learn robust representations via a contrastive loss.*
+![Hình 4: Cơ chế Tương phản Tần số.](Images/Fig. 4. frequency-domain branch.png)
+*Hình 4: Cơ chế Tương phản Tần số. Tương tự như nhánh thời gian, nhánh tần số sử dụng các phép tăng cường (Nhiễu Quang phổ, Che Tần số) và một bộ mã hóa dựa trên Transformer để học các biểu diễn mạnh mẽ thông qua một mất mát tương phản.*
 
-#### Frequency Domain Transformation: Beyond Simple FFT
-The frequency transformation addressed a fundamental challenge: how to convert complex-valued FFT output into a format suitable for standard CNN architectures. The chosen pipeline was as follows:
+#### Biến đổi miền tần số: Vượt ra ngoài FFT đơn giản
+Biến đổi tần số giải quyết một thách thức cơ bản: làm thế nào để chuyển đổi đầu ra FFT có giá trị phức thành một định dạng phù hợp cho các kiến trúc CNN tiêu chuẩn. Quy trình được chọn như sau:
 ```python
-# Real FFT for computational efficiency
+# Real FFT để hiệu quả tính toán
 x_fft = torch.fft.rfft(x, norm='ortho')  
 
-# Explicit magnitude-phase decomposition
+# Phân tách biên độ-pha rõ ràng
 magnitude = torch.abs(x_fft)        # |Z|
 phase = torch.angle(x_fft)          # ∠Z  
 
-# Channel stacking for CNN compatibility
+# Xếp chồng kênh để tương thích với CNN
 x_freq = torch.cat([magnitude, phase], dim=1)  # [B, C*2, F]
 ```
-This approach was chosen for several reasons: using Real FFT is more computationally and memory efficient for real-valued input signals; the magnitude-phase decomposition preserves complete spectral information unlike magnitude-only approaches; and it produces real-valued tensors compatible with standard Conv1D layers.
+Phương pháp này được chọn vì nhiều lý do: sử dụng Real FFT hiệu quả hơn về mặt tính toán và bộ nhớ đối với các tín hiệu đầu vào có giá trị thực; việc phân tách biên độ-pha bảo toàn thông tin quang phổ hoàn chỉnh không giống như các phương pháp chỉ dùng biên độ; và nó tạo ra các tensor có giá trị thực tương thích với các lớp Conv1D tiêu chuẩn.
 
-#### Dynamic Architecture Adaptation
-A crucial implementation detail for robustness was the use of **dynamic linear layer initialization** in the frequency branch. Because the final feature dimensions can vary after the convolutional layers depending on input signal length, the final classification layer was initialized on the first forward pass:
+#### Thích ứng kiến trúc động
+Một chi tiết triển khai quan trọng để đảm bảo tính mạnh mẽ là việc sử dụng **khởi tạo lớp tuyến tính động** trong nhánh tần số. Bởi vì các chiều đặc trưng cuối cùng có thể thay đổi sau các lớp tích chập tùy thuộc vào độ dài tín hiệu đầu vào, lớp phân loại cuối cùng được khởi tạo trong lần truyền thuận đầu tiên:
 ```python
-# First forward pass determines actual feature dimensions
+# Lần truyền thuận đầu tiên xác định các chiều đặc trưng thực tế
 if self.freq_logits is None:
-    actual_features = x_flat.shape[1]  # Calculated after conv layers
+    actual_features = x_flat.shape[1]  # Được tính toán sau các lớp conv
     self.freq_logits = nn.Linear(actual_features, num_classes).to(device)
 ```
-This design enabled the same architecture to work seamlessly across datasets with different temporal lengths and channel counts without requiring manual configuration changes.
+Thiết kế này cho phép cùng một kiến trúc hoạt động liền mạch trên các bộ dữ liệu có độ dài thời gian và số kênh khác nhau mà không cần thay đổi cấu hình thủ công.
 
-### 3.5.2 Hàm mất mát hỗn hợp: Một giải phẫu chi tiết
+### 3.5.2 Hàm mất mát hỗn hợp: Phân tích chi tiết
 
-The orchestration of the dual-branch learning is governed by a sophisticated hybrid loss function.
+Việc điều phối học tập hai nhánh được chi phối bởi một hàm mất mát hỗn hợp phức tạp.
 
-#### Step 1: Present the Formula
-The total loss, \( L_{total} \), is formulated as a weighted sum of four distinct components:
+#### Bước 1: Trình bày Công thức
+Tổng mất mát, \( L_{total} \), được xây dựng dưới dạng tổng có trọng số của bốn thành phần riêng biệt:
 
-\[ L_{total} = L_{sup\_t} + L_{sup\_f} + \lambda_{ct} \cdot L_{cotraining} + \lambda_{cs} \cdot L_{consistency} \quad \text{(Equation 3.1)} \]
+\[ L_{total} = L_{sup\_t} + L_{sup\_f} + \lambda_{ct} \cdot L_{cotraining} + \lambda_{cs} \cdot L_{consistency} \quad \text{(Phương trình 3.1)} \]
 
-#### Step 2: Define Every Symbol
--   **\( L_{sup\_t} \)** & **\( L_{sup\_f} \)**: The standard supervised classification loss (Categorical Cross-Entropy) for the temporal and frequency branches, respectively, calculated using ground-truth labels.
--   **\( L_{cotraining} \)**: The co-training loss. This is the core of the reciprocal teaching mechanism, where one branch is trained on high-confidence *pseudo-labels* generated by the other.
--   **\( L_{consistency} \)**: A feature consistency loss (e.g., Mean Squared Error) that encourages the high-level embeddings from both branches to be similar for the same input sample.
--   **\( \lambda_{ct} \)** (Co-training weight): A hyperparameter that scales the influence of the co-training loss.
--   **\( \lambda_{cs} \)** (Consistency weight): A hyperparameter that controls the strength of the feature consistency regularization.
+#### Bước 2: Định nghĩa từng ký hiệu
+-   **\( L_{sup\_t} \)** & **\( L_{sup\_f} \)**: Mất mát phân loại có giám sát tiêu chuẩn (Cross-Entropy Phân loại) cho nhánh thời gian và tần số, được tính toán bằng cách sử dụng các nhãn thực tế.
+-   **\( L_{cotraining} \)**: Mất mát đồng huấn luyện. Đây là cốt lõi của cơ chế dạy học tương hỗ, trong đó một nhánh được huấn luyện trên các *nhãn giả* có độ tin cậy cao được tạo ra bởi nhánh kia.
+-   **\( L_{consistency} \)**: Một mất mát nhất quán đặc trưng (ví dụ: Lỗi Bình phương Trung bình) khuyến khích các vector nhúng cấp cao từ cả hai nhánh tương tự nhau cho cùng một mẫu đầu vào.
+-   **\( \lambda_{ct} \)** (Trọng số đồng huấn luyện): Một siêu tham số điều chỉnh ảnh hưởng của mất mát đồng huấn luyện.
+-   **\( \lambda_{cs} \)** (Trọng số nhất quán): Một siêu tham số kiểm soát sức mạnh của việc điều chuẩn nhất quán đặc trưng.
 
-#### Step 3: Explain in Plain English
-This equation acts as a control system for the entire model. It balances four distinct learning objectives:
-1.  **`Ground Truth Learning` (\(L_{sup\_t} + L_{sup\_f}\))**: The primary objective. Both experts must learn to correctly classify the data based on the real, verified labels.
-2.  **`Reciprocal Teaching` (\(L_{cotraining}\))**: The "student-teacher" component. Each branch learns from the confident predictions of the other, regularizing its training with a complementary perspective.
-3.  **`Representational Agreement` (\(L_{consistency}\))**: This forces the two branches to find common ground, ensuring their high-level interpretations (feature embeddings) are mapped to a similar location in latent space.
+#### Bước 3: Giải thích bằng ngôn ngữ đơn giản
+Phương trình này hoạt động như một hệ thống kiểm soát cho toàn bộ mô hình. Nó cân bằng bốn mục tiêu học tập riêng biệt:
+1.  **`Học từ sự thật` (\(L_{sup\_t} + L_{sup\_f}\))**: Mục tiêu chính. Cả hai chuyên gia phải học cách phân loại chính xác dữ liệu dựa trên các nhãn thực, đã được xác minh.
+2.  **`Dạy học tương hỗ` (\(L_{cotraining}\))**: Thành phần "học sinh-giáo viên". Mỗi nhánh học từ các dự đoán tự tin của nhánh kia, điều chỉnh việc huấn luyện của mình bằng một góc nhìn bổ sung.
+3.  **`Thống nhất biểu diễn` (\(L_{consistency}\))**: Điều này buộc hai nhánh phải tìm ra điểm chung, đảm bảo các diễn giải cấp cao của chúng (vector nhúng đặc trưng) được ánh xạ đến một vị trí tương tự trong không gian tiềm ẩn.
 
-#### Step 4: Summarize the Objective
-The overall objective of the hybrid loss function is to train two specialized-but-collaborating experts. It grounds both experts in reality with supervised loss, forces them to learn from each other's unique perspectives via co-training, and encourages them to develop a shared understanding of the data via consistency loss.
+#### Bước 4: Tóm tắt mục tiêu
+Mục tiêu tổng thể của hàm mất mát hỗn hợp là huấn luyện hai chuyên gia chuyên biệt nhưng hợp tác. Nó đặt cả hai chuyên gia vào thực tế với mất mát có giám sát, buộc chúng học hỏi từ các quan điểm độc đáo của nhau thông qua đồng huấn luyện, và khuyến khích chúng phát triển một sự hiểu biết chung về dữ liệu thông qua mất mát nhất quán.
 
 ### 3.5.3 Quy trình huấn luyện sáu giai đoạn: Công thức từng bước
 
-The final training methodology uses a 6-stage pipeline, which was found to be critical for stability. Initial experiments with joint end-to-end training were prone to gradient conflicts, necessitating a staged approach to first build stable representations before introducing complex cross-domain interactions.
+Phương pháp huấn luyện cuối cùng sử dụng một quy trình 6 giai đoạn, được phát hiện là rất quan trọng để đảm bảo sự ổn định. Các thí nghiệm ban đầu với việc huấn luyện chung từ đầu đến cuối dễ bị xung đột gradient, đòi hỏi một phương pháp theo giai đoạn để trước tiên xây dựng các biểu diễn ổn định trước khi giới thiệu các tương tác chéo miền phức tạp.
 
-![Figure 5: The multi-phase training strategy, adapted from CA-TCC [7]. CoFT extends this concept into a six-stage pipeline.](Images/Fig. 3. Four phases for CA-TCC semi-supervised training. In Phase 1, TS-TCC is trained with fully unlabeled data. Next, we use the available few labeled.png)
-*Figure 5: The multi-phase training strategy, adapted from CA-TCC [7]. CoFT extends this concept into a six-stage pipeline.*
+![Hình 5: Chiến lược huấn luyện đa pha, được điều chỉnh từ CA-TCC [7]. CoFT mở rộng khái niệm này thành một quy trình sáu giai đoạn.](Images/Fig. 3. Four phases for CA-TCC semi-supervised training. In Phase 1, TS-TCC is trained with fully unlabeled data. Next, we use the available few labeled.png)
+*Hình 5: Chiến lược huấn luyện đa pha, được điều chỉnh từ CA-TCC [7]. CoFT mở rộng khái niệm này thành một quy trình sáu giai đoạn.*
 
--   **Stage 1: `self_supervised`**: Both branches are pre-trained for 40 epochs on unlabeled data using their respective contrastive losses. There is no interaction between the branches.
--   **Stage 2: `train_linear_{p}`**: A linear classifier is trained on top of each frozen encoder to assess the quality of the learned representations using a percentage `p` of labels.
--   **Stage 3: `ft_{p}`**: The full model is fine-tuned using the complete hybrid loss function (Equation 3.1) on the labeled data. This is the first stage where co-training occurs.
--   **Stage 4: `gen_pseudo_labels`**: The fine-tuned model from Stage 3 is used to generate high-confidence pseudo-labels (softmax probability > 0.95) for the unlabeled data.
--   **Stage 5: `SupCon`**: The encoders are further refined using the Supervised Contrastive Loss on the combined set of original labels and pseudo-labels.
--   **Stage 6: `train_linear_SupCon_{p}`**: Finally, the encoders are frozen again, and a new linear classifier is trained from scratch on top of the refined representations to produce the final result.
+-   **Giai đoạn 1: `self_supervised`**: Cả hai nhánh được tiền huấn luyện trong 40 kỷ nguyên trên dữ liệu không có nhãn bằng cách sử dụng các mất mát tương phản tương ứng của chúng. Không có sự tương tác giữa các nhánh.
+-   **Giai đoạn 2: `train_linear_{p}`**: Một bộ phân loại tuyến tính được huấn luyện trên đỉnh của mỗi bộ mã hóa đã đóng băng để đánh giá chất lượng của các biểu diễn đã học bằng cách sử dụng một tỷ lệ `p` nhãn.
+-   **Giai đoạn 3: `ft_{p}`**: Toàn bộ mô hình được tinh chỉnh bằng cách sử dụng hàm mất mát hỗn hợp hoàn chỉnh (Phương trình 3.1) trên dữ liệu có nhãn. Đây là giai đoạn đầu tiên có sự đồng huấn luyện.
+-   **Giai đoạn 4: `gen_pseudo_labels`**: Mô hình được tinh chỉnh từ Giai đoạn 3 được sử dụng để tạo các nhãn giả có độ tin cậy cao (xác suất softmax > 0.95) cho dữ liệu không có nhãn.
+-   **Giai đoạn 5: `SupCon`**: Các bộ mã hóa được tinh chỉnh thêm bằng cách sử dụng Mất mát Tương phản có giám sát trên tập hợp kết hợp của các nhãn gốc và nhãn giả.
+-   **Giai đoạn 6: `train_linear_SupCon_{p}`**: Cuối cùng, các bộ mã hóa lại được đóng băng, và một bộ phân loại tuyến tính mới được huấn luyện từ đầu trên đỉnh của các biểu diễn đã được tinh chỉnh để tạo ra kết quả cuối cùng.
 
 ### 3.5.4 Tăng cường dữ liệu
 
-CoFT employed a curated set of effective and computationally efficient augmentations for both domains.
+CoFT đã sử dụng một tập hợp các phép tăng cường hiệu quả và tiết kiệm chi phí tính toán cho cả hai miền.
 
--   **Temporal Domain**: Adopted the effective augmentations from the CA-TCC baseline: **Jittering**, **Scaling**, and **Cropping**.
--   **Frequency Domain**: A conservative approach was used to avoid corrupting diagnostic patterns, designed to mimic realistic signal artifacts: **FFT-Domain Noise Injection** and **Selective Frequency Masking**.
+-   **Miền Thời gian**: Áp dụng các phép tăng cường hiệu quả từ mô hình cơ sở CA-TCC: **Jittering**, **Scaling**, và **Cropping**.
+-   **Miền Tần số**: Một cách tiếp cận thận trọng đã được sử dụng để tránh làm hỏng các mẫu chẩn đoán, được thiết kế để bắt chước các hiện vật tín hiệu thực tế: **Thêm nhiễu trong miền FFT** và **Che tần số chọn lọc**.
 
 ---
 
 # 4 KẾT QUẢ VÀ PHÂN TÍCH
 
-This chapter presents the empirical findings of the study, structured to directly answer the research questions posed in Chapter 1. We chronicle the research journey from initial hypotheses, through failed experiments, to the final breakthrough results, providing a transparent account of the scientific process.
+Chương này trình bày các phát hiện thực nghiệm của nghiên cứu, được cấu trúc để trả lời trực tiếp các câu hỏi nghiên cứu đã đặt ra trong Chương 1. Chúng tôi ghi lại hành trình nghiên cứu từ các giả thuyết ban đầu, qua các thí nghiệm thất bại, đến các kết quả đột phá cuối cùng, cung cấp một báo cáo minh bạch về quá trình khoa học.
 
-## 4.1 Trả lời Câu hỏi nghiên cứu 1: CoFT có thể vượt trội hơn một mô hình cơ sở tiên tiến không?
+## 4.1 Trả lời câu hỏi nghiên cứu 1: CoFT có thể vượt trội hơn một mô hình cơ sở tiên tiến không?
 
-The first research question sought to determine if the CoFT framework could significantly and consistently outperform a state-of-the-art, single-domain model (CA-TCC). The final results, summarized in Table 2 and 3 after an extensive optimization process, provide a clear and affirmative answer.
+Câu hỏi nghiên cứu đầu tiên tìm cách xác định liệu khuôn khổ CoFT có thể vượt trội đáng kể và nhất quán so với một mô hình đơn miền, tiên tiến (CA-TCC) hay không. Các kết quả cuối cùng, được tóm tắt trong Bảng 2 và 3 sau một quá trình tối ưu hóa rộng rãi, cung cấp một câu trả lời rõ ràng và khẳng định.
 
-**Table 2: Final Performance of CoFT vs. CA-TCC Baseline (5-seed average)**
+**Bảng 2: Hiệu suất cuối cùng của CoFT so với mô hình cơ sở CA-TCC (trung bình 5 hạt giống)**
 
-| Dataset   | Label % | Model       | Accuracy                | MF1-Score               |
+| Dataset   | % Nhãn | Model       | Độ chính xác            | Điểm MF1                |
 |:----------|:--------|:------------|:------------------------|:------------------------|
-| **HAR**       | **1%**      | CA-TCC (Baseline) | 77.3% ± 0.6%            | 76.2% ± 0.1%            |
-|           |         | **CoFT (Ours)**     | **85.47% ± 0.5%**       | **85.44% ± 0.1%**       |
-| **HAR**       | **5%**      | CA-TCC (Baseline) | 88.3% ± 0.3%            | 88.3% ± 0.4%            |
-|           |         | **CoFT (Ours)**     | **90.04% ± 0.3%**       | **89.62% ± 0.4%**       |
-| **Sleep-EDF** | **1%**      | CA-TCC (Baseline) | 70.8% ± 0.5%            | 79.4% ± 0.1%            |
-|           |         | **CoFT (Ours)**     | **80.12% ± 0.5%**       | 69.68% ± 0.1%           |
-| **Sleep-EDF** | **5%**      | CA-TCC (Baseline) | 74.6% ± 0.1%            | 82.1% ± 0.2%            |
-|           |         | **CoFT (Ours)**     | **83.23% ± 0.1%**       | 71.85% ± 0.2%           |
-| **Epilepsy**  | **1%**      | CA-TCC (Baseline) | 91.9% ± 0.1%            | 92.0% ± 0.1%            |
-|           |         | **CoFT (Ours)**     | **94.61% ± 0.1%**       | **91.04% ± 0.1%**       |
-| **Epilepsy**  | **5%**      | CA-TCC (Baseline) | 94.5% ± 0.1%            | 94.0% ± 0.1%            |
-|           |         | **CoFT (Ours)**     | **94.91% ± 0.1%**       | **91.55% ± 0.1%**       |
+| **HAR**       | **1%**      | CA-TCC (Cơ sở) | 77.3% ± 0.6%            | 76.2% ± 0.1%            |
+|           |         | **CoFT (Của chúng tôi)** | **85.47% ± 0.5%**       | **85.44% ± 0.1%**       |
+| **HAR**       | **5%**      | CA-TCC (Cơ sở) | 88.3% ± 0.3%            | 88.3% ± 0.4%            |
+|           |         | **CoFT (Của chúng tôi)** | **90.04% ± 0.3%**       | **89.62% ± 0.4%**       |
+| **Sleep-EDF** | **1%**      | CA-TCC (Cơ sở) | 70.8% ± 0.5%            | 79.4% ± 0.1%            |
+|           |         | **CoFT (Của chúng tôi)** | **80.12% ± 0.5%**       | 69.68% ± 0.1%           |
+| **Sleep-EDF** | **5%**      | CA-TCC (Cơ sở) | 74.6% ± 0.1%            | 82.1% ± 0.2%            |
+|           |         | **CoFT (Của chúng tôi)** | **83.23% ± 0.1%**       | 71.85% ± 0.2%           |
+| **Epilepsy**  | **1%**      | CA-TCC (Cơ sở) | 91.9% ± 0.1%            | 92.0% ± 0.1%            |
+|           |         | **CoFT (Của chúng tôi)** | **94.61% ± 0.1%**       | **91.04% ± 0.1%**       |
+| **Epilepsy**  | **5%**      | CA-TCC (Cơ sở) | 94.5% ± 0.1%            | 94.0% ± 0.1%            |
+|           |         | **CoFT (Của chúng tôi)** | **94.91% ± 0.1%**       | **91.55% ± 0.1%**       |
 
-**Table 3: Statistical Analysis of Performance Gains**
+**Bảng 3: Phân tích thống kê về sự cải thiện hiệu suất**
 
-| Dataset   | Label % | Accuracy Gain | p-value (Accuracy) |
+| Dataset   | % Nhãn | Tăng độ chính xác | p-value (Độ chính xác) |
 |:----------|:--------|:--------------|:-------------------|
 | HAR       | 1%      | **+8.17%**    | <0.01              |
 | HAR       | 5%      | **+1.74%**    | <0.01              |
@@ -569,137 +571,137 @@ The first research question sought to determine if the CoFT framework could sign
 | Epilepsy  | 1%      | **+2.71%**    | <0.01              |
 | Epilepsy  | 5%      | **+0.41%**    | <0.05              |
 
-**Interpretation of Findings:**
--   **Description**: Table 2 presents a head-to-head comparison of the final accuracy and MF1-scores for the CoFT model versus the CA-TCC baseline across three datasets and two low-label scenarios (1% and 5%). Table 3 quantifies the absolute accuracy gains and provides p-values from a paired t-test to assess statistical significance.
--   **Observation**: CoFT demonstrates a consistent and statistically significant performance improvement over the baseline in all tested scenarios. The most substantial gains are observed in the 1% label setting for HAR (+8.17%) and Sleep-EDF (+9.32%), indicating that the framework is particularly effective in extreme label scarcity. As the percentage of available labels increases to 5%, the performance gap narrows, but CoFT maintains a significant advantage.
--   **Analysis**: The results strongly support the hypothesis that leveraging the frequency domain via co-training provides substantial benefits. The framework's ability to use one domain's confident predictions to teach the other acts as a powerful regularizer, which is most valuable when ground-truth labels are scarce. The diminishing (but still positive) gains at 5% labels suggest that as more supervised data becomes available, the baseline model's performance improves, but the complementary information provided by CoFT's second branch still offers a distinct advantage.
+**Diễn giải kết quả:**
+-   **Mô tả**: Bảng 2 trình bày so sánh trực tiếp độ chính xác cuối cùng và điểm MF1 của mô hình CoFT so với mô hình cơ sở CA-TCC trên ba bộ dữ liệu và hai kịch bản nhãn thấp (1% và 5%). Bảng 3 định lượng mức tăng độ chính xác tuyệt đối và cung cấp giá trị p từ kiểm định t cặp để đánh giá ý nghĩa thống kê.
+-   **Quan sát**: CoFT thể hiện sự cải thiện hiệu suất nhất quán và có ý nghĩa thống kê so với mô hình cơ sở trong tất cả các kịch bản được thử nghiệm. Mức tăng đáng kể nhất được quan sát trong cài đặt nhãn 1% cho HAR (+8.17%) và Sleep-EDF (+9.32%), cho thấy khuôn khổ này đặc biệt hiệu quả trong tình trạng khan hiếm nhãn cực độ. Khi tỷ lệ nhãn có sẵn tăng lên 5%, khoảng cách hiệu suất thu hẹp, nhưng CoFT vẫn duy trì một lợi thế đáng kể.
+-   **Phân tích**: Kết quả ủng hộ mạnh mẽ giả thuyết rằng việc tận dụng miền tần số thông qua đồng huấn luyện mang lại lợi ích đáng kể. Khả năng của khuôn khổ sử dụng các dự đoán tự tin của một miền để dạy miền kia hoạt động như một cơ chế điều chuẩn mạnh mẽ, điều này có giá trị nhất khi nhãn thực tế khan hiếm. Mức tăng giảm dần (nhưng vẫn dương) ở nhãn 5% cho thấy khi có nhiều dữ liệu có giám sát hơn, hiệu suất của mô hình cơ sở cải thiện, nhưng thông tin bổ sung do nhánh thứ hai của CoFT cung cấp vẫn mang lại một lợi thế khác biệt.
 
-## 4.2 Trả lời Câu hỏi nghiên cứu 2: Nguồn gốc thực sự của việc tăng hiệu suất là gì?
+## 4.2 Trả lời câu hỏi nghiên cứu 2: Nguồn gốc thực sự của sự cải thiện hiệu suất là gì?
 
-The second research question aimed to deconstruct CoFT's performance, determining how much is attributable to the novel architecture versus rigorous hyperparameter optimization. A detailed ablation study, presented in Table 4, was designed to answer this.
+Câu hỏi nghiên cứu thứ hai nhằm mục đích phân tích hiệu suất của CoFT, xác định bao nhiêu phần trăm là do kiến trúc mới so với việc tối ưu hóa siêu tham số nghiêm ngặt. Một nghiên cứu cắt lớp chi tiết, được trình bày trong Bảng 4, đã được thiết kế để trả lời câu hỏi này.
 
-**Table 4: Ablation Study - Deconstructing CoFT's Performance Gains on HAR (1% Labels)**
+**Bảng 4: Nghiên cứu cắt lớp - Phân tích sự cải thiện hiệu suất của CoFT trên HAR (1% Nhãn)**
 
-| # | Configuration                                       | Accuracy (Mean ± Std) | Gain vs. Prev. Step | Source of Gain / Key Insight                                                                          |
+| # | Cấu hình                                          | Độ chính xác (TB ± Lệch chuẩn) | Tăng so với bước trước | Nguồn gốc cải thiện / Điểm chính                                                                   |
 |:-:|:----------------------------------------------------|:----------------------|:--------------------|:------------------------------------------------------------------------------------------------------|
-| 1 | **Baseline (Original CA-TCC)**                      | 77.3%                 | -                   | Starting point.                                                                                       |
-| 2 | **Baseline (Tuned Hyperparams)**                    | **83.59% ± 1.94**     | **+6.29%**          | **Hyperparameter tuning** is the single most impactful factor.                                         |
-| 3 | **CoFT (w/ Co-training, but Temporal Prediction Only)** | 82.90% ± 2.46         | -0.69%              | Adding the frequency branch without proper ensembling *hurts* performance compared to a tuned baseline. |
-| 4 | **CoFT (Full Model w/ Ensemble)**                   | **85.47%**            | **+2.57%**          | The **Ensemble mechanism** is critical to unlock the frequency branch's potential and achieve SOTA results. |
+| 1 | **Cơ sở (CA-TCC gốc)**                             | 77.3%                 | -                   | Điểm xuất phát.                                                                                       |
+| 2 | **Cơ sở (Siêu tham số đã tinh chỉnh)**              | **83.59% ± 1.94**     | **+6.29%**          | **Tinh chỉnh siêu tham số** là yếu tố có tác động lớn nhất.                                           |
+| 3 | **CoFT (với Đồng huấn luyện, nhưng chỉ dự đoán Thời gian)** | 82.90% ± 2.46         | -0.69%              | Thêm nhánh tần số mà không có tổ hợp phù hợp *làm tổn hại* hiệu suất so với một cơ sở đã được tinh chỉnh. |
+| 4 | **CoFT (Mô hình đầy đủ với Tổ hợp)**                | **85.47%**            | **+2.57%**          | **Cơ chế Tổ hợp** là rất quan trọng để khai thác tiềm năng của nhánh tần số và đạt được kết quả SOTA. |
 
-*Note: Results for configurations 2 and 3 are the average of 3 seeds. Results for 1 and 4 are from single, representative runs.*
+*Lưu ý: Kết quả cho các cấu hình 2 và 3 là trung bình của 3 hạt giống. Kết quả cho 1 và 4 là từ các lần chạy đơn lẻ, đại diện.*
 
-**Interpretation of Findings:**
--   **Description**: Table 4 breaks down the performance progression from the original baseline to the final CoFT model into four distinct steps. Each step introduces a single new component, allowing for the isolation of its specific contribution.
--   **Observation**: The largest single performance increase (**+6.29%**) comes from simply applying the optimized hyperparameters to the original CA-TCC baseline (Step 2). Counter-intuitively, introducing the CoFT architecture but only using the temporal branch for prediction *decreases* performance by -0.69% (Step 3). The final jump to 85.47% is achieved only when the predictions from both branches are ensembled (Step 4), contributing a **+2.57%** gain.
--   **Analysis**: This ablation study reveals a nuanced narrative. The source of CoFT's success is not monolithic but is a synergy of three factors:
-    1.  **The Primacy of Hyperparameter Tuning**: A significant portion of the total gain comes from establishing a powerful, well-tuned baseline. This underscores the critical importance of rigorous optimization in evaluating new architectures.
-    2.  **The Pitfall of Naive Fusion**: Simply adding a second branch can act as a confusing regularizer if its outputs are not properly integrated, proving that more complexity is not always better.
-    3.  **The Crucial Role of Ensembling**: The architectural contribution of CoFT is only unlocked when the two specialized domain experts (temporal and frequency) are created via co-training and then their "wisdom" is aggregated through an ensemble. The frequency branch is not just a regularizer; it is a vital contributor to the final decision.
+**Diễn giải kết quả:**
+-   **Mô tả**: Bảng 4 chia nhỏ quá trình tiến triển hiệu suất từ mô hình cơ sở ban đầu đến mô hình CoFT cuối cùng thành bốn bước riêng biệt. Mỗi bước giới thiệu một thành phần mới duy nhất, cho phép cô lập đóng góp cụ thể của nó.
+-   **Quan sát**: Mức tăng hiệu suất đơn lẻ lớn nhất (**+6.29%**) đến từ việc chỉ cần áp dụng các siêu tham số đã tối ưu hóa cho mô hình cơ sở CA-TCC ban đầu (Bước 2). Một cách phản trực giác, việc giới thiệu kiến trúc CoFT nhưng chỉ sử dụng nhánh thời gian để dự đoán *làm giảm* hiệu suất đi -0.69% (Bước 3). Bước nhảy cuối cùng lên 85.47% chỉ đạt được khi các dự đoán từ cả hai nhánh được tổ hợp (Bước 4), đóng góp một mức tăng **+2.57%**.
+-   **Phân tích**: Nghiên cứu cắt lớp này tiết lộ một câu chuyện đa sắc thái. Nguồn gốc thành công của CoFT không phải là nguyên khối mà là sự hiệp đồng của ba yếu tố:
+    1.  **Sự ưu tiên của việc tinh chỉnh siêu tham số**: Một phần đáng kể của tổng mức tăng đến từ việc thiết lập một cơ sở mạnh mẽ, được tinh chỉnh tốt. Điều này nhấn mạnh tầm quan trọng thiết yếu của việc tối ưu hóa nghiêm ngặt trong việc đánh giá các kiến trúc mới.
+    2.  **Cạm bẫy của việc hợp nhất ngây thơ**: Chỉ cần thêm một nhánh thứ hai có thể hoạt động như một cơ chế điều chuẩn gây nhiễu nếu đầu ra của nó không được tích hợp đúng cách, chứng tỏ rằng sự phức tạp hơn không phải lúc nào cũng tốt hơn.
+    3.  **Vai trò quan trọng của việc tổ hợp**: Đóng góp về mặt kiến trúc của CoFT chỉ được khai thác khi hai chuyên gia miền chuyên biệt (thời gian và tần số) được tạo ra thông qua đồng huấn luyện và sau đó "trí tuệ" của chúng được tổng hợp thông qua một tổ hợp. Nhánh tần số không chỉ là một cơ chế điều chuẩn; nó là một người đóng góp quan trọng cho quyết định cuối cùng.
 
-## 4.3 Trả lời Câu hỏi nghiên cứu 3: Hành trình nghiên cứu để tối ưu hóa việc chuyển giao kiến thức
+## 4.3 Trả lời câu hỏi nghiên cứu 3: Hành trình nghiên cứu để chuyển giao kiến thức tối ưu
 
-The third research question explored the optimal parameters and principles governing knowledge transfer between the two domains. This was not a simple parameter search but an intensive, multi-month investigation that began with a failed hypothesis and ended with a key scientific discovery.
+Câu hỏi nghiên cứu thứ ba khám phá các tham số và nguyên tắc tối ưu chi phối việc chuyển giao kiến thức giữa hai miền. Đây không phải là một cuộc tìm kiếm tham số đơn giản mà là một cuộc điều tra chuyên sâu, kéo dài nhiều tháng, bắt đầu với một giả thuyết thất bại và kết thúc bằng một khám phá khoa học quan trọng.
 
 ### 4.3.1 Giả thuyết ban đầu và những thất bại đầu tiên: Nguy cơ của sự liên kết mạnh
-**Initial Hypothesis:** Based on a survey of data fusion literature [11, 12], which often emphasizes strong integration, our initial hypothesis was that a tight coupling between the temporal and frequency domains would be optimal. We posited that a high co-training weight (e.g., \(\lambda_{ct} \ge 0.1\)) would force robust knowledge transfer.
+**Giả thuyết ban đầu:** Dựa trên một cuộc khảo sát tài liệu về hợp nhất dữ liệu [11, 12], thường nhấn mạnh sự tích hợp mạnh mẽ, giả thuyết ban đầu của chúng tôi là một sự kết hợp chặt chẽ giữa các miền thời gian và tần số sẽ là tối ưu. Chúng tôi cho rằng một trọng số đồng huấn luyện cao (ví dụ: \(\lambda_{ct} \ge 0.1\)) sẽ buộc chuyển giao kiến thức mạnh mẽ.
 
-**Catastrophic Results:** Early experiments built on this hypothesis were a resounding failure.
-*   **Performance:** With \(\lambda_{ct} = 0.5\), accuracy on the HAR dataset plummeted to around 45-50%, which is worse than random guessing for a 6-class problem.
-*   **Training Instability:** Over 40% of training runs diverged, with loss values exploding to `NaN` (Not a Number). Gradient analysis revealed that the co-training loss term completely dominated all other terms, effectively hijacking the learning process.
+**Kết quả thảm khốc:** Các thí nghiệm ban đầu được xây dựng trên giả thuyết này là một thất bại nặng nề.
+*   **Hiệu suất:** Với \(\lambda_{ct} = 0.5\), độ chính xác trên bộ dữ liệu HAR giảm mạnh xuống khoảng 45-50%, tệ hơn cả đoán ngẫu nhiên cho một bài toán 6 lớp.
+*   **Sự bất ổn trong huấn luyện:** Hơn 40% các lần chạy huấn luyện bị phân kỳ, với các giá trị mất mát bùng nổ thành `NaN` (Không phải là số). Phân tích gradient cho thấy thuật ngữ mất mát đồng huấn luyện hoàn toàn lấn át tất cả các thuật ngữ khác, thực chất là chiếm quyền kiểm soát quá trình học.
 
-This critical failure demonstrated that our initial, intuitive assumption was fundamentally flawed. It invalidated the "stronger is better" approach and forced a complete re-evaluation, triggering a systematic investigation into the true nature of cross-domain learning in this context.
+Thất bại nghiêm trọng này đã chứng minh rằng giả định ban đầu, trực quan của chúng tôi là sai lầm cơ bản. Nó đã làm mất giá trị của cách tiếp cận "càng mạnh càng tốt" và buộc phải đánh giá lại hoàn toàn, kích hoạt một cuộc điều tra có hệ thống về bản chất thực sự của việc học chéo miền trong bối cảnh này.
 
-### 4.3.2 Khám phá "Càng ít càng tốt": Một cuộc điều tra có hệ thống
+### 4.3.2 Khám phá "Ít hơn là Nhiều hơn": Một cuộc điều tra có hệ thống
 
-The failure of strong coupling prompted a new hypothesis: perhaps the domains required a much gentler, more regularizing interaction. This led to a systematic, multi-stage parameter search, moving from a high-coupling regime to an ultra-low one.
+Sự thất bại của liên kết mạnh đã thúc đẩy một giả thuyết mới: có lẽ các miền yêu cầu một sự tương tác nhẹ nhàng hơn, mang tính điều chuẩn hơn nhiều. Điều này dẫn đến một cuộc tìm kiếm tham số có hệ thống, đa giai đoạn, chuyển từ chế độ liên kết cao sang chế độ cực thấp.
 
-**Table 5: Effect of Co-training Weight (\(\lambda_{ct}\)) on HAR 1% Accuracy**
+**Bảng 5: Ảnh hưởng của trọng số đồng huấn luyện (\(\lambda_{ct}\)) đến độ chính xác trên HAR 1%**
 
-| \(\lambda_{ct}\) | Accuracy | Performance vs. Tuned Baseline | Training Stability |
+| \(\lambda_{ct}\) | Độ chính xác | Hiệu suất so với Cơ sở đã tinh chỉnh | Độ ổn định huấn luyện |
 |:-----------------|:---------|:-------------------------------|:-------------------|
-| 0.1              | 58.23%   | -25.36% (terrible)             | 20% divergence     |
-| 0.01             | 74.49%   | -9.10% (poor)                  | Stable             |
-| 0.005            | 74.66%   | -8.93% (moderate)              | Stable             |
-| **0.0001**       | **85.47%**| **+1.88% (best)**              | Very stable        |
+| 0.1              | 58.23%   | -25.36% (rất tệ)                | 20% phân kỳ        |
+| 0.01             | 74.49%   | -9.10% (kém)                   | Ổn định              |
+| 0.005            | 74.66%   | -8.93% (trung bình)              | Ổn định              |
+| **0.0001**       | **85.47%**| **+1.88% (tốt nhất)**          | Rất ổn định         |
 
-**Interpretation of Findings:**
--   **Observation**: As shown in Table 5, there is a clear and dramatic trend. High values of \(\lambda_{ct}\) severely degrade performance. As the weight is reduced by orders of magnitude, performance steadily improves, with the optimal value found to be an exceptionally small `0.0001`.
--   **Analysis**: This "Less is More" phenomenon is explained by what we term **"label confusion."** In supervised fine-tuning, the effective loss is a combination of the supervised loss (from ground-truth labels) and the co-training loss (from pseudo-labels). Since pseudo-labels are inherently noisy, a high \(\lambda_{ct}\) amplifies these incorrect learning signals, confusing the model and corrupting the gradient. An ultra-low value, however, provides a gentle regularization signal that guides representation learning without overwhelming the ground-truth signal. It encourages the two branches to agree without forcing them to, which proved to be the key to unlocking their synergistic potential.
+**Diễn giải kết quả:**
+-   **Quan sát**: Như được hiển thị trong Bảng 5, có một xu hướng rõ ràng và ấn tượng. Các giá trị cao của \(\lambda_{ct}\) làm suy giảm nghiêm trọng hiệu suất. Khi trọng số được giảm đi theo cấp số nhân, hiệu suất tăng đều đặn, với giá trị tối ưu được tìm thấy là một con số đặc biệt nhỏ `0.0001`.
+-   **Phân tích**: Hiện tượng "Ít hơn là Nhiều hơn" này được giải thích bằng cái mà chúng tôi gọi là **"sự nhầm lẫn nhãn."** Trong quá trình tinh chỉnh có giám sát, mất mát hiệu quả là sự kết hợp của mất mát có giám sát (từ các nhãn thực tế) và mất mát đồng huấn luyện (từ các nhãn giả). Vì các nhãn giả vốn có nhiễu, một giá trị \(\lambda_{ct}\) cao sẽ khuếch đại các tín hiệu học sai này, gây nhầm lẫn cho mô hình và làm hỏng gradient. Tuy nhiên, một giá trị cực thấp cung cấp một tín hiệu điều chuẩn nhẹ nhàng hướng dẫn việc học biểu diễn mà không lấn át tín hiệu thực tế. Nó khuyến khích hai nhánh đồng ý mà không ép buộc chúng, điều này đã được chứng minh là chìa khóa để khai thác tiềm năng hiệp đồng của chúng.
 
-### 4.3.3 Động lực của phương pháp Ensemble: Hiện tượng đảo ngược
+### 4.3.3 Động lực của phương pháp tổ hợp: Hiện tượng "Lật ngược"
 
-This journey also revealed that the optimal way to combine the two branches was itself dependent on the co-training weight, leading to the discovery of an "ensemble flip".
+Hành trình này cũng tiết lộ rằng cách tối ưu để kết hợp hai nhánh tự nó phụ thuộc vào trọng số đồng huấn luyện, dẫn đến việc khám phá ra một "sự lật ngược tổ hợp".
 
-**Table 6: Interaction Between Ensemble Method and Co-training Weight (\(\lambda_{ct}\))**
+**Bảng 6: Tương tác giữa phương pháp tổ hợp và trọng số đồng huấn luyện (\(\lambda_{ct}\))**
 
-| \(\lambda_{ct}\) | Simple Average | Temporal Only | Frequency Only | Best Method      |
+| \(\lambda_{ct}\) | Trung bình đơn giản | Chỉ Thời gian | Chỉ Tần số | Phương pháp tốt nhất |
 |:-----------------|:---------------|:--------------|:---------------|:-----------------|
-| **0.0001**       | **85.47%**     | 82.90%        | 78.15%         | **Simple Average** |
-| 0.001            | 81.47%         | 81.22%        | 75.89%         | Simple Average   |
-| 0.005            | 74.66%         | **79.73%**    | 70.12%         | **Temporal Only**  |
-| 0.01             | 74.22%         | **79.49%**    | 68.95%         | **Temporal Only**  |
+| **0.0001**       | **85.47%**     | 82.90%        | 78.15%         | **Trung bình đơn giản** |
+| 0.001            | 81.47%         | 81.22%        | 75.89%         | Trung bình đơn giản |
+| 0.005            | 74.66%         | **79.73%**    | 70.12%         | **Chỉ Thời gian**  |
+| 0.01             | 74.22%         | **79.49%**    | 68.95%         | **Chỉ Thời gian**  |
 
-**Interpretation of Findings:**
--   **Observation**: A distinct "flip" occurs, as shown in Table 6. At the optimal, ultra-low \(\lambda_{ct}\) values (≤ 0.001), a simple average of both branches is the best strategy. However, as \(\lambda_{ct}\) increases, the frequency branch becomes a source of noise, and it is better to rely only on the temporal branch's predictions.
--   **Analysis**: This confirms the "label confusion" theory. At high \(\lambda_{ct}\), the frequency branch learns corrupted representations. Including its noisy predictions in the ensemble hurts performance. At the optimal low \(\lambda_{ct}\), both branches learn well-separated, complementary representations, and their combined prediction is stronger than either one alone. This shows that the architectural synergy between the two branches is only unlocked at the correct, gentle coupling strength.
+**Diễn giải kết quả:**
+-   **Quan sát**: Một "sự lật ngược" rõ rệt xảy ra, như được hiển thị trong Bảng 6. Tại các giá trị \(\lambda_{ct}\) cực thấp, tối ưu (≤ 0.001), một trung bình đơn giản của cả hai nhánh là chiến lược tốt nhất. Tuy nhiên, khi \(\lambda_{ct}\) tăng lên, nhánh tần số trở thành một nguồn nhiễu, và tốt hơn là chỉ dựa vào các dự đoán của nhánh thời gian.
+-   **Phân tích**: Điều này xác nhận lý thuyết "nhầm lẫn nhãn". Ở giá trị \(\lambda_{ct}\) cao, nhánh tần số học các biểu diễn bị hỏng. Việc bao gồm các dự đoán nhiễu của nó trong tổ hợp làm tổn hại đến hiệu suất. Ở giá trị \(\lambda_{ct}\) thấp tối ưu, cả hai nhánh đều học các biểu diễn được tách biệt tốt, bổ sung cho nhau, và dự đoán kết hợp của chúng mạnh hơn bất kỳ dự đoán nào một mình. Điều này cho thấy sự hiệp đồng về mặt kiến trúc giữa hai nhánh chỉ được khai thác ở cường độ kết hợp nhẹ nhàng, chính xác.
 
-## 4.4 Trả lời Câu hỏi nghiên cứu 4: Các nguyên tắc có thể được chuyển giao sang các bộ dữ liệu mới không?
+## 4.4 Trả lời câu hỏi nghiên cứu 4: Các nguyên tắc có thể được chuyển giao sang các bộ dữ liệu mới không?
 
-The final research question asked if the principles learned from the intensive HAR optimization could be used to guide parameter selection for new datasets without requiring an exhaustive search. We developed a principled transfer methodology based on analyzing key dataset characteristics.
+Câu hỏi nghiên cứu cuối cùng hỏi liệu các nguyên tắc học được từ việc tối ưu hóa chuyên sâu trên HAR có thể được sử dụng để hướng dẫn lựa chọn tham số cho các bộ dữ liệu mới mà không cần tìm kiếm toàn diện hay không. Chúng tôi đã phát triển một phương pháp chuyển giao có nguyên tắc dựa trên việc phân tích các đặc điểm chính của bộ dữ liệu.
 
-**Methodology:**
-1.  **Sequence Length → \(\lambda_{ct}\)**: Longer sequences can tolerate slightly higher co-training weights.
-2.  **Signal Type & Noise → \(\lambda_{cs}\)**: Noisier signals (like EEG) benefit from stronger consistency regularization.
-3.  **Ensemble Universality**: The `simple_average` ensemble (with optimal \(\lambda_{ct}\)) was hypothesized to be a robust default.
+**Phương pháp luận:**
+1.  **Độ dài chuỗi → \(\lambda_{ct}\)**: Các chuỗi dài hơn có thể chịu được các trọng số đồng huấn luyện cao hơn một chút.
+2.  **Loại tín hiệu & Nhiễu → \(\lambda_{cs}\)**: Các tín hiệu nhiễu hơn (như EEG) được hưởng lợi từ việc điều chuẩn nhất quán mạnh hơn.
+3.  **Tính phổ quát của tổ hợp**: Tổ hợp `trung bình đơn giản` (với \(\lambda_{ct}\) tối ưu) được giả thuyết là một mặc định mạnh mẽ.
 
-**Transferred Parameters and Rationale:**
+**Các tham số được chuyển giao và lý do:**
 
-**Table 7: Transferred Parameters and Rationale**
-| Dataset    | \(\lambda_{ct}\) (Final) | \(\lambda_{cs}\) (Final) | Rationale                                                              |
+**Bảng 7: Các tham số được chuyển giao và lý do**
+| Dataset    | \(\lambda_{ct}\) (Cuối cùng) | \(\lambda_{cs}\) (Cuối cùng) | Lý do                                                                    |
 |:-----------|:-------------------------|:-------------------------|:-----------------------------------------------------------------------|
-| **Sleep-EDF**| **0.0002** (2x HAR)      | **0.015** (1.5x HAR)     | 23x longer sequence allowed 2x \(\lambda_{ct}\); 1.5x \(\lambda_{cs}\) for EEG noise. |
-| **Epilepsy** | **0.00005** (0.5x HAR)   | **0.025** (2.5x HAR)     | EEG sensitivity required 0.5x \(\lambda_{ct}\); 2.5x \(\lambda_{cs}\) for seizure complexity. |
+| **Sleep-EDF**| **0.0002** (2x HAR)      | **0.015** (1.5x HAR)     | Chuỗi dài hơn 23 lần cho phép 2x \(\lambda_{ct}\); 1.5x \(\lambda_{cs}\) cho nhiễu EEG. |
+| **Epilepsy** | **0.00005** (0.5x HAR)   | **0.025** (2.5x HAR)     | Độ nhạy của EEG yêu cầu 0.5x \(\lambda_{ct}\); 2.5x \(\lambda_{cs}\) cho sự phức tạp của cơn co giật. |
 
-**Interpretation of Findings:**
--   **Observation**: As shown in Table 2, applying these transferred parameters to the Sleep-EDF and Epilepsy datasets resulted in significant performance gains (+9.32% and +2.71% respectively) over the baseline.
--   **Analysis**: This result validates that the core principles governing the CoFT framework are not dataset-specific. The ability to achieve substantial improvements on new, diverse medical datasets using only a principled, zero-shot transfer of hyperparameters is a key contribution of this work. It demonstrates the robustness of the framework and provides a practical methodology for applying CoFT to new problems efficiently.
+**Diễn giải kết quả:**
+-   **Quan sát**: Như được hiển thị trong Bảng 2, việc áp dụng các tham số được chuyển giao này cho các bộ dữ liệu Sleep-EDF và Epilepsy đã dẫn đến những cải thiện hiệu suất đáng kể (lần lượt là +9.32% và +2.71%) so với mô hình cơ sở.
+-   **Phân tích**: Kết quả này xác thực rằng các nguyên tắc cốt lõi chi phối khuôn khổ CoFT không phải là đặc thù của bộ dữ liệu. Khả năng đạt được những cải tiến đáng kể trên các bộ dữ liệu y tế mới, đa dạng chỉ bằng cách sử dụng một phương pháp chuyển giao siêu tham số có nguyên tắc, không cần tinh chỉnh lại (zero-shot) là một đóng góp quan trọng của công trình này. Nó chứng tỏ sự mạnh mẽ của khuôn khổ và cung cấp một phương pháp luận thực tế để áp dụng CoFT cho các vấn đề mới một cách hiệu quả.
 
 ---
 
 # 5 KẾT LUẬN
 
-This final chapter summarizes the research journey, critically evaluates its outcomes, and outlines promising directions for future inquiry. It aims to answer the ultimate question: "So what?" by contextualizing the contributions of the CoFT framework within the broader landscape of time series analysis.
+Chương cuối cùng này tóm tắt hành trình nghiên cứu, đánh giá một cách phê bình các kết quả của nó, và vạch ra các hướng đi hứa hẹn cho các cuộc điều tra trong tương lai. Nó nhằm mục đích trả lời câu hỏi cuối cùng: "Vậy thì sao?" bằng cách đặt bối cảnh cho những đóng góp của khuôn khổ CoFT trong bối cảnh rộng lớn hơn của phân tích chuỗi thời gian.
 
 ## 5.1 Tóm tắt hành trình nghiên cứu
 
-This thesis began by identifying a critical bottleneck in deep learning for time series: the "data rich, label poor" paradigm, which is especially acute in high-stakes domains. To address this, we proposed, implemented, and validated **CoFT (Co-training with Frequency and Temporal domains)**, a novel dual-branch, semi-supervised framework. The core of CoFT is not to simply fuse temporal and frequency features, but to treat them as two complementary views for a true co-training methodology, orchestrated by a sophisticated, multi-stage pipeline and a carefully balanced hybrid loss function.
+Luận văn này bắt đầu bằng việc xác định một nút thắt cổ chai quan trọng trong học sâu cho chuỗi thời gian: mô hình "dữ liệu giàu, nhãn nghèo", đặc biệt nghiêm trọng trong các lĩnh vực có yêu cầu cao. Để giải quyết vấn đề này, chúng tôi đã đề xuất, triển khai và xác thực **CoFT (Đồng huấn luyện với miền Tần số và Thời gian)**, một khuôn khổ bán giám sát, hai nhánh mới. Cốt lõi của CoFT không phải là chỉ đơn thuần hợp nhất các đặc trưng thời gian và tần số, mà là coi chúng như hai khung nhìn bổ sung cho một phương pháp đồng huấn luyện thực sự, được điều phối bởi một quy trình đa giai đoạn phức tạp và một hàm mất mát hỗn hợp được cân bằng cẩn thận.
 
-Our empirical investigation, structured to answer four core research questions, yielded several key findings. We demonstrated that CoFT achieves **state-of-the-art performance**, with accuracy gains of up to **+8.17%** over a strong baseline. A detailed ablation study revealed that this success is a synergy between **rigorous hyperparameter tuning** (which established a powerful baseline) and the **architectural contribution of the ensembled dual-branch system**. The investigation uncovered the **"Less is More" phenomenon**, proving that an ultra-low co-training weight (\(\lambda_{ct}=0.0001\)) is optimal for avoiding "label confusion" and enabling effective, gentle knowledge transfer. Finally, we established a **principled parameter transfer methodology**, successfully applying the insights from one dataset to achieve significant gains on new, diverse medical datasets without costly re-tuning.
+Cuộc điều tra thực nghiệm của chúng tôi, được cấu trúc để trả lời bốn câu hỏi nghiên cứu cốt lõi, đã mang lại một số phát hiện chính. Chúng tôi đã chứng minh rằng CoFT đạt được **hiệu suất tiên tiến**, với mức tăng độ chính xác lên đến **+8.17%** so với một mô hình cơ sở mạnh. Một nghiên cứu cắt lớp chi tiết đã tiết lộ rằng thành công này là sự hiệp đồng giữa **việc tinh chỉnh siêu tham số nghiêm ngặt** (thiết lập một cơ sở mạnh mẽ) và **đóng góp về mặt kiến trúc của hệ thống hai nhánh được tổ hợp**. Cuộc điều tra đã khám phá ra hiện tượng **"Ít hơn là Nhiều hơn"**, chứng minh rằng một trọng số đồng huấn luyện cực thấp (\(\lambda_{ct}=0.0001\)) là tối ưu để tránh "sự nhầm lẫn nhãn" và cho phép chuyển giao kiến thức hiệu quả, nhẹ nhàng. Cuối cùng, chúng tôi đã thiết lập một **phương pháp chuyển giao tham số có nguyên tắc**, áp dụng thành công những hiểu biết từ một bộ dữ liệu để đạt được những lợi ích đáng kể trên các bộ dữ liệu y tế mới, đa dạng mà không cần tinh chỉnh lại tốn kém.
 
 ## 5.2 Hạn chế của nghiên cứu
 
-Acknowledging the boundaries of this research is critical for scientific honesty and for guiding future work. The primary limitations are as follows:
+Việc thừa nhận những giới hạn của nghiên cứu này là rất quan trọng để đảm bảo tính trung thực khoa học và để định hướng cho các công trình trong tương lai. Các hạn chế chính như sau:
 
-1.  **Reliance on Data Augmentation for Sensitive Data:** The CoFT framework, like its contrastive learning predecessors, fundamentally relies on data augmentation to create the correlated views necessary for self-supervised learning. This presents a significant conceptual challenge for deployment in sensitive domains. For critical signals such as medical EEG or ECG, where subtle morphological changes could indicate a life-threatening condition, even 'simple' augmentations must be applied with extreme caution. An overly aggressive augmentation could inadvertently distort or destroy the very diagnostic patterns we aim to classify. This observation opens a new and critical avenue for research: developing augmentation-free or minimal-augmentation self-supervised learning frameworks for sensitive time series, a direction that was beyond the scope of this thesis but is vital for enhancing the safety, reliability, and clinical applicability of such models.
+1.  **Phụ thuộc vào Tăng cường dữ liệu cho dữ liệu nhạy cảm:** Khuôn khổ CoFT, giống như các tiền thân học tương phản của nó, về cơ bản dựa vào việc tăng cường dữ liệu để tạo ra các khung nhìn tương quan cần thiết cho việc học tự giám sát. Điều này đặt ra một thách thức khái niệm đáng kể cho việc triển khai trong các lĩnh vực nhạy cảm. Đối với các tín hiệu quan trọng như EEG hoặc ECG y tế, nơi những thay đổi hình thái tinh tế có thể chỉ ra một tình trạng đe dọa tính mạng, ngay cả các phép tăng cường 'đơn giản' cũng phải được áp dụng hết sức thận trọng. Một phép tăng cường quá mạnh có thể vô tình làm biến dạng hoặc phá hủy chính các mẫu chẩn đoán mà chúng tôi muốn phân loại. Quan sát này mở ra một hướng nghiên cứu mới và quan trọng: phát triển các khuôn khổ học tự giám sát không cần tăng cường hoặc tăng cường tối thiểu cho các chuỗi thời gian nhạy cảm, một hướng đi nằm ngoài phạm vi của luận văn này nhưng rất quan trọng để nâng cao tính an toàn, độ tin cậy và khả năng ứng dụng lâm sàng của các mô hình như vậy.
 
-2.  **Focus on Classification Tasks:** This work exclusively validated CoFT on time series classification. While the robust, disentangled representations learned by the framework are likely beneficial for other tasks, its performance on time series forecasting or anomaly detection has not been empirically evaluated.
+2.  **Tập trung vào các nhiệm vụ phân loại:** Công trình này chỉ xác thực CoFT trên phân loại chuỗi thời gian. Mặc dù các biểu diễn mạnh mẽ, được tách rời do khuôn khổ học được có khả năng mang lại lợi ích cho các nhiệm vụ khác, hiệu suất của nó trên dự báo chuỗi thời gian hoặc phát hiện bất thường vẫn chưa được đánh giá thực nghiệm.
 
-3.  **Architectural Parity as a Bottleneck:** The decision to use identical architectures for both the temporal and frequency branches was a necessary methodological choice to prove the inherent value of the frequency domain. However, as our results showed, this non-specialized architecture likely acts as a performance bottleneck for the frequency branch. The full potential of frequency-domain features may only be unlocked by architectures specifically designed for spectral data (e.g., Spectral CNNs).
+3.  **Sự tương đương về kiến trúc như một nút thắt cổ chai:** Quyết định sử dụng các kiến trúc giống hệt nhau cho cả hai nhánh thời gian và tần số là một lựa chọn phương pháp luận cần thiết để chứng minh giá trị vốn có của miền tần số. Tuy nhiên, như kết quả của chúng tôi đã cho thấy, kiến trúc không chuyên biệt này có khả năng hoạt động như một nút thắt cổ chai hiệu suất cho nhánh tần số. Tiềm năng đầy đủ của các đặc trưng miền tần số có thể chỉ được khai thác bởi các kiến trúc được thiết kế đặc biệt cho dữ liệu quang phổ (ví dụ: Spectral CNNs).
 
 ## 5.3 Hướng nghiên cứu trong tương lai
 
-The limitations identified above provide a clear and actionable roadmap for future research. The following directions are proposed as direct extensions of this work:
+Những hạn chế được xác định ở trên cung cấp một lộ trình rõ ràng và có thể hành động cho các nghiên cứu trong tương lai. Các hướng sau đây được đề xuất như là sự mở rộng trực tiếp của công trình này:
 
-1.  **Develop Augmentation-Free Co-Training Frameworks:** This is the most critical direction for enhancing the safety and reliability of the model for clinical applications. Future work should explore self-supervised frameworks that do not rely on synthetic data perturbations. A promising approach could involve cross-domain reconstruction or prediction: for instance, using the temporal branch's representation to predict the signal's wavelet decomposition, or vice-versa. This would create a powerful learning signal from the intrinsic structure of the data itself, ensuring that learned features are faithful to the original, clinically-relevant signal morphology.
+1.  **Phát triển các khuôn khổ Đồng huấn luyện không cần tăng cường:** Đây là hướng quan trọng nhất để nâng cao tính an toàn và độ tin cậy của mô hình cho các ứng dụng lâm sàng. Các công trình trong tương lai nên khám phá các khuôn khổ tự giám sát không dựa vào các nhiễu loạn dữ liệu tổng hợp. Một cách tiếp cận hứa hẹn có thể bao gồm việc tái tạo hoặc dự đoán chéo miền: ví dụ, sử dụng biểu diễn của nhánh thời gian để dự đoán phân rã wavelet của tín hiệu, hoặc ngược lại. Điều này sẽ tạo ra một tín hiệu học mạnh mẽ từ cấu trúc nội tại của chính dữ liệu, đảm bảo rằng các đặc trưng đã học trung thành với hình thái tín hiệu gốc, có liên quan đến lâm sàng.
 
-2.  **Design Domain-Specific Architectures:** Building on our finding that the ensemble mechanism was key to unlocking the frequency branch's potential, future work should design and validate specialized neural architectures (e.g., 1D Spectral CNNs, attention mechanisms tailored for spectral patterns) for the frequency branch. This would move beyond architectural parity to a truly domain-aware design, potentially further enhancing its expert contribution and overall performance.
+2.  **Thiết kế các kiến trúc đặc thù cho miền:** Dựa trên phát hiện của chúng tôi rằng cơ chế tổ hợp là chìa khóa để khai thác tiềm năng của nhánh tần số, các công trình trong tương lai nên thiết kế và xác thực các kiến trúc nơ-ron chuyên biệt (ví dụ: 1D Spectral CNNs, các cơ chế chú ý được thiết kế riêng cho các mẫu quang phổ) cho nhánh tần số. Điều này sẽ vượt ra ngoài sự tương đương về kiến trúc để đến một thiết kế thực sự nhận biết miền, có khả năng nâng cao hơn nữa đóng góp chuyên môn và hiệu suất tổng thể của nó.
 
-3.  **Expand to Forecasting and Anomaly Detection:** The robust representations learned by CoFT should be evaluated on other major time series tasks. For forecasting, the disentangled features could improve long-term predictions. For anomaly detection, the consistency loss between the two domains could serve as a powerful signal for identifying anomalous states where the temporal and frequency characteristics of a signal diverge from the norm.
+3.  **Mở rộng sang Dự báo và Phát hiện bất thường:** Các biểu diễn mạnh mẽ do CoFT học được nên được đánh giá trên các nhiệm vụ chuỗi thời gian chính khác. Đối với dự báo, các đặc trưng được tách rời có thể cải thiện các dự đoán dài hạn. Đối với phát hiện bất thường, mất mát nhất quán giữa hai miền có thể đóng vai trò như một tín hiệu mạnh mẽ để xác định các trạng thái bất thường nơi các đặc điểm thời gian và tần số của một tín hiệu khác với định mức.
 
 ## 5.4 Suy ngẫm cuối cùng
 
-The research journey documented in this thesis was rarely linear. The most valuable insights—such as the optimality of an ultra-low co-training weight or the critical role of the ensemble—were discovered not by confirming initial hypotheses, but by systematically investigating failures and unexpected results. This work contributes both a practical, high-performing model and, more importantly, a set of principles for how to rigorously evaluate, deconstruct, and understand complex dual-domain learning systems. The path forward is not just to build better models, but to build them more thoughtfully, with a deeper understanding of the synergies and trade-offs that govern their success.
+Hành trình nghiên cứu được ghi lại trong luận văn này hiếm khi là tuyến tính. Những hiểu biết quý giá nhất—chẳng hạn như tính tối ưu của một trọng số đồng huấn luyện cực thấp hoặc vai trò quan trọng của tổ hợp—được khám phá không phải bằng cách xác nhận các giả thuyết ban đầu, mà bằng cách điều tra một cách có hệ thống các thất bại và các kết quả bất ngờ. Công trình này đóng góp cả một mô hình thực tế, hiệu suất cao và, quan trọng hơn, một tập hợp các nguyên tắc về cách đánh giá, phân tích và hiểu một cách nghiêm ngặt các hệ thống học hai miền phức tạp. Con đường phía trước không chỉ là xây dựng các mô hình tốt hơn, mà còn là xây dựng chúng một cách chu đáo hơn, với sự hiểu biết sâu sắc hơn về các hiệp đồng và sự đánh đổi chi phối thành công của chúng.
 
 ---
 
@@ -734,46 +736,46 @@ The research journey documented in this thesis was rarely linear. The most valua
 ---
 
 # PHỤ LỤC
-This section can include supplementary materials such as detailed hyperparameter tables for each dataset, code snippets for key modules, or additional visualizations of feature embeddings.
+Phần này có thể bao gồm các tài liệu bổ sung như bảng siêu tham số chi tiết cho từng bộ dữ liệu, các đoạn mã cho các mô-đun chính, hoặc các hình ảnh trực quan bổ sung về các vector nhúng đặc trưng.
 
-## Appendix A: Hyperparameter Configuration Tables
+## Phụ lục A: Bảng cấu hình siêu tham số
 
-This appendix provides a comprehensive summary of the final hyperparameters used for the CoFT framework across all benchmark datasets. The parameters for the HAR dataset were determined through an exhaustive optimization process, while the parameters for Sleep-EDF and Epilepsy were derived using the principled transfer methodology detailed in Chapter 4.
+Phụ lục này cung cấp một bản tóm tắt toàn diện về các siêu tham số cuối cùng được sử dụng cho khuôn khổ CoFT trên tất cả các bộ dữ liệu benchmark. Các tham số cho bộ dữ liệu HAR được xác định thông qua một quá trình tối ưu hóa toàn diện, trong khi các tham số cho Sleep-EDF và Epilepsy được suy ra bằng cách sử dụng phương pháp chuyển giao có nguyên tắc được trình bày chi tiết trong Chương 4.
 
-### **Table 8: General Training and Model Parameters**
+### **Bảng 8: Các tham số huấn luyện và mô hình chung**
 
-| Parameter | HAR | Sleep-EDF | Epilepsy | Description |
+| Tham số | HAR | Sleep-EDF | Epilepsy | Mô tả |
 | :--- | :---: | :---: | :---: | :--- |
-| **Epochs** | 40 | 40 | 40 | Total number of training epochs for all stages. |
-| **Batch Size** | 128 | 128 | 128 | Number of samples per training batch. |
-| **Learning Rate** | 3e-4 | 3e-4 | 3e-4 | Initial learning rate for the Adam optimizer. |
-| **Optimizer** | Adam | Adam | Adam | The optimization algorithm used for training. |
-| **Weight Decay** | 3e-4 | 3e-4 | 3e-4 | L2 regularization parameter. |
-| **Dropout** | 0.1 | 0.1 | 0.1 | Dropout rate for regularization in the final layers. |
-| **Input Channels**| 9 | 1 | 1 | Number of input channels in the raw time series. |
-| **Num Classes** | 6 | 5 | 2 | Number of target classes for classification. |
+| **Kỷ nguyên** | 40 | 40 | 40 | Tổng số kỷ nguyên huấn luyện cho tất cả các giai đoạn. |
+| **Kích thước lô** | 128 | 128 | 128 | Số lượng mẫu trên mỗi lô huấn luyện. |
+| **Tốc độ học** | 3e-4 | 3e-4 | 3e-4 | Tốc độ học ban đầu cho trình tối ưu hóa Adam. |
+| **Trình tối ưu hóa** | Adam | Adam | Adam | Thuật toán tối ưu hóa được sử dụng để huấn luyện. |
+| **Suy giảm trọng số** | 3e-4 | 3e-4 | 3e-4 | Tham số điều chuẩn L2. |
+| **Dropout** | 0.1 | 0.1 | 0.1 | Tỷ lệ dropout để điều chuẩn trong các lớp cuối cùng. |
+| **Kênh đầu vào**| 9 | 1 | 1 | Số lượng kênh đầu vào trong chuỗi thời gian thô. |
+| **Số lớp** | 6 | 5 | 2 | Số lượng lớp mục tiêu để phân loại. |
 
-### **Table 9: CoFT-Specific Hyperparameters**
+### **Bảng 9: Các siêu tham số dành riêng cho CoFT**
 
-These parameters control the core mechanisms of the dual-branch co-training framework. The values reflect the "Less is More" discovery and the parameter transfer strategy.
+Các tham số này kiểm soát các cơ chế cốt lõi của khuôn khổ đồng huấn luyện hai nhánh. Các giá trị phản ánh khám phá "Ít hơn là Nhiều hơn" và chiến lược chuyển giao tham số.
 
-| Parameter | HAR (Optimized) | Sleep-EDF (Transferred) | Epilepsy (Transferred) | Description |
+| Tham số | HAR (Tối ưu) | Sleep-EDF (Chuyển giao) | Epilepsy (Chuyển giao) | Mô tả |
 | :--- | :---: | :---: | :---: | :--- |
-| **`lambda_cotraining`** | **0.0001** | **0.0002** | **0.00005** | The critical co-training weight. Ultra-low values prevent "label confusion". |
-| **`lambda_consistency`** | **0.01** | **0.015** | **0.025** | Weight for the feature consistency loss between branches. |
-| **Ensemble Method** | `temporal_only` | `temporal_only` | `temporal_only` | The universally superior method for combining branch predictions. |
-| **Confidence Threshold**| 0.95 | 0.95 | 0.95 | Minimum softmax probability to accept a pseudo-label. |
-| **Warmup Ratio** | 0.25 | 0.25 | 0.25 | Fraction of epochs to warm up the co-training mechanism. |
+| **`lambda_cotraining`** | **0.0001** | **0.0002** | **0.00005** | Trọng số đồng huấn luyện quan trọng. Các giá trị cực thấp ngăn chặn "sự nhầm lẫn nhãn". |
+| **`lambda_consistency`** | **0.01** | **0.015** | **0.025** | Trọng số cho mất mát nhất quán đặc trưng giữa các nhánh. |
+| **Phương pháp Tổ hợp** | `temporal_only` | `temporal_only` | `temporal_only` | Phương pháp vượt trội phổ biến để kết hợp các dự đoán của nhánh. |
+| **Ngưỡng tin cậy**| 0.95 | 0.95 | 0.95 | Xác suất softmax tối thiểu để chấp nhận một nhãn giả. |
+| **Tỷ lệ khởi động** | 0.25 | 0.25 | 0.25 | Tỷ lệ kỷ nguyên để khởi động cơ chế đồng huấn luyện. |
 
-### **Table 10: Contrastive Learning and Augmentation Parameters**
+### **Bảng 10: Các tham số học tương phản và tăng cường dữ liệu**
 
-These parameters govern the self-supervised representation learning stage (TS-TCC) and the data augmentation pipeline.
+Các tham số này chi phối giai đoạn học biểu diễn tự giám sát (TS-TCC) và quy trình tăng cường dữ liệu.
 
-| Parameter | HAR | Sleep-EDF | Epilepsy | Description |
+| Tham số | HAR | Sleep-EDF | Epilepsy | Mô tả |
 | :--- | :---: | :---: | :---: | :--- |
-| **Contrastive Temp (τ)**| 0.2 | 0.2 | 0.2 | Temperature for the NT-Xent contrastive loss. |
-| **Jitter Ratio** | 0.8 | 0.8 | 0.8 | Strength of the random noise added for jitter augmentation. |
-| **Jitter Scale Ratio**| 2.0 | 2.0 | 2.0 | Strength of the random scaling augmentation. |
-| **Max Segments** | 8 | 20 | 12 | Maximum number of segments for permutation augmentation. |
-| **Use InfoTS Augs**| `False` | `False` | `False` | Switch to disable complex InfoTS augmentations, favoring simplicity. |
+| **Nhiệt độ tương phản (τ)**| 0.2 | 0.2 | 0.2 | Nhiệt độ cho mất mát tương phản NT-Xent. |
+| **Tỷ lệ Jitter** | 0.8 | 0.8 | 0.8 | Độ mạnh của nhiễu ngẫu nhiên được thêm vào để tăng cường jitter. |
+| **Tỷ lệ co giãn Jitter**| 2.0 | 2.0 | 2.0 | Độ mạnh của phép tăng cường co giãn ngẫu nhiên. |
+| **Số đoạn tối đa** | 8 | 20 | 12 | Số lượng đoạn tối đa cho phép tăng cường hoán vị. |
+| **Sử dụng Augs InfoTS**| `False` | `False` | `False` | Chuyển đổi để tắt các phép tăng cường InfoTS phức tạp, ưu tiên sự đơn giản. |
 
