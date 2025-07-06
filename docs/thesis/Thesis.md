@@ -70,7 +70,7 @@ The core contributions of this work are fourfold. First, we design and validate 
     - 2.3.2 CoFT: A True Co-Training Framework
   - 2.4 Conclusion
 - **Chapter 3: Methodology and Implementation**
-  - 3.1 Experimental Setup and Reproducibility
+  - 3.1 High-Level Architecture: A Dual-Branch Approach
     - 3.1.1 Technology Stack and Hardware Configuration
     - 3.1.2 Guiding Principles for Full Reproducibility
   - 3.2 Benchmark Datasets and Preprocessing
@@ -182,8 +182,6 @@ A classical time series can often be decomposed into four main structural compon
 *   **Cycle:** Repeating patterns without a fixed period, often lasting several years and related to macroeconomic factors. An example is the boom-and-bust cycles of an economy.
 *   **Irregularity/Noise:** The unpredictable fluctuations remaining after the other three components have been removed. This is the unstructured part of the signal.
 
-*[FIGURE_PLACEHOLDER: A diagram illustrating the decomposition of a time series into Trend, Seasonal, Cyclical, and Irregular components. Use an example like monthly retail sales data.]*
-
 ![Time series decomposition into trend, seasonal, and residual components.](https://timeseriesreasoning.com/wp-content/uploads/2021/04/image-5-1024x724.png)
 *Figure 2.1: An illustration of decomposing a time series. The original data (top) is split into its trend, seasonal, and residual (noise) components, revealing the underlying patterns. Source: timeseriesreasoning.com*
 
@@ -224,8 +222,6 @@ The core difference between CV and time series lies in the types of invariances 
 
 This fundamental difference necessitates a completely different approach to designing data augmentation strategies and loss functions, which are at the heart of the contrastive learning methods we discuss next.
 
-*[TABLE_PLACEHOLDER: A table comparing the fundamental properties of Computer Vision and Time Series Analysis. Rows should include: Data Structure (2D Spatial vs. 1D Temporal), Key Relation (Spatial Proximity vs. Temporal Dependency), Desired Invariances (Rotation, Flip vs. Time Warping), Example Data Augmentation.]*
-
 | Property                  | Computer Vision                                | Time Series Analysis                             |
 | :------------------------ | :--------------------------------------------- | :----------------------------------------------- |
 | **Data Structure**        | 2D/3D Spatial Grid (Pixels)                    | 1D Sequence (Ordered Data Points)                |
@@ -244,8 +240,6 @@ The core idea is to learn an embedding space where different "views" of the same
 2.  **Encoder:** A neural network (often a combination of CNNs and Transformers) that maps the input time series to a representation vector (embedding) in a latent space. This encoder is the component that will be transferred to downstream tasks after pre-training.
 3.  **Loss Function:** The mathematical engine that drives the "pulling" and "pushing" of embeddings. The most common and effective loss function in this domain is NT-Xent (Normalized Temperature-scaled Cross-Entropy).
 
-*[FIGURE_PLACEHOLDER: A block diagram illustrating the contrastive learning workflow. It should show: (1) Input sample -> (2) Two data augmentation branches (Aug 1, Aug 2) creating two views -> (3) Both views passing through a shared Encoder -> (4) Generating two representation vectors -> (5) A contrastive loss function pulling positive pairs together and pushing negative pairs apart.]*
-
 ![Different Approaches to Contrastive Learning for Time-series.](https://www.borealisai.com/wp-content/uploads/2022/11/Self-supervised-Learning-in-Time-Series-Forecasting-%E2%80%94-A-Contrastive-Learning-Approach-2.png)
 *Figure 2.2: A diagram illustrating different strategies for contrastive learning in time series. Positive and negative pairs can be constructed based on instance-level augmentations, temporal proximity (temporal contrast), or even in the frequency domain. Source: borealisai.com*
 
@@ -259,12 +253,12 @@ The CoFT framework is a direct and principled extension of **CA-TCC** (Contrasti
 
 The pipeline begins with **TS-TCC** (Temporal and Contextual Contrasting) [6], which introduced a novel self-supervised approach to learn representations from entirely unlabeled data. Its core idea is to create two different-yet-related views of a time series through data augmentation and then train an encoder to maximize the agreement between these views using a contrastive loss. The "Temporal Contrasting" module learns to identify robust patterns by comparing augmented versions of the same time segment. Crucially, the "Contextual Contrasting" module works at a higher level, training the model to learn representations that are robust to variations across different time series instances within a batch. This dual-objective forces the model to learn features that are both locally and globally informative.
 
-![Figure 2.1: Overall architecture of the proposed TS-TCC.](../../Images/fig1_tstcc_architecture.png)
-*Figure 2.1: The high-level architecture of TS-TCC, showing the temporal contrasting module that learns from augmented views of the input time series and the contextual contrasting module that learns from different instances.*
+![Figure 2.3: Overall architecture of the proposed TS-TCC.](../../Images/fig1_tstcc_architecture.png)
+*Figure 2.3: The high-level architecture of TS-TCC, showing the temporal contrasting module that learns from augmented views of the input time series and the contextual contrasting module that learns from different instances.*
 
 The encoder within the TS-TCC framework is a critical component, typically based on a Transformer architecture, which excels at capturing long-range dependencies in sequential data.
 
-![Figure 2.2: Architecture of the Transformer model used in the Temporal Contrasting module.](../../Images/fig2_transformer_architecture.png)
+![Figure 2.4: Architecture of the Transformer model used in the Temporal Contrasting module.](../../Images/fig2_transformer_architecture.png)
 *Figure 2.4: The detailed architecture of the Transformer encoder used within the TS-TCC framework, featuring multi-head self-attention and feed-forward layers.*
 
 **CA-TCC: From Representation Learning to a Full Semi-Supervised Framework**
