@@ -179,6 +179,9 @@ A classical time series can often be decomposed into four main structural compon
 
 *[FIGURE_PLACEHOLDER: A diagram illustrating the decomposition of a time series into Trend, Seasonal, Cyclical, and Irregular components. Use an example like monthly retail sales data.]*
 
+![Time series decomposition into trend, seasonal, and residual components.](https://timeseriesreasoning.com/wp-content/uploads/2021/04/image-5-1024x724.png)
+*Figure 2.1: An illustration of decomposing a time series. The original data (top) is split into its trend, seasonal, and residual (noise) components, revealing the underlying patterns. Source: timeseriesreasoning.com*
+
 Understanding and modeling these components is crucial, as an effective model must be able to distinguish between structured patterns (trend, seasonality) and random noise.
 
 #### **2.1.2 The "Data Rich, Label Poor" Paradox: Motivation for Self-Supervised Learning**
@@ -218,6 +221,14 @@ This fundamental difference necessitates a completely different approach to desi
 
 *[TABLE_PLACEHOLDER: A table comparing the fundamental properties of Computer Vision and Time Series Analysis. Rows should include: Data Structure (2D Spatial vs. 1D Temporal), Key Relation (Spatial Proximity vs. Temporal Dependency), Desired Invariances (Rotation, Flip vs. Time Warping), Example Data Augmentation.]*
 
+| Property                  | Computer Vision                                | Time Series Analysis                             |
+| :------------------------ | :--------------------------------------------- | :----------------------------------------------- |
+| **Data Structure**        | 2D/3D Spatial Grid (Pixels)                    | 1D Sequence (Ordered Data Points)                |
+| **Key Relationship**      | Spatial Locality                               | Temporal Dependency & Causality                  |
+| **Desired Invariances**   | Rotation, Flipping, Scaling, Illumination      | Time Warping, Phase Shifting, Amplitude Noise    |
+| **Example Augmentations** | Random Cropping, Color Jitter, Rotation        | Jittering, Scaling, Permutation, Window Slicing  |
+*Table 2.1: A comparison of fundamental properties between Computer Vision and Time Series Analysis, highlighting the core differences that demand domain-specific approaches.*
+
 #### **2.2.2 The Contrastive Learning Paradigm**
 
 To address the label scarcity problem, Self-Supervised Contrastive Learning has emerged as one of the most powerful representation learning paradigms. Instead of learning from human-provided labels, it creates a pretext task from the data itself.
@@ -229,6 +240,9 @@ The core idea is to learn an embedding space where different "views" of the same
 3.  **Loss Function:** The mathematical engine that drives the "pulling" and "pushing" of embeddings. The most common and effective loss function in this domain is NT-Xent (Normalized Temperature-scaled Cross-Entropy).
 
 *[FIGURE_PLACEHOLDER: A block diagram illustrating the contrastive learning workflow. It should show: (1) Input sample -> (2) Two data augmentation branches (Aug 1, Aug 2) creating two views -> (3) Both views passing through a shared Encoder -> (4) Generating two representation vectors -> (5) A contrastive loss function pulling positive pairs together and pushing negative pairs apart.]*
+
+![Different Approaches to Contrastive Learning for Time-series.](https://www.borealisai.com/wp-content/uploads/2022/11/Self-supervised-Learning-in-Time-Series-Forecasting-%E2%80%94-A-Contrastive-Learning-Approach-2.png)
+*Figure 2.2: A diagram illustrating different strategies for contrastive learning in time series. Positive and negative pairs can be constructed based on instance-level augmentations, temporal proximity (temporal contrast), or even in the frequency domain. Source: borealisai.com*
 
 Advanced frameworks have been proposed to refine this process. For instance, **RankSCL** (Luo et al., 2023) [8] introduces a loss function that weights positive pairs based on their "confidence," and **SLOTS** (Cai et al., 2023) [4] proposes an end-to-end model that jointly optimizes multiple loss functions. This contrasts with CoFT's deliberate **six-stage pipeline**, which was found to be essential for training stability by first building stable domain-specific representations before introducing complex cross-domain interactions.
 
@@ -246,7 +260,7 @@ The pipeline begins with **TS-TCC** (Temporal and Contextual Contrasting) [6], w
 The encoder within the TS-TCC framework is a critical component, typically based on a Transformer architecture, which excels at capturing long-range dependencies in sequential data.
 
 ![Figure 2.2: Architecture of the Transformer model used in the Temporal Contrasting module.](../../Images/fig2_transformer_architecture.png)
-*Figure 2.2: The detailed architecture of the Transformer encoder used within the TS-TCC framework, featuring multi-head self-attention and feed-forward layers.*
+*Figure 2.4: The detailed architecture of the Transformer encoder used within the TS-TCC framework, featuring multi-head self-attention and feed-forward layers.*
 
 **CA-TCC: From Representation Learning to a Full Semi-Supervised Framework**
 
