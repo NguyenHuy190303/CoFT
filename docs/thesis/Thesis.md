@@ -253,7 +253,7 @@ Initial experiments with simpler frequency integration methods (concatenation, e
 
 CoFT employed a parallel dual-branch architecture. The initial design, detailed below, was carefully constructed to maintain architectural symmetry. This decision was a crucial part of our scientific methodology, allowing for a fair and controlled comparison between the temporal and frequency domains.
 
-![Figure 3.1: The six-stage training pipeline, illustrating the progression from self-supervised pre-training to supervised fine-tuning and pseudo-labeling.](../../Images/fig3_ca_tcc_pipeline.png)
+![Figure 3.1: High-level overview of the CoFT dual-branch framework, showing parallel temporal and frequency pathways leading to a final ensemble prediction.](../../Images/fig5_coft_dual_branch.png)
 
 #### **3.2.1 Temporal Branch: Proven Foundation**
 
@@ -322,6 +322,8 @@ This design enabled the same architecture to work across datasets with different
 ### **3.3 Semi-Supervised Training Strategy: A Multi-Stage Pipeline**
 
 CoFT's training methodology emerged from extensive experimentation with different semi-supervised approaches. The final 6-stage pipeline represents a careful balance between representation learning, knowledge transfer, and computational efficiency.
+
+![Figure 3.3: The six-stage training pipeline, illustrating the progression from self-supervised pre-training to supervised fine-tuning and pseudo-labeling.](../../Images/fig3_ca_tcc_pipeline.png)
 
 #### **3.3.1 Six-Stage Training Pipeline: Design Rationale**
 
