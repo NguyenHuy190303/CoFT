@@ -1,5 +1,3 @@
-![CoFT Logo](../../Images/coft_logo.png)
-
 # CoFT: Synergistic Co-Training of Temporal and Frequency Domains for Semi-Supervised Time Series Learning
 
 ---
