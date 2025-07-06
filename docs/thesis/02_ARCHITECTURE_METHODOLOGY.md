@@ -170,4 +170,28 @@ CoFT's architecture successfully combines temporal and frequency domain learning
 2. Complementary domain representations
 3. Robust semi-supervised learning pipeline
 
-This architecture provides a strong foundation for time series classification in low-label scenarios. 
+This architecture provides a strong foundation for time series classification in low-label scenarios.
+
+## 4. **Performance Analysis and Future Architectural Enhancements**
+
+The latest optimization results, achieving **85.54% accuracy** on the HAR dataset, have validated the core CoFT framework. However, they also exposed a critical area for improvement: the **frequency branch is a performance bottleneck**.
+
+### **Frequency Branch as a "Performance Drag"**
+
+Analysis shows the `temporal_only` model achieves 85.54% accuracy, while the `frequency_only` model stagnates at 81.30%. When combined (`simple_average`), the result is a diluted 82.39%. This indicates the current simple frequency model (a standard 1D CNN on FFT outputs) is not powerful enough to capture complex spectral patterns effectively.
+
+### **Future Work: Advanced Frequency-Domain Models**
+
+To unlock the full potential of co-training, the frequency branch must be enhanced to become a strong, contributing learner. This is a primary direction for future research. Two promising architectures will be investigated:
+
+#### **1. Frequency Attention Mechanism**
+- **Concept**: Instead of treating all frequency bands equally, a self-attention mechanism will be applied to the spectral data.
+- **Hypothesis**: The model can learn to focus on the most discriminative frequency bands for a given task, ignoring noise and irrelevant frequencies. This is particularly relevant for datasets like HAR and Epilepsy where specific motion or neural frequencies carry the most information.
+- **Implementation**: An attention layer will be added after the FFT processing to re-weigh the frequency features before they are fed into the frequency CNN.
+
+#### **2. Spectral Convolutional Neural Network (Spectral CNN)**
+- **Concept**: A specialized CNN architecture designed to operate directly on graph-structured or spectral data.
+- **Hypothesis**: A standard 1D CNN may not be optimal for learning from the abstract relationships in spectral data. A Spectral CNN can better model the relationships between different frequency components, leading to a more robust feature representation.
+- **Implementation**: The existing 1D CNN in `FrequencyModel` will be replaced with a Spectral CNN architecture, potentially using libraries that support graph convolutions.
+
+By strengthening the frequency branch with these advanced models, we anticipate not only improving the `frequency_only` performance but also enabling the `simple_average` and more advanced ensemble methods to surpass the `temporal_only` baseline, achieving true synergistic gains from the CoFT framework. 

@@ -21,6 +21,7 @@
 # Configuration
 MODE=${1:-"help"}
 DATASET=${2:-"HAR"}
+SEED=${3:-0}
 CONDA_ENV="CoFT"
 
 # Color codes
@@ -72,7 +73,7 @@ show_usage() {
     echo -e "${GREEN}✅ STREAMLINED & TEMPORAL-FOCUSED!${NC}"
     echo ""
     echo -e "${YELLOW}USAGE:${NC}"
-    echo "  ./search.sh [mode] [dataset]"
+    echo "  ./search.sh [mode] [dataset] [seed]"
     echo ""
     echo -e "${YELLOW}MODES:${NC}"
     echo -e "  ${GREEN}diagnostic${NC}  - Quick validation (3 experiments, ~5-15 min)"
@@ -199,11 +200,15 @@ verify_parameters() {
 
 # IMPROVED: Smarter auto-preparation with better detection
 auto_prepare_models() {
-    echo -e "${BLUE}🔧 Auto-preparing models for dataset: $DATASET${NC}"
+    local seed_to_check=${1:-0}
+    local enable_coft_flag=${2:-"--enable_coft"}
+    local coft_status_for_prepare=${3:-"enabled"}
+
+    echo -e "${BLUE}🔧 Auto-preparing models for dataset: $DATASET (seed: $seed_to_check, CoFT: ${coft_status_for_prepare})${NC}"
     
-    # FIXED: Use correct path pattern from main.py
-    local self_supervised_path="experiments_logs/${DATASET}_experiments/test1/self_supervised_seed_0/saved_models/ckp_last.pt"
-    local linear_model_path="experiments_logs/${DATASET}_experiments/test1/train_linear_1p_seed_0/saved_models/ckp_last.pt"
+    # FIXED: Use correct path pattern from main.py with dynamic seed
+    local self_supervised_path="experiments_logs/${DATASET}_experiments/test1/self_supervised_seed_${seed_to_check}/saved_models/ckp_last.pt"
+    local linear_model_path="experiments_logs/${DATASET}_experiments/test1/train_linear_1p_seed_${seed_to_check}/saved_models/ckp_last.pt"
     
     # Check if both required models exist
     local need_self_supervised=false
@@ -224,11 +229,11 @@ auto_prepare_models() {
         
         if [[ "$need_self_supervised" == "true" ]]; then
             # Train self-supervised model
-            echo -e "   🚀 Training self-supervised model..."
+            echo -e "   🚀 Training self-supervised model (seed: $seed_to_check)..."
             if ! timeout 1800 conda run -n "$CONDA_ENV" python main.py \
                 --training_mode self_supervised \
                 --selected_dataset "$DATASET" \
-                --enable_coft; then
+                $enable_coft_flag --seed "$seed_to_check"; then
                 echo -e "   ${RED}❌ Failed to train self-supervised model${NC}"
                 return 1
             fi
@@ -236,11 +241,11 @@ auto_prepare_models() {
         
         if [[ "$need_linear" == "true" ]]; then
             # Train linear classifier  
-            echo -e "   🚀 Training linear classifier..."
+            echo -e "   🚀 Training linear classifier (seed: $seed_to_check)..."
             if ! timeout 900 conda run -n "$CONDA_ENV" python main.py \
                 --training_mode train_linear_1p \
                 --selected_dataset "$DATASET" \
-                --enable_coft; then
+                $enable_coft_flag --seed "$seed_to_check"; then
                 echo -e "   ${RED}❌ Failed to train linear classifier${NC}"
                 return 1
             fi
@@ -262,8 +267,9 @@ run_experiment() {
     local ensemble=$4
     local desc="$5"
     local results_dir="$6"
+    local current_seed=${7:-0}
     
-    echo -e "${PURPLE}🔬 Experiment $exp_id${NC}: $desc"
+    echo -e "${PURPLE}🔬 Experiment $exp_id (seed: $current_seed)${NC}: $desc"
     echo "   Parameters: λ_ct=$lambda_ct, λ_cs=$lambda_cs, ensemble=$ensemble"
     
     # Create backup and update parameters
@@ -285,9 +291,10 @@ run_experiment() {
     
     # Create experiment log
     mkdir -p "$results_dir"
-    local exp_log="$results_dir/experiment_$exp_id.log"
+    local exp_log="$results_dir/experiment_${exp_id}_seed_${current_seed}.log"
     {
         echo "Experiment $exp_id: $desc"
+        echo "Seed: $current_seed"
         echo "lambda_cotraining: $lambda_ct"
         echo "lambda_consistency: $lambda_cs" 
         echo "ensemble_method: $ensemble"
@@ -303,7 +310,7 @@ run_experiment() {
     if conda run -n "$CONDA_ENV" python main.py \
         --training_mode ft_1p \
         --selected_dataset "$DATASET" \
-        --enable_coft >> "$exp_log" 2>&1; then
+        --enable_coft --seed "$current_seed" >> "$exp_log" 2>&1; then
         
         # Extract accuracy with multiple fallback patterns
         local test_acc=$(grep "Test Accuracy" "$exp_log" | tail -1 | grep -oE "[0-9]+\.[0-9]+" | head -1)
@@ -314,11 +321,11 @@ run_experiment() {
         
         # Save result
         local duration=$(($(date +%s) - start_time))
-        echo "$exp_id,$lambda_ct,$lambda_cs,$ensemble,$test_acc,$duration,$verification" >> "$results_dir/results.csv"
+        echo "$exp_id,$current_seed,$lambda_ct,$lambda_cs,$ensemble,$test_acc,$duration,$verification" >> "$results_dir/results.csv"
     else
         echo -e "   ${RED}❌ Training failed${NC}"
         local duration=$(($(date +%s) - start_time))
-        echo "$exp_id,$lambda_ct,$lambda_cs,$ensemble,FAILED,$duration,$verification" >> "$results_dir/results.csv"
+        echo "$exp_id,$current_seed,$lambda_ct,$lambda_cs,$ensemble,FAILED,$duration,$verification" >> "$results_dir/results.csv"
     fi
     
     # Always restore files
@@ -329,25 +336,33 @@ run_experiment() {
 # CONSOLIDATED: Generic mode runner (reduces duplication)
 run_mode() {
     local mode_name=$1
-    local experiments=("${@:2}")  # Get experiments array
+    local coft_status_for_prepare=${2}
+    shift 2
+    local experiments=("$@")  # Get experiments array
     
-    local results_dir="${mode_name}_OPTIMIZED_$(date +%Y%m%d_%H%M%S)"
+    local results_dir="${mode_name}_${DATASET}_$(date +%Y%m%d_%H%M%S)"
     mkdir -p "$results_dir"
     
-    echo -e "${CYAN}🚀 ${mode_name^^} MODE - CoFT Parameter Search${NC}"
-    echo "📊 Running ${#experiments[@]} experiments"
+    echo -e "${CYAN}🚀 ${mode_name^^} MODE - CoFT Parameter Search on ${DATASET}${NC}"
+    echo "📊 Running ${#experiments[@]} experiments for seed $SEED"
     echo "📁 Results directory: $results_dir"
     echo -e "${YELLOW}💡 Press Ctrl+C anytime to stop gracefully${NC}"
     echo "═══════════════════════════════════════════════════════════════════════════"
     
+    # Determine the CoFT flag for preparation
+    local coft_prep_flag="--enable_coft"
+    if [[ "$coft_status_for_prepare" == "disabled" ]]; then
+        coft_prep_flag=""
+    fi
+
     # Auto-prepare models
-    if ! auto_prepare_models; then
+    if ! auto_prepare_models "$SEED" "$coft_prep_flag" "$coft_status_for_prepare"; then
         echo -e "${RED}❌ Failed to prepare models. Cannot continue.${NC}"
         return 1
     fi
     
     # Initialize results file
-    echo "exp_id,lambda_cotraining,lambda_consistency,ensemble,test_accuracy,duration,verification" > "$results_dir/results.csv"
+    echo "exp_id,seed,lambda_cotraining,lambda_consistency,ensemble,test_accuracy,duration,verification" > "$results_dir/results.csv"
     
     # Run experiments
     local exp_id=0
@@ -361,10 +376,10 @@ run_mode() {
         # Parse experiment parameters
         IFS='|' read -r lambda_ct lambda_cs ensemble desc <<< "$experiment"
         
-        run_experiment "$exp_id" "$lambda_ct" "$lambda_cs" "$ensemble" "$desc" "$results_dir"
+        run_experiment "$exp_id" "$lambda_ct" "$lambda_cs" "$ensemble" "$desc" "$results_dir" "$SEED"
         
         # Track best result
-        local current_acc=$(tail -1 "$results_dir/results.csv" | cut -d',' -f5)
+        local current_acc=$(tail -1 "$results_dir/results.csv" | cut -d',' -f6)
         if [[ "$current_acc" != "FAILED" && -n "$current_acc" ]] && \
            (( $(echo "$current_acc > $best_acc" | bc -l 2>/dev/null || echo 0) )); then
             best_acc="$current_acc"
@@ -393,7 +408,7 @@ run_diagnostic_mode() {
         "0.02|0.3|frequency_only|Medium CoFT, frequency only"
         "0.1|0.5|simple_average|High CoFT, simple average"
     )
-    run_mode "diagnostic" "${experiments[@]}"
+    run_mode "diagnostic" "enabled" "${experiments[@]}"
 }
 
 run_quick_mode() {
@@ -405,7 +420,7 @@ run_quick_mode() {
         "0.0002|0.1|temporal_only|Slightly higher λ_ct"
         "0.0005|0.1|temporal_only|Higher λ_ct boundary test"
     )
-    run_mode "quick" "${experiments[@]}"
+    run_mode "quick" "enabled" "${experiments[@]}"
 }
 
 run_temporal_mode() {
@@ -418,7 +433,7 @@ run_temporal_mode() {
         done
     done
     
-    run_mode "temporal" "${experiments[@]}"
+    run_mode "temporal" "enabled" "${experiments[@]}"
 }
 
 run_optimize_mode() {
@@ -433,7 +448,7 @@ run_optimize_mode() {
         done
     done
     
-    run_mode "optimize" "${experiments[@]}"
+    run_mode "optimize" "enabled" "${experiments[@]}"
 }
 
 # Main execution logic
@@ -443,7 +458,10 @@ main() {
         "quick") run_quick_mode ;;
         "temporal") run_temporal_mode ;;
         "optimize") run_optimize_mode ;;
-        "help"|*) show_usage ;;
+        "help"|*) 
+            show_usage
+            echo -e "${YELLOW}NEW: You can now specify a seed as the third argument. e.g., ./search.sh quick HAR 1${NC}"
+            ;;
     esac
 }
 
