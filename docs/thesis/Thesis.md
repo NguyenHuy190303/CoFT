@@ -56,13 +56,16 @@ The core contributions of this work are fourfold. First, we design and validate 
   - 1.3 Summary of Contributions
   - 1.4 Thesis Structure
   - 1.5 Use of AI in this Thesis
-- **Chapter 2: Related Work**
-  - 2.1 Self-Supervised and Semi-Supervised Learning for Time Series
-  - 2.2 Contrastive Learning for Time Series Representation
-    - 2.2.1 Data Augmentation Strategies
-    - 2.2.2 Advanced Contrastive Frameworks and Loss Functions
+- **Chapter 2: Theoretical Foundations and Related Work**
+  - 2.1 Time Series Analysis: A Unique Data Modality
+    - 2.1.1 Definition and Structural Components
+    - 2.1.2 The "Data Rich, Label Poor" Paradox: Motivation for Self-Supervised Learning
+    - 2.1.3 Domain-Specific Challenges
+  - 2.2 Self-Supervised Representation Learning for Time Series
+    - 2.2.1 Fundamental Differences from Computer Vision: The Challenge of Invariances
+    - 2.2.2 The Contrastive Learning Paradigm
     - 2.2.3 Foundational Frameworks: From TS-TCC to CA-TCC
-  - 2.3 Co-Training and Frequency-Temporal Domain Fusion
+  - 2.3 Co-Training: A Principled Approach for Multi-View Learning
     - 2.3.1 Traditional Fusion Approaches
     - 2.3.2 CoFT: A True Co-Training Framework
   - 2.4 Conclusion
@@ -155,45 +158,87 @@ Specifically, Gemini and Perplexity AI were used to help restructure paragraphs,
 
 ---
 
-## **Chapter 2: Related Work**
+## **Chapter 2: Theoretical Foundations and Related Work**
 
-This chapter provides a comprehensive review of the literature relevant to the CoFT framework, situated at the intersection of semi-supervised learning, contrastive representation learning, and multi-domain time series analysis. We first surveyed the landscape of contrastive learning for time series, followed by an analysis of existing approaches for combining temporal and frequency domain information, thereby highlighting the unique contributions of CoFT.
+This chapter establishes the theoretical foundation and research context for the CoFT framework. The goal is not merely to list concepts, but to build a systematic argument that leads the reader from the most fundamental properties of time series data to the reason why a multi-domain co-training architecture is a logical and necessary step forward. We will begin by analyzing the unique properties and challenges of time series data, highlighting its fundamental differences from other data types. Next, the chapter will delve into modern representation learning paradigms, particularly Self-Supervised Contrastive Learning, and provide a detailed analysis of the foundational CA-TCC [7] architecture. Finally, we will introduce co-training theory [3] as a principled solution for integrating information from multiple views, setting a solid stage for the CoFT architecture detailed in Chapter 3.
 
-### **2.1 Self-Supervised and Semi-Supervised Learning for Time Series**
+### **2.1 Time Series Analysis: A Unique Data Modality**
 
-Deep learning models have demonstrated remarkable success in time series classification but often rely on large, meticulously labeled datasets. In many real-world domains, particularly in healthcare (e.g., EEG, ECG analysis), data acquisition is abundant, but expert annotation is scarce, time-consuming, and expensive. This label scarcity has motivated a surge in research on self-supervised and semi-supervised learning methods.
+Deep learning has achieved resounding success in fields like computer vision and natural language processing. However, mechanically applying successful architectures from these domains to time series often fails to yield optimal results. The root cause lies in the unique nature and inherent challenges of time series data.
 
-Self-supervised learning (SSL) aims to learn meaningful representations from unlabeled data by creating pretext tasks. The learned representations can then be transferred to downstream tasks (like classification) where only a small amount of labeled data is required for fine-tuning. This two-stage paradigm (unsupervised pre-training followed by supervised fine-tuning) has become a dominant approach. Among SSL paradigms, contrastive learning has emerged as a particularly effective method for learning discriminative representations.
+#### **2.1.1 Definition and Structural Components**
 
-### **2.2 Contrastive Learning for Time Series Representation**
+Formally, a univariate time series is a set of observations \(Y = \{y_1, y_2, \dots, y_T\}\) ordered according to a time index \(t = 1, 2, \dots, T\). Unlike conventional datasets where the order of samples can be permuted without loss of information, in time series, the order *is* the information. The causal temporal dependency—that an observation at time \(t\) is influenced by prior observations—is its most fundamental property.
 
-Contrastive learning learns representations by pulling "positive" sample pairs (similar samples) closer together in an embedding space while pushing "negative" pairs (dissimilar samples) apart. This approach, popularized in computer vision by frameworks like SimCLR [5], has been successfully adapted to the time series domain. Foundational works like **TS-TCC** [6] and **TS2Vec** [10] established the viability of contrastive pre-training for time series, demonstrating that robust representations can be learned and transferred effectively to downstream tasks with limited labels.
+A classical time series can often be decomposed into four main structural components, which provide insight into its underlying dynamics:
 
-A typical contrastive learning framework for time series consists of three key components: data augmentation, a neural network encoder, and a contrastive loss function. CoFT builds upon this foundation, and its design choices can be understood by examining the state-of-the-art in each component.
+*   **Trend:** The underlying, long-term direction of the series. Examples include the upward trend of a nation's GDP over decades or the gradual performance decay of an industrial sensor over time (sensor drift).
+*   **Seasonality:** Cyclical, repeating patterns with a fixed and known period. Examples include retail sales spiking in the fourth quarter due to holidays, or power consumption patterns being higher during the day and lower at night.
+*   **Cycle:** Repeating patterns without a fixed period, often lasting several years and related to macroeconomic factors. An example is the boom-and-bust cycles of an economy.
+*   **Irregularity/Noise:** The unpredictable fluctuations remaining after the other three components have been removed. This is the unstructured part of the signal.
 
-#### **2.2.1 Data Augmentation Strategies**
+*[FIGURE_PLACEHOLDER: A diagram illustrating the decomposition of a time series into Trend, Seasonal, Cyclical, and Irregular components. Use an example like monthly retail sales data.]*
 
-The creation of positive pairs via data augmentation is the cornerstone of contrastive learning. The choice of augmentation is critical, as it implicitly defines the invariances the model should learn. A recent systematic review by Wen et al. (2021) [9] categorized common time series augmentations into three groups:
+Understanding and modeling these components is crucial, as an effective model must be able to distinguish between structured patterns (trend, seasonality) and random noise.
 
-1.  **Transforming Augmentations:** These modify the signal's properties, including **jittering** (adding noise), **scaling** (changing magnitude), **time-warping**, and **permutation** (shuffling segments).
-2.  **Masking Augmentations:** These occlude parts of the data, such as **time masking** (setting segments to zero) or **frequency masking** (filtering frequency bands).
-3.  **Neighboring Augmentations:** These define positive pairs based on temporal proximity, assuming that adjacent windows in a time series are semantically similar.
+#### **2.1.2 The "Data Rich, Label Poor" Paradox: Motivation for Self-Supervised Learning**
 
-While a rich ecosystem of augmentations exists, the CoFT thesis made a crucial discovery through its **InfoTS experiment (Chapter 4.3)**. It systematically demonstrated that a suite of complex, probabilistic augmentations (InfoTS) provided a negligible performance gain (+0.03%) over a simple, deterministic set of augmentations (jitter, scaling, cropping), but at the cost of a 50% increase in variance and a 25% increase in training time. This finding provided strong empirical backing for CoFT's design philosophy: **simplicity over sophistication**. The chosen augmentations are effective enough to drive learning without introducing unnecessary complexity, which aligns with the principle of maximizing the performance-to-complexity ratio.
+The greatest challenge, and the primary motivation for this thesis, is the "data rich, label poor" paradox. While the acquisition of raw time series data has become increasingly easy thanks to the proliferation of sensors and connected devices, the process of labeling it is extremely costly and requires deep domain expertise.
 
-#### **2.2.2 Advanced Contrastive Frameworks and Loss Functions**
+*   In **Computer Vision**, labeling millions of images can be accomplished via crowdsourcing platforms at a relatively low cost.
+*   In **Time Series Analysis**, particularly in medicine, labeling a 30-second EEG signal for sleep stage classification requires a highly trained medical professional and is a time-consuming process.
 
-While the standard contrastive objective (NT-Xent loss) treats all positive and negative pairs equally, more advanced methods have been proposed to refine this process. For instance, **RankSCL** (Rank Supervised Contrastive Learning, Luo et al., 2023) [8] introduces a novel loss function that weights positive pairs based on their "confidence" or rank, giving more importance to samples that are less ambiguous. This represents a frontier in designing more intelligent loss functions.
+This paradox is particularly acute in the time series domain and is the main driver behind the development of semi-supervised and, especially, self-supervised learning (SSL) methods. SSL aims to learn useful and generalizable representations from the massive pool of unlabeled data itself, before fine-tuning them on a small amount of labeled data for a specific task.
 
-Furthermore, some works challenge the standard two-stage pre-training/fine-tuning pipeline. **SLOTS** (Cai et al., 2023) [4] proposes an end-to-end, semi-supervised model that jointly optimizes unsupervised contrastive loss, supervised contrastive loss (on the few available labels), and a standard classification loss. This contrasts with CoFT's deliberate **six-stage pipeline**, which was found to be essential for training stability. As detailed in the thesis (Chapter 3.3.1), CoFT's staged approach first builds stable domain-specific representations before introducing complex cross-domain interactions, thereby avoiding the gradient conflicts that plagued initial end-to-end training attempts.
+#### **2.1.3 Domain-Specific Challenges**
+
+The diversity of real-world problems underscores that there is no "one-size-fits-all" solution in time series analysis. The characteristics of the data vary significantly depending on the application domain, posing unique challenges:
+
+*   **Biomedical Data (EEG, ECG):** These signals often have high sampling rates, are non-stationary, and contain subtle morphological patterns that are diagnostically significant. A minor distortion in waveform shape can completely alter the clinical interpretation. Therefore, models must be extremely sensitive to local morphological details and robust to physiological artifacts (e.g., muscle noise, eye movements).
+*   **Financial Data:** Characterized by non-stationarity and strong influence from external events (exogenous shocks). Phenomena like "volatility clustering"—where periods of high and low volatility tend to cluster together—demand models capable of adapting quickly to sudden changes in variance.
+*   **Industrial Sensor Data (IoT):** Often exhibits clear seasonality (e.g., a factory's day/night operational cycles) but can also be affected by sensor drift over time. Models must be robust enough to distinguish between a gradual, benign change (drift) and a sudden change that signals a fault.
+
+These challenges demand architectures capable of capturing multi-scale dependencies and adapting to the time-varying statistical properties of the data.
+
+### **2.2 Self-Supervised Representation Learning for Time Series**
+
+While both fields benefit from deep learning, naively applying successful techniques from Computer Vision (CV) to time series often leads to failure. The reason lies in fundamental differences in the nature of the data and the desired invariances.
+
+#### **2.2.1 Fundamental Differences from Computer Vision: The Challenge of Invariances**
+
+The core difference between CV and time series lies in the types of invariances a model is expected to learn.
+
+*   In **CV**, a model should be invariant to transformations like flipping, rotation, scaling, or changes in lighting. A cat is still a cat whether it is upside-down or differently illuminated. Data augmentations in CV are designed to teach the model these invariances.
+*   In **time series**, many of these same transformations would completely destroy the information. "Flipping" a time series (reversing time) breaks the causal structure. Permuting data points loses temporal dependencies. Invariance in time series is a different, more subtle concept, such as:
+    *   **Time Warping Invariance:** A "walking" activity performed slightly faster is still walking.
+    *   **Phase Shift Invariance:** A repeating pattern that starts slightly later is still the same pattern.
+    *   **Amplitude Noise Invariance:** A signal with some additive noise should still be identified as the original signal.
+
+This fundamental difference necessitates a completely different approach to designing data augmentation strategies and loss functions, which are at the heart of the contrastive learning methods we discuss next.
+
+*[TABLE_PLACEHOLDER: A table comparing the fundamental properties of Computer Vision and Time Series Analysis. Rows should include: Data Structure (2D Spatial vs. 1D Temporal), Key Relation (Spatial Proximity vs. Temporal Dependency), Desired Invariances (Rotation, Flip vs. Time Warping), Example Data Augmentation.]*
+
+#### **2.2.2 The Contrastive Learning Paradigm**
+
+To address the label scarcity problem, Self-Supervised Contrastive Learning has emerged as one of the most powerful representation learning paradigms. Instead of learning from human-provided labels, it creates a pretext task from the data itself.
+
+The core idea is to learn an embedding space where different "views" of the same data sample (called **positive pairs**) are pulled closer together, while different data samples (**negative pairs**) are pushed apart. This is achieved through three main components:
+
+1.  **Data Augmentation:** This is the heart of contrastive learning. It creates different views of the same time series to form positive pairs. As discussed in 2.2.1, these augmentations must be carefully designed to preserve temporal semantics. A systematic review by Wen et al. [9] showed that simple augmentations like jittering, scaling, and cropping often provide high efficacy without unnecessary complexity. This finding reinforces CoFT's design philosophy of prioritizing simplicity and effectiveness.
+2.  **Encoder:** A neural network (often a combination of CNNs and Transformers) that maps the input time series to a representation vector (embedding) in a latent space. This encoder is the component that will be transferred to downstream tasks after pre-training.
+3.  **Loss Function:** The mathematical engine that drives the "pulling" and "pushing" of embeddings. The most common and effective loss function in this domain is NT-Xent (Normalized Temperature-scaled Cross-Entropy).
+
+*[FIGURE_PLACEHOLDER: A block diagram illustrating the contrastive learning workflow. It should show: (1) Input sample -> (2) Two data augmentation branches (Aug 1, Aug 2) creating two views -> (3) Both views passing through a shared Encoder -> (4) Generating two representation vectors -> (5) A contrastive loss function pulling positive pairs together and pushing negative pairs apart.]*
+
+Advanced frameworks have been proposed to refine this process. For instance, **RankSCL** (Luo et al., 2023) [8] introduces a loss function that weights positive pairs based on their "confidence," and **SLOTS** (Cai et al., 2023) [4] proposes an end-to-end model that jointly optimizes multiple loss functions. This contrasts with CoFT's deliberate **six-stage pipeline**, which was found to be essential for training stability by first building stable domain-specific representations before introducing complex cross-domain interactions.
 
 #### **2.2.3 Foundational Frameworks: From TS-TCC to CA-TCC**
 
-The development of CoFT was built upon the shoulders of giants, most notably the **TS-TCC** and **CA-TCC** frameworks, which established a powerful paradigm for semi-supervised time series learning. Understanding their core mechanics is essential to appreciate the innovations of CoFT.
+The CoFT framework is a direct and principled extension of **CA-TCC** (Contrastive Augmentation - Temporal Contrastive Clustering) [7], a state-of-the-art framework for semi-supervised time series classification. CA-TCC is not just a single loss function but a complete, multi-stage pipeline designed to maximally leverage both unlabeled and labeled data. Understanding its rigorous process is critical for contextualizing the innovations presented in this thesis, as it forms the foundational "playing field" upon which CoFT was built and evaluated.
 
 **TS-TCC: Learning from Temporal and Contextual Contrasting**
 
-TS-TCC (Temporal and Contextual Contrasting) [6] introduced a novel self-supervised approach to learn time series representations from entirely unlabeled data. Its core idea is to create two different-yet-related views of a time series through data augmentation and then train an encoder to maximize the agreement between these views using a contrastive loss. The "Temporal Contrasting" module learns to identify robust patterns by comparing augmented versions of the same time segment. Crucially, the "Contextual Contrasting" module works at a higher level, training the model to learn representations that are robust to variations across different time series instances within a batch. This dual-objective forces the model to learn features that are both locally and globally informative.
+The pipeline begins with **TS-TCC** (Temporal and Contextual Contrasting) [6], which introduced a novel self-supervised approach to learn representations from entirely unlabeled data. Its core idea is to create two different-yet-related views of a time series through data augmentation and then train an encoder to maximize the agreement between these views using a contrastive loss. The "Temporal Contrasting" module learns to identify robust patterns by comparing augmented versions of the same time segment. Crucially, the "Contextual Contrasting" module works at a higher level, training the model to learn representations that are robust to variations across different time series instances within a batch. This dual-objective forces the model to learn features that are both locally and globally informative.
 
 ![Figure 2.1: Overall architecture of the proposed TS-TCC.](../../Images/fig1_tstcc_architecture.png)
 *Figure 2.1: The high-level architecture of TS-TCC, showing the temporal contrasting module that learns from augmented views of the input time series and the contextual contrasting module that learns from different instances.*
@@ -205,9 +250,9 @@ The encoder within the TS-TCC framework is a critical component, typically based
 
 **CA-TCC: From Representation Learning to a Full Semi-Supervised Framework**
 
-CA-TCC (Contrastive Augmentation - Temporal Contrastive Clustering) [7] evolves the principles of TS-TCC into a comprehensive, multi-stage semi-supervised framework. It leverages TS-TCC as the foundational pre-training step (Phase 1) to build strong representations from unlabeled data. The "Contrastive Augmentation" part of its name refers to its use of a strong/weak augmentation strategy, which is critical for creating effective positive pairs for contrastive learning. After the initial pre-training, CA-TCC employs a "Temporal Contrastive Clustering" mechanism in its subsequent phases to fine-tune the model with the few available labels, effectively bridging the gap between unsupervised representation learning and supervised classification. CoFT adopts this battle-tested framework as its temporal branch baseline, inheriting its stable and effective pipeline before introducing the novel frequency-domain co-training mechanism.
+CA-TCC evolves the principles of TS-TCC into a comprehensive, multi-stage semi-supervised framework. It leverages TS-TCC as the foundational pre-training step (Phase 1) to build strong representations from unlabeled data. The "Contrastive Augmentation" part of its name refers to its use of a strong/weak augmentation strategy, which is critical for creating effective positive pairs for contrastive learning. After the initial pre-training, CA-TCC employs a "Temporal Contrastive Clustering" mechanism in its subsequent phases to fine-tune the model with the few available labels, effectively bridging the gap between unsupervised representation learning and supervised classification. CoFT adopts this battle-tested framework as its temporal branch baseline, inheriting its stable and effective pipeline before introducing the novel frequency-domain co-training mechanism.
 
-### **2.3 Co-Training and Frequency-Temporal Domain Fusion**
+### **2.3 Co-Training: A Principled Approach for Multi-View Learning**
 
 The most significant contribution of CoFT is its novel application of a co-training methodology to fuse information from the temporal and frequency domains. To appreciate this contribution, it is necessary to review how these two domains have been combined previously.
 
