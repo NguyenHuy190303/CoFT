@@ -69,21 +69,26 @@ The core contributions of this work are fourfold. First, we design and validate 
     - 2.3.1 Traditional Fusion Approaches
     - 2.3.2 CoFT: A True Co-Training Framework
   - 2.4 Conclusion
-- **Chapter 3: CoFT: A Dual-Branch Framework for Semi-Supervised Time Series Classification**
-  - 3.1 Framework Overview and Design Philosophy
-    - 3.1.1 Why This Approach Was Necessary
-  - 3.2 Dual-Branch Architecture: Design and Implementation
-    - 3.2.1 Temporal Branch: Proven Foundation
-    - 3.2.2 Frequency Branch: A Controlled Experiment via Mirror Architecture
-    - 3.2.3 Frequency Domain Transformation: Beyond Simple FFT
-    - 3.2.4 Dynamic Architecture Adaptation
-  - 3.3 Semi-Supervised Training Strategy: A Multi-Stage Pipeline
-    - 3.3.1 Six-Stage Training Pipeline: Design Rationale
-    - 3.3.2 Co-Training Module: The Heart of Cross-Domain Learning
-  - 3.4 Hybrid Loss Function: Balancing Competing Objectives
-  - 3.5 Data Augmentation
-    - 3.5.1 Temporal Domain Augmentations
-    - 3.5.2 Frequency Domain Augmentations
+- **Chapter 3: Methodology and Implementation**
+  - 3.1 Experimental Setup and Reproducibility
+    - 3.1.1 Technology Stack and Hardware Configuration
+    - 3.1.2 Guiding Principles for Full Reproducibility
+  - 3.2 Benchmark Datasets and Preprocessing
+    - 3.2.1 Semi-supervised Data Splitting Methodology
+    - 3.2.2 Dataset-Specific Preprocessing Pipelines
+  - 3.3 The CoFT Framework: Architecture and Rationale
+    - 3.3.1 Design Philosophy
+    - 3.3.2 Dual-Branch Architecture: A Controlled Experiment
+    - 3.3.3 Frequency Domain Transformation: Beyond Simple FFT
+    - 3.3.4 Data Augmentation for Dual Domains
+  - 3.4 Semi-Supervised Training Strategy
+    - 3.4.1 The 6-Stage Diagnostic Pipeline
+    - 3.4.2 Data Augmentation for Dual Domains
+    - 3.4.3 Co-Training Module and Hybrid Loss Function
+  - 3.5 Evaluation Methodology
+    - 3.5.1 Fair Comparison Strategy
+    - 3.5.2 Evaluation Metrics
+    - 3.5.3 Statistical Validation
 - **Chapter 4: Experimental Evaluation - The Journey of Discovery**
   - 4.1 Experimental Setup and Methodology
     - 4.1.1 Dataset Selection for Rigorous and Fair Comparison
@@ -290,62 +295,108 @@ This approach is fundamentally different from prior work:
 
 The CoFT framework is firmly grounded in the principles of self-supervised contrastive learning, adopting best practices such as simple and efficient data augmentations and a stable, staged training pipeline. However, its primary novelty lies in its sophisticated adaptation of the co-training paradigm to the multi-domain setting of time series analysis. By treating the temporal and frequency domains as equal partners and enabling gentle knowledge transfer through a carefully calibrated hybrid loss, CoFT significantly advances the state-of-the-art. The discovery of the "label confusion" theory and the optimality of ultra-low coupling weights provided not only a high-performing model but also valuable scientific insights that can guide future research in semi-supervised and multi-domain learning.
 
-## **Chapter 3: CoFT: A Dual-Branch Framework for Semi-Supervised Time Series Classification**
+---
 
-This chapter presents a comprehensive analysis of the CoFT (Co-training with Frequency and Temporal domains) framework, detailing not only its final architecture but also the extensive design decisions, failed experiments, and counter-intuitive discoveries that shaped its development.
+## **Chapter 3: Methodology and Implementation**
 
-### **3.1 Framework Overview and Design Philosophy**
+This chapter provides a comprehensive account of the CoFT (Co-training with Frequency and Temporal domains) framework. It not only details the final architecture but also documents the research journey, including the design philosophy, the systematic evaluation of alternatives, and the counter-intuitive discoveries that shaped its development. The methodology is presented with a steadfast commitment to reproducibility, detailing the complete experimental setup, technological stack, and data processing pipelines.
 
-The fundamental insight driving CoFT stems from signal processing theory: time series data contains complementary information in both temporal and frequency domains. However, unlike traditional approaches that simply apply FFT as a preprocessing step, CoFT treats frequency and temporal domains as **equal partners** in a co-training framework.
+### **3.1 Experimental Setup and Reproducibility**
 
-**Key Design Principles:**
-- **Controlled Baseline via Architectural Parity:** The framework intentionally started with identical encoder architectures for both domains. This created a controlled experimental setup to isolate and prove the fundamental value of frequency-domain information, even when processed by a non-specialized model.
-- **Gradual and Gentle Knowledge Transfer:** A core discovery of this work is that cross-domain learning in this context benefits from extremely low coupling weights. This prevented domain interference and avoided the "label confusion" phenomenon detailed in Chapter 4.
-- **Robustness and Numerical Stability:** The design incorporated extensive safeguards against common deep learning pitfalls like NaN propagation and gradient explosion, ensuring stable training across diverse datasets.
-- **Memory Efficiency:** The framework included built-in optimizations, such as using Real FFT and efficient data handling, making it suitable for resource-constrained environments.
+This research was conducted on a carefully selected hardware and software ecosystem to balance rapid development with large-scale performance validation. The guiding principle throughout was to ensure full reproducibility.
 
-The framework extended CA-TCC (Contrastive Augmentation - Temporal Contrastive Clustering) by adding a parallel frequency branch. The implementation philosophy emphasized **toggleable features** - the entire CoFT functionality was controlled by a single `--enable_coft` flag, enabling clean A/B testing and ensuring that the baseline remained completely unaffected when CoFT was disabled.
+#### **3.1.1 Technology Stack and Hardware Configuration**
 
-### **3.1.1 Why This Approach Was Necessary**
+**Hardware Configuration:**
+-   **Development:** An NVIDIA RTX 4060 GPU (8GB) was used for initial development, focusing on optimization under memory-constrained conditions.
+-   **Parallel Computing:** A research-provided Linux server with 3 NVIDIA RTX 5000 GPUs facilitated parallel execution of multiple experiments during the initial optimization phase.
+-   **Validation:** A Colab Pro instance with an NVIDIA A100 GPU (40GB) was utilized for large-scale hyperparameter searches and final performance validation.
 
-Initial experiments with simpler frequency integration methods (concatenation, early fusion, late fusion) failed to achieve meaningful improvements. The breakthrough came from recognizing that frequency and temporal domains operate on fundamentally different feature spaces and require **separate learning pathways** before meaningful integration can occur.
+**Software Ecosystem:**
+The project was built upon a diverse software stack, with each component playing a critical role:
+-   **Deep Learning Core:** PyTorch (v2.2.2+) served as the primary framework, supported by CUDA (v12.1) for GPU acceleration.
+-   **Data Science Stack:** The standard stack including NumPy, Pandas, and Scikit-learn was used for numerical operations, data manipulation, and evaluation. Specialized libraries such as **MNE (v0.20.7)** for neurophysiological data processing (Sleep-EDF, Epilepsy) and **mat4py** for loading MATLAB files were essential.
+-   **Augmentation & Transformation:** In addition to custom implementations, **tsaug** was used for time series augmentations, and **einops** provided a flexible API for tensor manipulation, enhancing code readability.
+-   **Experimentation & Automation:** **Jupyter Notebooks** and **Google Colab** were the primary interactive development environments. Automation was heavily reliant on **Bash scripts (`search.sh`)**, which used system tools (`sed`, `grep`, `bc`) for systematic experiment execution, and **argparse** for flexible command-line control of the main Python script.
 
-### **3.2 Dual-Branch Architecture: Design and Implementation**
+#### **3.1.2 Guiding Principles for Full Reproducibility**
+The soul of this chapter is reproducibility. Every choice was documented with the goal that another researcher could achieve 100% identical results.
+-   **Consistent Data Splits:** All experiments for both baseline and proposed models were conducted on the same training, validation, and test sets.
+-   **Fixed Random Seeds:** All stochastic processes (weight initialization, data shuffling) were controlled using a set of five fixed random seeds (0, 1, 2, 3, 4). Results are reported as the mean and standard deviation across these runs.
+-   **Controlled Variable:** The `--enable_coft` feature flag was the *only* variable changed between baseline and CoFT runs, ensuring the baseline code remained untouched.
+-   **Open Source:** The project was built entirely on public libraries and is intended for release to allow for community validation.
 
-CoFT employed a parallel dual-branch architecture. The initial design, detailed below, was carefully constructed to maintain architectural symmetry. This decision was a crucial part of our scientific methodology, allowing for a fair and controlled comparison between the temporal and frequency domains.
+### **3.2 Benchmark Datasets and Preprocessing**
+
+To ensure a rigorous and scientifically fair comparison, all experiments were conducted on the same benchmark datasets used in the original CA-TCC publication [7]. This decision allows for the direct isolation and evaluation of the proposed dual-domain co-training architecture. The chosen datasets represent a diverse range of time series challenges.
+
+**Benchmark Datasets:**
+-   **Human Activity Recognition (HAR):** 9-channel balanced, multi-class data with clear dynamic patterns.
+-   **Sleep-EDF (Sleep Stage Classification):** Single-channel, long-sequence medical data with severe class imbalance.
+-   **Epilepsy (Seizure Detection):** Single-channel, short-sequence, highly imbalanced binary classification data.
+
+#### **3.2.1 Semi-supervised Data Splitting Methodology**
+The foundation of this study is the simulation of label scarcity. For each dataset, the official training data, `D_train_full`, was subjected to a stratified splitting process. This ensures that even with a small percentage of labels, the class distribution of the original dataset is preserved, preventing sampling bias and ensuring a fair and reproducible evaluation.
+
+#### **3.2.2 Dataset-Specific Preprocessing Pipelines**
+Each dataset required a distinct preprocessing pipeline to transform raw data into a tensor format suitable for training.
+
+-   **Human Activity Recognition (HAR):**
+    1.  **Loading:** Data was loaded directly from the original `.txt` files. The nine signal channels (total acceleration, body acceleration, gyroscope) were read individually.
+    2.  **Stacking:** The nine channels were stacked to form a single multivariate tensor of size `(num_samples, 9, 128)`.
+    3.  **Label Normalization:** Labels were adjusted to be zero-indexed.
+    4.  **Splitting:** The original training set was split 80/20 into a new training set and a validation set.
+    5.  **Storage:** Final tensors were saved as PyTorch `.pt` files. No signal value normalization (e.g., Z-score) was applied.
+
+-   **Sleep-EDF (Sleep Stage Classification):**
+    1.  **Loading:** The `mne` library was used to read `.edf` files, selecting the EEG Fpz-Cz channel.
+    2.  **Segmentation:** The continuous signal was segmented into non-overlapping 30-second epochs.
+    3.  **Labeling:** Annotations were mapped to numerical labels (0-5), merging "Sleep stage 4" into "Sleep stage 3".
+    4.  **Filtering:** To focus on core sleep stages, 30 minutes of "Wake" state data were removed from the beginning and end of each recording.
+    5.  **Storage:** Processed data for each subject was saved into `.npz` files.
+
+-   **Epilepsy (Seizure Detection):**
+    1.  **Loading:** Data was read from a single `.csv` file.
+    2.  **Signal Normalization:** Scikit-learn's `MinMaxScaler` was applied across the entire signal data to scale values to the `[0, 1]` range.
+    3.  **Label Binarization:** The multi-class problem was converted to a binary one: Class 1 (seizure) was kept, while all other classes (2-5) were merged into Class 0 (non-seizure).
+    4.  **Splitting:** Data was split into training, validation, and test sets using a 64/16/20 ratio.
+    5.  **Storage:** Data was reshaped (adding a channel dimension) and saved as PyTorch `.pt` files.
+
+### **3.3 The CoFT Framework: Architecture and Rationale**
+
+The CoFT framework was born from a fundamental insight from signal processing theory: time series data contains complementary information in both temporal and frequency domains. However, unlike traditional approaches that simply use FFT as a preprocessing step, CoFT treats these domains as **equal partners** in a co-training framework.
+
+#### **3.3.1 Design Philosophy**
+-   **Controlled Baseline via Architectural Parity:** The framework intentionally started with identical encoder architectures for both domains to isolate and prove the value of frequency-domain information itself.
+-   **Gradual and Gentle Knowledge Transfer:** A core discovery is that cross-domain learning in this context benefits from extremely low coupling weights to prevent domain interference and "label confusion."
+-   **Toggleable Features:** The entire CoFT functionality was controlled by a single `--enable_coft` flag, enabling clean A/B testing and ensuring the baseline remained completely unaffected when CoFT was disabled.
+
+Initial experiments with simpler frequency integration methods (concatenation, early/late fusion) failed to achieve meaningful improvements. The breakthrough came from recognizing that the two domains required **separate learning pathways** before meaningful integration could occur.
+
+#### **3.3.2 Dual-Branch Architecture: A Controlled Experiment**
+CoFT employs a parallel dual-branch architecture, a design carefully constructed to maintain architectural symmetry and function as a controlled scientific experiment.
 
 ![Figure 3.1: High-level overview of the CoFT dual-branch framework, showing parallel temporal and frequency pathways leading to a final ensemble prediction.](../../Images/fig5_coft_dual_branch.png)
-*Figure 3.1: The dual-branch architecture of CoFT. The top branch processes temporal features, while the bottom branch processes frequency features derived from an FFT transformation. Both branches share the same core architecture and interact via a co-training module.*
+*Figure 3.1: The dual-branch architecture of CoFT. The top branch processes temporal features, while the bottom branch processes frequency features. Both branches share the same core architecture and interact via a co-training module.*
 
-#### **3.2.1 Temporal Branch: Proven Foundation**
+-   **Temporal Branch: A Proven Foundation**
+    The temporal branch preserved the exact CA-TCC architecture (3 Conv1D layers, 4-head multi-head attention, Batch Normalization, Dropout) to ensure a fair comparison and maintain the benefits of the baseline model.
 
-The temporal branch preserved the exact CA-TCC architecture to ensure fair comparison and maintain all benefits of the baseline model. This design decision was crucial - any modifications to the temporal branch would confound the evaluation of frequency domain contributions.
+-   **Frequency Branch: A Controlled Experiment via Mirror Architecture**
+    **Critical Design Decision:** The decision to mirror the temporal architecture in the frequency branch was a deliberate methodological choice, not an assumption of optimality. The primary goal was to establish a rigorous, controlled baseline. By keeping the model capacity identical, we could ensure that any observed performance differences were attributable purely to the inherent characteristics of the frequency-domain data itself, not to architectural advantages. This "architectural parity" allowed us to answer the fundamental research question: "Does frequency information provide a synergistic benefit even when processed by a standard, non-specialized time-series encoder?"
 
-**Architecture Specifications:**
-- **Conv1D Blocks**: 3 layers with channels [32, 64, 128], kernel sizes [8, 5, 3]
-- **Attention**: Multi-head attention with 4 heads for temporal dependency modeling
-- **Normalization**: Batch normalization for training stability
-- **Regularization**: Dropout (0.3) and gradient clipping (max_norm=1.0)
-
-#### **3.2.2 Frequency Branch: A Controlled Experiment via Mirror Architecture**
-Critical Design Decision: Why Start with an Identical Architecture?
-The decision to mirror the temporal architecture in the frequency branch was a deliberate methodological choice, not an assumption of optimality. The primary goal was to establish a rigorous, controlled baseline. By keeping the model capacity and architecture identical, we could ensure that any observed performance differences were attributable purely to the inherent characteristics of the frequency-domain data itself, rather than to architectural advantages or disadvantages.
-This "architectural parity" allowed us to answer a fundamental research question: "Does frequency information provide a synergistic benefit even when processed by a standard, non-specialized time-series encoder?"
-As the experimental results in Chapter 4 will demonstrate, this approach was successful in proving the core hypothesis, leading to state-of-the-art performance. However, the results also revealed the limitations of this parity, showing that the frequency branch, while beneficial, underperformed relative to its temporal counterpart. This critical insight—that a non-specialized architecture acted as a performance bottleneck for frequency-domain features—paves the way for future work on specialized architectures (e.g., Spectral CNNs), a direction discussed further in Chapter 5.
-
-#### **3.2.3 Frequency Domain Transformation: Beyond Simple FFT**
-
-The frequency transformation addressed a fundamental challenge: how to convert complex-valued FFT output into a format suitable for standard CNN architectures.
+#### **3.3.3 Frequency Domain Transformation: Beyond Simple FFT**
+The transformation pipeline addressed the challenge of converting complex-valued FFT output into a format suitable for standard CNNs.
 
 ![Figure 3.2: Detailed illustration of the frequency domain transformation, from raw time series input to the final stacked magnitude-phase representation fed into the convolutional layers.](../../Images/fig4_frequency_branch.png)
 *Figure 3.2: The frequency transformation pipeline. A raw time series input undergoes a Real FFT, is decomposed into magnitude and phase components, which are then concatenated and fed into the frequency encoder.*
 
 **Transformation Pipeline:**
 ```python
-# Real FFT for computational efficiency
+# Real FFT for computational efficiency and memory optimization
 x_fft = torch.fft.rfft(x, norm='ortho')  
 
-# Explicit magnitude-phase decomposition
+# Explicit magnitude-phase decomposition for information preservation
 magnitude = torch.abs(x_fft)        # |Z|
 phase = torch.angle(x_fft)          # ∠Z  
 
@@ -353,194 +404,77 @@ phase = torch.angle(x_fft)          # ∠Z
 x_freq = torch.cat([magnitude, phase], dim=1)  # [B, C*2, F]
 ```
 
-**Why Real FFT Instead of Complex FFT?**
-1. **Computational Efficiency**: Real signals produce conjugate-symmetric spectra, making RFFT sufficient
-2. **Memory Optimization**: Reduces frequency bins by ~50% without information loss
-3. **Numerical Stability**: Avoids complex number operations in downstream layers
-
-**Why Magnitude-Phase Decomposition?**
-- **Information Preservation**: Maintains complete spectral information (compared to magnitude-only approaches)
-- **Architectural Compatibility**: Standard Conv1D layers expect real-valued inputs
-- **Interpretability**: Magnitude captures "what frequencies", phase captures "when"
-
 **Alternative Approaches Considered and Rejected:**
-1. **Real-Imaginary Split**: Less interpretable, no performance advantage
-2.  **Magnitude-Only**: 15% accuracy loss in preliminary experiments  
-3. **Log-Magnitude**: Introduced numerical instabilities with near-zero values
-4. **Complex-Valued CNNs**: Increased complexity without clear benefits
+1.  **Real-Imaginary Split**: Less interpretable, no performance advantage.
+2.  **Magnitude-Only**: 15% accuracy loss in preliminary experiments.
+3.  **Log-Magnitude**: Introduced numerical instabilities with near-zero values.
+4.  **Complex-Valued CNNs**: Increased complexity without clear benefits in this context.
 
-#### **3.2.4 Dynamic Architecture Adaptation**
+A crucial implementation detail was **dynamic linear layer initialization**, which allowed the same architecture to work across datasets with different temporal lengths without manual reconfiguration.
 
-A crucial implementation detail: the frequency branch used **dynamic linear layer initialization** to handle varying input dimensions across datasets:
+### **3.4 Semi-Supervised Training Strategy**
 
-```python
-# First forward pass determines actual feature dimensions
-if self.freq_logits is None:
-    actual_features = x_flat.shape[1]  # Calculated after conv layers
-    self.freq_logits = nn.Linear(actual_features, num_classes).to(device)
-```
+CoFT's training methodology evolved from extensive experimentation into a robust 6-stage pipeline, balancing representation learning, knowledge transfer, and computational efficiency.
 
-This design enabled the same architecture to work across datasets with different temporal lengths and channel counts without manual configuration.
+#### **3.4.1 The 6-Stage Diagnostic Pipeline**
+The 4-phase CA-TCC process was expanded into a 6-stage pipeline to rigorously measure and diagnose the quality of learned representations at each juncture.
 
-### **3.3 Semi-Supervised Training Strategy: A Multi-Stage Pipeline**
+**Rationale: Why Six Stages Instead of End-to-End?**
+The staged approach was critical for training stability. Initial experiments with joint end-to-end training were prone to gradient conflicts and numerical instability. In our early end-to-end trials on the HAR dataset, we observed that the gradients from the co-training loss were often an order of magnitude larger than the supervised loss, leading to training divergence in over 40% of runs. The staged approach ensures stable, domain-specific representations are built before introducing more complex cross-domain interactions.
 
-CoFT's training methodology emerged from extensive experimentation with different semi-supervised approaches. The final 6-stage pipeline represents a careful balance between representation learning, knowledge transfer, and computational efficiency.
+**Table 3.1: Mapping from CA-TCC Phases to the CoFT 6-Stage Pipeline**
 
-![Figure 3.3: The six-stage training pipeline, illustrating the progression from self-supervised pre-training to supervised fine-tuning and pseudo-labeling.](../../Images/fig3_ca_tcc_pipeline.png)
-*Figure 3.3: The six-stage semi-supervised training pipeline inherited from CA-TCC and adapted for CoFT. It progresses from self-supervised pre-training on unlabeled data to supervised fine-tuning and pseudo-label generation with few labels.*
+| CoFT Pipeline Stage (in Code & Thesis) | Corresponding CA-TCC Phase | Purpose                                                                                              |
+| -------------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------- |
+| Stage 1: `self_supervised`             | Phase 1                      | Contrastive pre-training to learn initial representations.                                           |
+| Stage 2: `train_linear_{p}`            | (Evaluation Step #1)         | **EVALUATE:** Freeze encoder, train a linear layer to assess the quality of Stage 1 representations. |
+| Stage 3: `ft_{p}`                      | Phase 2                      | Fine-tune the encoder with few labeled samples; introduce co-training.                               |
+| Stage 4: `gen_pseudo_labels`           | Phase 3                      | Generate pseudo-labels from the fine-tuned model.                                                    |
+| Stage 5: `SupCon`                      | Phase 4                      | Re-train with real and pseudo labels using Supervised Contrastive Loss.                              |
+| Stage 6: `train_linear_SupCon_{p}`     | (Evaluation Step #2)         | **EVALUATE:** Freeze encoder again post-SupCon, train another linear layer to measure improvement.    |
 
-#### **3.3.1 Six-Stage Training Pipeline: Design Rationale**
 
-**Why Six Stages Instead of End-to-End Training?**
-The staged approach was found to be critical for training stability. Initial experiments with joint end-to-end training were prone to gradient conflicts and numerical instability. For instance, in our early end-to-end trials on the HAR dataset, we observed that the gradients from the co-training loss were often an order of magnitude larger than the supervised loss, leading to training divergence in over 40% of runs. This necessitated the adopted staged approach to first build stable, domain-specific representations before introducing more complex cross-domain interactions, ensuring a robust and reliable training process.
+#### **3.4.2 Data Augmentation for Dual Domains**
+CoFT employs a curated set of effective and computationally efficient augmentations. The design philosophy was shaped by a key investigation (detailed in Chapter 4) which demonstrated that a simple, deterministic set of augmentations provided a better performance-to-complexity ratio than more sophisticated libraries.
 
-**Stage-by-Stage Analysis:**
+-   **Temporal Domain Augmentations:** The simple yet effective augmentations from CA-TCC were adopted: **Jittering** (adding Gaussian noise), **Scaling** (multiplying by a random scalar), and **Cropping** (randomly sampling a sub-sequence).
 
-**Stage 1: `self_supervised` (Contrastive Pre-training)**
-- **Duration**: 40 epochs
-- **Objective**: Learn domain-specific representations without labels
-- **Key Innovation**: Parallel contrastive learning in both domains simultaneously
-```python
-# Both branches learn independently but on the same augmented views
-temporal_loss = NT_Xent(temporal_features_1, temporal_features_2)
-frequency_loss = NT_Xent(frequency_features_1, frequency_features_2) 
-total_loss = temporal_loss + frequency_loss  # Simple addition, no coupling
-```
+-   **Frequency Domain Augmentations:** A conservative approach was adopted to avoid semantic corruption, especially in medical signals. The philosophy was **semantic preservation over aggressive transformation**, focusing on adding realistic, physiologically-plausible noise patterns.
+    1.  **FFT-Domain Noise Injection**: Controlled, low-amplitude noise was added directly in the frequency domain to simulate realistic interference patterns (e.g., power line noise, sensor thermal noise).
+    2.  **Selective Frequency Masking**: Small frequency bands were randomly masked to mimic natural signal artifacts (e.g., motion artifacts, hardware filtering effects).
 
-**Stage 2: `train_linear_{p}` (Representation Quality Assessment)**
-- **Purpose**: Evaluate learned representations without fine-tuning
-- **Critical Insight**: Frequency representations were initially 10-15% weaker than temporal
-- **Design Decision**: This stage guided the development of frequency-specific augmentations
+This strategy proved effective in creating diverse views for contrastive learning while maintaining the integrity of the underlying signal characteristics.
 
-**Stage 3: `ft_{p}` (Supervised Fine-tuning with Co-training)**
-- **The Core Innovation**: First introduction of cross-domain co-training
-- **Challenge Discovered**: High co-training weights (lambda_ct > 0.01) caused severe performance degradation
-- **Breakthrough**: Ultra-low weights (lambda_ct = 0.0001) achieved optimal performance
+#### **3.4.3 Co-Training Module and Hybrid Loss Function**
+The coordination of the dual-branch learning is governed by a sophisticated co-training module and a hybrid loss function.
 
-**Stage 4: `gen_pseudo_labels` (High-Confidence Pseudo-labeling)**
-- **Confidence Threshold**: 0.95 (determined through ablation studies)
-- **Quality Control**: Only predictions where `max(softmax(logits)) > 0.95` are retained
-- **Cross-validation**: Temporal and frequency predictions must agree for pseudo-label acceptance
+**Co-Training Module: The Heart of Cross-Domain Learning**
+The module implements knowledge transfer with extensive safeguards against numerical instability, reflecting hard-learned lessons from early experiments that suffered from gradient explosion and feature collapse.
+-   **Pseudo-Labeling with Confidence Gating:** High-confidence pseudo-labels are generated using a softmax probability threshold (0.95), with extensive `NaN` checks.
+-   **Cross-Domain Feature Alignment:** To handle dimension mismatches and differing feature scales between domains, we implemented **Adaptive Cross-Domain Adapters**—small, dynamically initialized neural networks that learn a mapping from one feature space to another.
 
-**Stage 5: `SupCon` (Supervised Contrastive Learning)**
-- **Objective**: Refine feature space using both real and pseudo labels
-- **Implementation**: 
-```python
-# Combine real and pseudo labels for supervised contrastive learning
-all_labels = torch.cat([real_labels, pseudo_labels])
-all_features = torch.cat([real_features, pseudo_features])
-supcon_loss = SupConLoss(all_features, all_labels)
-```
+**Hybrid Loss Function: Balancing Competing Objectives**
+The final loss formulation carefully balances four distinct components:
+\[ L_{total} = (L_{sup\_t} + L_{sup\_f}) + \lambda_{ct} \cdot L_{cotraining} + \lambda_{cs} \cdot L_{consistency} \]
+-   **\(L_{sup\_t}\) & \(L_{sup\_f}\):** Supervised classification loss (Cross-Entropy) for the temporal and frequency branches on ground-truth labels.
+-   **\(L_{cotraining}\):** The co-training loss, where one branch is trained on high-confidence pseudo-labels generated by the other.
+-   **\(L_{consistency}\):** A feature consistency loss (e.g., MSE) that encourages the high-level embedding vectors from both branches to be similar for the same input sample.
+-   **\(\lambda_{ct}\) & \(\lambda_{cs}\):** Hyperparameters controlling the influence of the cross-domain losses. A key discovery of this work, detailed in Chapter 4, is that an ultra-low value for \(\lambda_{ct}\) (0.0001) is optimal, a finding explained by the 'Label Confusion Theory'.
 
-**Stage 6: `train_linear_SupCon_{p}` (Final Evaluation)**
-- **Purpose**: Measure the quality of refined representations
-- **Result**: Consistent 2-4% improvement over Stage 2 results
+This function balances four objectives: forcing each branch to learn the ground truth (\(L_{sup}\)), to learn from the other's "perspective" (\(L_{cotraining}\)), and to develop a shared "understanding" of the data (\(L_{consistency}\)).
 
-#### **3.3.2 Co-Training Module: The Heart of Cross-Domain Learning**
+### **3.5 Evaluation Methodology**
 
-The co-training module implemented sophisticated cross-domain knowledge transfer with extensive safeguards against numerical instability.
+A rigorous evaluation strategy was designed to ensure that the performance gains of CoFT are both significant and fairly measured.
 
-**3.3.2.1 Pseudo-Labeling with Confidence Gating**
-```python
-def generate_pseudo_labels(self, logits, threshold=0.95):
-    # Numerical stability checks
-    if torch.isnan(logits).any():
-        return fallback_pseudo_labels, zero_confidence_mask
-    
-    probs = F.softmax(logits, dim=1) + self.eps  # ε = 1e-8
-    max_probs, pseudo_labels = torch.max(probs, dim=1)
-    confidence_mask = max_probs > threshold
-    
-    return pseudo_labels, confidence_mask
-```
-
-**3.3.2.2 Cross-Domain Feature Alignment**
-The most challenging aspect was aligning features from different domains. Initial attempts with simple MSE loss failed due to:
-1. **Dimension Mismatches**: Conv layers produce different spatial dimensions
-2. **Feature Scale Differences**: Frequency features had different magnitude ranges
-
-**Solution: Adaptive Cross-Domain Adapters**
-```python
-# Dynamic adapter initialization based on actual feature dimensions
-if not hasattr(self, '_adapters_initialized'):
-    temporal_dim = temporal_features.shape[1]
-    freq_dim = freq_features.shape[1]
-    
-    self.temporal_to_freq_adapter = nn.Sequential(
-        nn.Linear(temporal_dim, freq_dim),
-        nn.ReLU(),
-        nn.Linear(freq_dim, freq_dim)
-    ).to(device)
-```
-
-**3.3.2.3 Numerical Stability: Lessons from Failed Experiments**
-
-The extensive NaN handling throughout the co-training module reflected hard-learned lessons:
-- **Gradient Explosion**: Early versions without gradient clipping failed on ~30% of runs
-- **Probability Collapse**: Softmax without temperature control led to overconfident predictions
-- **Adapter Saturation**: Non-linear adapters without proper initialization caused feature collapse
-
-**Current Safeguards:**
-1. **Multi-level NaN Detection**: Check inputs, intermediate values, and outputs
-2. **Graceful Degradation**: Return zero loss rather than crashing on numerical errors
-3. **Gradient Clipping**: max_norm=1.0 prevented explosion
-4. **Temperature Scaling**: τ=0.07 prevented overconfident predictions
-
-### **3.4 Hybrid Loss Function: Balancing Competing Objectives**
-
-The hybrid loss function represented one of the most challenging design aspects of CoFT, requiring careful balance between multiple competing objectives while maintaining numerical stability.
-
-#### **3.4.1 Loss Architecture**
-After extensive experimentation, the final loss formulation carefully balanced domain-specific and cross-domain objectives:
-
-\[ L_{total} = \underbrace{L_{temporal} + L_{frequency}}_{\text{Domain-specific}} + \underbrace{\lambda_{ct} \cdot L_{cotraining} + \lambda_{cs} \cdot L_{consistency}}_{\text{Cross-domain}} \]
-
-The formulation used carefully optimized hyperparameters, notably an ultra-low co-training weight (lambda_ct = 0.0001). The extensive experimental journey that led to this counter-intuitive discovery, along with a theoretical explanation, is detailed in Chapter 4, Section 4.2, where we introduced the 'Label Confusion Theory' as a formal explanation.
-
-### 3.5 Data Augmentation
-
-Data augmentation is the cornerstone of contrastive learning, as it generates the different "views" of the data required to train the encoder. The design philosophy for CoFT's augmentations was shaped by a key investigation, detailed in Chapter 4, which demonstrated that a simple, deterministic set of augmentations provided a better performance-to-complexity ratio than more sophisticated, probabilistic libraries like InfoTS. Consequently, CoFT employed a curated set of effective and computationally efficient augmentations for both domains.
-
-#### 3.5.1 Temporal Domain Augmentations
-
-For the temporal branch, we adopted the simple yet effective augmentations proven by the baseline CA-TCC framework. These included:
-
--   **Jittering:** Adding a small amount of Gaussian noise to simulate sensor noise.
--   **Scaling:** Multiplying the entire signal by a small random scalar to handle variations in magnitude.
--   **Cropping:** Randomly cropping a sub-sequence from the time series to learn temporal invariance.
-
-A combination of these augmentations was used to create two distinct views for the temporal contrastive learning task.
-
-#### 3.5.2 Frequency Domain Augmentations
-
-For the frequency branch, we adopted a conservative yet realistic approach designed specifically to preserve signal semantics while introducing natural variations that could occur in real-world scenarios. Rather than applying aggressive transformations that might alter the fundamental characteristics of the signal, our frequency domain augmentations were designed around the principle of **adding realistic, physiologically-plausible noise patterns**.
-
-**Design Philosophy: Semantic Preservation Over Aggressive Transformation**
-
-The frequency domain augmentation strategy was motivated by a critical consideration for medical and sensor time series: **avoiding semantic corruption**. Traditional augmentation approaches often apply transformations that, while mathematically sound, could inadvertently destroy or alter the very patterns that define different classes. In medical signals, for instance, subtle morphological changes can be the difference between normal and pathological conditions. Our approach instead focused on introducing variations that mirror real-world acquisition conditions.
-
-**Implemented Augmentations:**
-
-1.  **FFT-Domain Noise Injection**: We added controlled, low-amplitude noise directly in the frequency domain. This approach simulates **realistic interference patterns** commonly encountered in signal acquisition:
-    - **Electrical interference**: 50/60Hz power line noise
-    - **Ambient electromagnetic interference**: Broadband low-level noise from electronic devices
-    - **Sensor thermal noise**: Natural noise characteristics of acquisition hardware
-
-2.  **Selective Frequency Masking**: We applied random masking to small frequency bands, mimicking **natural signal artifacts**:
-    - **Breathing artifacts**: Low-frequency oscillations in physiological signals
-    - **Motion artifacts**: Frequency components introduced by subject movement
-    - **Hardware filtering effects**: Natural attenuation in specific frequency ranges
-
-**Rationale: Realistic Signal Perturbation**
-
-This conservative augmentation strategy served multiple purposes:
-
-- **Semantic Safety**: By limiting transformations to noise-like additions and band masking, we preserved the fundamental spectral signatures that distinguish different classes
-- **Real-World Validity**: The augmentations mirror actual variations encountered in practical signal acquisition scenarios
-- **Physiological Plausibility**: For medical datasets, the added variations correspond to known artifacts and interference patterns in clinical recordings
-- **Robustness Training**: The model learns to be invariant to realistic noise conditions while remaining sensitive to diagnostic patterns
-
-The approach proved effective in creating sufficiently diverse views for contrastive learning while maintaining the integrity of the underlying signal characteristics. This balance between augmentation diversity and semantic preservation represents a principled approach to frequency domain data augmentation for sensitive time series applications.
+-   **Fair Comparison Strategy:**
+    -   **Tuned Baseline:** The CA-TCC baseline was rigorously hyperparameter-tuned to ensure it performed at its peak, creating a genuinely challenging comparison.
+    -   **Ablation Studies:** Experiments were designed to dissect each component of CoFT, isolating the contributions of the dual-branch architecture, the co-training mechanism, and the ensemble method.
+-   **Evaluation Metrics:**
+    -   **Accuracy:** The proportion of correct predictions.
+    -   **Macro F1-Score:** The unweighted mean of the F1-scores for each class, critical for imbalanced datasets like Sleep-EDF and Epilepsy.
+-   **Statistical Validation:**
+    -   A paired t-test was used to determine whether the performance improvements of CoFT over the baseline were statistically significant.
 
 ---
 
